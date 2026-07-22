@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en" ng-app="foodBridgeApp" ng-controller="RootController">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FoodBridge – Food Donation Platform</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      crossorigin="anonymous" referrerpolicy="no-referrer"
+    />
+    <!-- Bootstrap Icons -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+      rel="stylesheet"
+      crossorigin="anonymous" referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="assets/css/style.css?v=20260416" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet" crossorigin="anonymous" referrerpolicy="no-referrer"> <!---updated font-->
+    <!-- Leaflet.js CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- MapLibre GL JS CSS (for live tracking) -->
+    <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  </head>
+  <body>
+
+    <!-- ── Navbar ────────────────────────────────────────────────────── -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top border-bottom py-3" ng-hide="currentPath==='/ngo-dashboard'">   <!---updated navbar-->
+      <div class="container"> <!--updated navbar-->
+        <a class="navbar-brand fw-bold text-dark d-flex align-items-center" href="#!/">
+          <div class="bg-success text-white rounded me-2 d-flex align-items-center justify-content-center" style="width:32px; height:32px;">
+            <i class="bi bi-box-seam-fill fs-5"></i>
+          </div>
+          FoodBridge
+        </a>
+        <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse"
+          data-bs-target="#navbars" aria-controls="navbars" aria-expanded="false">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbars">
+          <ul class="navbar-nav mx-auto mb-2 mb-lg-0 fw-medium">
+            <li class="nav-item"><a class="nav-link text-muted px-3 scroll-nav" ng-class="{'active': activeNavSection === 'process'}" href="#process">Process</a></li>
+            <li class="nav-item"><a class="nav-link text-muted px-3 scroll-nav" ng-class="{'active': activeNavSection === 'features'}" href="#features">Features</a></li>
+            <li class="nav-item"><a class="nav-link text-muted px-3 scroll-nav" ng-class="{'active': activeNavSection === 'impact'}" href="#impact">Impact</a></li>
+            <li class="nav-item"><a class="nav-link text-muted px-3 scroll-nav" ng-class="{'active': activeNavSection === 'network'}" href="#network">Network</a></li>
+          </ul>
+          
+          <!-- Auth buttons -->
+          <div class="d-flex align-items-center ms-lg-3 mt-3 mt-lg-0" ng-if="!isLoggedIn">
+            <a href="#" class="text-muted text-decoration-none fw-medium me-4"
+              data-bs-toggle="modal" data-bs-target="#authModal" ng-click="authMode='login'">
+              Login
+            </a>
+            <a href="#!/ngo/signup" class="btn btn-success rounded-pill px-4 fw-medium shadow-sm">
+              Join As A Hub
+            </a>
+          </div>
+          
+          <div class="d-flex align-items-center ms-lg-3 mt-3 mt-lg-0" ng-if="isLoggedIn">
+            <!-- Notification Bell -->
+            <div class="position-relative me-3" ng-if="userRole === 'donor' || userRole === 'volunteer'">
+              <i class="bi bi-bell-fill fs-5 text-muted cursor-pointer" ng-click="showNotifications = !showNotifications"></i>
+              <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle" ng-if="notificationCount > 0">
+                <span class="visually-hidden">New notifications</span>
+              </span>
+              <!-- Notification Dropdown -->
+              <div class="dropdown-menu dropdown-menu-end show" ng-if="showNotifications" style="position: absolute; right: 0; top: 100%; min-width: 280px; max-height: 300px; overflow-y: auto;">
+                <div class="px-3 py-2 border-bottom">
+                  <strong class="small">Notifications</strong>
+                </div>
+                <div class="px-3 py-2 text-muted small" ng-if="!notificationCount">
+                  No new notifications
+                </div>
+                <div class="px-3 py-2 small border-bottom" ng-repeat="n in notifications | limitTo: 5">
+                  <div class="fw-semibold">{{n.message}}</div>
+                  <div class="text-muted" style="font-size: 10px;">{{n.time | localTime}}</div>
+                </div>
+              </div>
+            </div>
+            <span class="navbar-text text-dark me-3 fw-medium small">
+              <i class="bi bi-check-circle-fill me-1 text-success"></i>{{currentUserEmail}}
+            </span>
+            <button class="btn btn-outline-danger btn-sm rounded-pill px-3 me-2" ng-click="logout()" ng-disabled="logoutInProgress">
+              <span ng-if="logoutInProgress" class="spinner-border spinner-border-sm me-1"></span>
+              <i class="bi bi-box-arrow-right me-1" ng-if="!logoutInProgress"></i>Sign Out
+            </button>
+            <a href="#!/donor-dashboard" class="btn btn-success btn-sm rounded-pill px-3 shadow-sm">Dashboard</a>
+          </div>
+        </div>
+      </div>
+      </nav>
+
+        <!-- ── Main View (AngularJS ng-view) ─────────────────────────────── -->
+    <div class="main-content container" ng-view></div>
+
+    <!-- ── Footer ────────────────────────────────────────────────────── -->
+    <footer class="bg-white pt-5 pb-4 mt-5 border-top" ng-hide="currentPath==='/ngo-dashboard'">
+      <div class="container">
+        <div class="row gy-4 mb-5">
+          <div class="col-lg-4 pe-lg-5">
+            <a class="navbar-brand fw-bold text-dark d-flex align-items-center mb-3 text-decoration-none" href="#!/">
+              <div class="bg-success text-white rounded me-2 d-flex align-items-center justify-content-center" style="width:28px; height:28px;">
+                <i class="bi bi-box-seam-fill fs-6"></i>
+              </div>
+              <span class="fs-5">FoodBridge</span>
+            </a>
+            <p class="text-muted small mb-4" style="line-height: 1.6;">
+              Connecting surplus to sustenance. Join the global movement to end food waste and hunger in our community.
+            </p>
+            <div class="d-flex gap-2">
+              <a href="https://foodbridge-example.com" target="_blank" class="btn btn-light btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center" style="width:36px; height:36px;"><i class="bi bi-globe"></i></a>
+              <a href="https://twitter.com/FoodBridge" target="_blank" class="btn btn-light btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center" style="width:36px; height:36px;"><i class="bi bi-twitter"></i></a>
+              <a href="javascript:void(0)" class="btn btn-light btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center" style="width:36px; height:36px;"><i class="bi bi-share-fill"></i></a>
+            </div>
+          </div>
+          
+          <div class="col-6 col-md-3 col-lg-2">
+            <h6 class="text-uppercase text-dark fw-bold mb-3 small tracking-wide">Platform</h6>
+            <ul class="list-unstyled mb-0 small">
+              <li class="mb-2"><a href="javascript:void(0)" ng-click="openHowItWorks(); $event.preventDefault()" class="text-muted text-decoration-none hover-success">How it works</a></li>
+              <li class="mb-2"><a href="#!/our-story" class="text-muted text-decoration-none hover-success">Our Story</a></li>
+              <li class="mb-2"><a href="#!/impact-report" class="text-muted text-decoration-none hover-success">Impact Report</a></li>
+            </ul>
+          </div>
+          
+          <div class="col-6 col-md-3 col-lg-2">
+            <h6 class="text-uppercase text-dark fw-bold mb-3 small tracking-wide">Resources</h6>
+            <ul class="list-unstyled mb-0 small">
+              <li class="mb-2"><a href="#!/safety-guidelines" class="text-muted text-decoration-none hover-success">Safety Guidelines</a></li>
+              <li class="mb-2"><a href="#!/ngo-directory" class="text-muted text-decoration-none hover-success">NGO Directory</a></li>
+              <li class="mb-2"><a href="#!/help-center" class="text-muted text-decoration-none hover-success">Support / Help Center</a></li>
+            </ul>
+          </div>
+
+          <div class="col-6 col-md-3 col-lg-2">
+            <h6 class="text-uppercase text-dark fw-bold mb-3 small tracking-wide">Legal</h6>
+            <ul class="list-unstyled mb-0 small">
+              <li class="mb-2"><a href="#!/privacy" class="text-muted text-decoration-none hover-success">Privacy</a></li>
+              <li class="mb-2"><a href="#!/terms" class="text-muted text-decoration-none hover-success">Terms</a></li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="text-center pt-4 border-top">
+          <p class="text-muted small mb-1">&copy; 2026 FoodBridge Inc. All rights reserved.</p>
+          <p class="text-muted small opacity-75 mb-2" style="font-size: 0.75rem;">Designed for a Zero Waste Future</p>
+          <!-- Subtle Admin Portal Link -->
+          <a href="javascript:void(0)" class="text-muted text-decoration-none small opacity-50 hover-success" style="font-size: 0.75rem;" 
+             data-bs-toggle="modal" data-bs-target="#authModal" ng-click="authMode='login'">
+             <i class="bi bi-shield-lock me-1"></i>Admin Portal
+          </a>
+        </div>
+      </div>
+    </footer>  <!--updated footer-->
+
+    <!-- ── Login / Register Modal ─────────────────────────────────────── -->
+    <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel"
+      aria-hidden="true" ng-controller="AuthController">
+      <div class="modal-dialog modal-dialog-centered">
+       <!-- <div class="modal-content"> --> <!--updated modal-->
+          <div class="modal-content shadow-lg border-0 rounded-4">
+          <!-- <div class="modal-header bg-success text-white">  -->
+            <div class="modal-header text-white"
+     style="background: linear-gradient(135deg, #198754, #0d6efd);">
+            <h5 class="modal-title" id="authModalLabel">
+              <i class="bi bi-person-circle me-2"></i>
+              <span ng-if="authMode==='login'">Login to FoodBridge</span>
+              <span ng-if="authMode==='register'">Create an Account</span>
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <!-- Error -->
+            <div class="alert alert-danger py-2" ng-if="authError">{{authError}}</div>
+            <div class="alert alert-success py-2" ng-if="authSuccess">{{authSuccess}}</div>
+
+            <!-- Toggle tabs -->
+            <ul class="nav nav-tabs mb-3">
+              <li class="nav-item">
+                <a class="nav-link" ng-class="{active: authMode==='login'}"
+                  ng-click="authMode='login'" href="#">Login</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" ng-class="{active: authMode==='register'}"
+                  ng-click="authMode='register'" href="#">Register</a>
+              </li>
+            </ul>
+
+            <!-- Login Form -->
+            <form ng-if="authMode==='login'" ng-submit="login()" novalidate autocomplete="off">
+              <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" ng-model="user.email" class="form-control"
+                  placeholder="you@example.com" required autofocus autocomplete="off" />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" ng-model="user.password" class="form-control"
+                  placeholder="••••••••" required autocomplete="off" />
+              </div>
+              <button type="submit" class="btn btn-success w-100" ng-disabled="authLoading">
+                <span ng-if="authLoading" class="spinner-border spinner-border-sm me-1"></span>
+                Login
+              </button>
+            </form>
+
+            <!-- Register Form -->
+            <form ng-if="authMode==='register'" ng-submit="signup()" novalidate>
+              <div class="mb-3">
+                <label class="form-label">Full Name</label>
+                <input type="text" ng-model="user.name" class="form-control"
+                  placeholder="John Doe" required />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" ng-model="user.email" class="form-control"
+                  placeholder="you@example.com" required />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" ng-model="user.password" class="form-control"
+                  placeholder="Min. 6 characters" required />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Role</label>
+                <select ng-model="user.role" class="form-select" required>
+                  <option value="">-- Select Role --</option>
+                  <option value="Donor">Donor</option>
+                  <option value="NGO">NGO</option>
+                  <option value="Volunteer">Delivery Partner</option>
+                </select>
+              </div>
+              <div class="mb-3" ng-if="user.role === 'Volunteer'">
+                <label class="form-label">Select NGO</label>
+                <select ng-model="user.ngo_id" class="form-select" ng-required="user.role === 'Volunteer'">
+                  <option value="">-- Choose an NGO --</option>
+                  <option ng-repeat="ngo in ngos" value="{{ngo.id}}">{{ngo.name || ngo.email}}</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary w-100" ng-disabled="authLoading">
+                <span ng-if="authLoading" class="spinner-border spinner-border-sm me-1"></span>
+                Create Account
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+
+    <!-- ── Scripts – ORDER IS CRITICAL ───────────────────────────────── -->
+    <!-- 1. AngularJS core -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <!-- 2. Initialize Module BEFORE other services -->
+    <script>
+      console.log("[FoodBridge] Initializing Angular module with ngRoute");
+      var app = angular.module("foodBridgeApp", ["ngRoute"]);
+    </script>
+    <script>
+      // Register AuthInterceptor immediately after module creation
+      console.log("[FoodBridge] Registering AuthInterceptor");
+      angular.module("foodBridgeApp").config(["$httpProvider", function($httpProvider) {
+        $httpProvider.interceptors.push("AuthInterceptor");
+      }]);
+    </script>
+    <script>
+      window.FOODBRIDGE_MAPBOX_TOKEN = window.FOODBRIDGE_MAPBOX_TOKEN ||
+        (window.localStorage && window.localStorage.getItem("FOODBRIDGE_MAPBOX_TOKEN")) ||
+        "";
+    </script>
+
+    <!-- 3. Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- 4. Leaflet.js + Leaflet.heat (free, no watermark, no billing) -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <!-- 5. MapLibre GL JS (for live tracking) -->
+    <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <!-- 6. App Scripts -->
+    <script src="app/services/apiService.js?v=20260520"></script>
+    <script src="app/services/mapService.js?v=20260520"></script>
+    <script src="app/services/liveTrackingService.js?v=20260520"></script>
+    <script src="app/services/navigationService.js?v=20260520"></script>
+    <script src="app/app.js?v=20260520"></script>
+    <script src="app/bootstrap.js?v=20260520"></script>
+    <script src="app/components/ngo/ngo-controllers.js?v=20260520"></script>
+    <script src="app/components/ngo/ngo-chat.js?v=20260520"></script>
+    <script src="app/components/donor/donor-chat.js?v=20260520"></script>
+    <script src="app/components/achievements/achievements-controller.js"></script>
+    
+    <!-- How It Works Modal -->
+    <div ng-include="'app/components/home/how-it-works-modal.html'"></div>
+    
+    <!-- Partnership Modal -->
+    <div ng-include="'app/components/home/partnership-modal.html'"></div>
+    
+    <script>
+      var notificationAudioCtx = null;
+      function playFallbackTone() {
+        try {
+          var AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (!AudioCtx) return;
+          notificationAudioCtx = notificationAudioCtx || new AudioCtx();
+          var ctx = notificationAudioCtx;
+          var osc = ctx.createOscillator();
+          var gain = ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.value = 880;
+          gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.08, ctx.currentTime + 0.01);
+          gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.15);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.16);
+        } catch (e) {
+          // Keep notification silent if WebAudio is unavailable.
+        }
+      }
+      function playNotification() {
+        var audio = document.getElementById("notificationSound");
+        if (audio && audio.src) {
+          audio.currentTime = 0;
+          var playPromise = audio.play();
+          if (playPromise && typeof playPromise.catch === "function") {
+            playPromise.catch(function() {
+              playFallbackTone();
+            });
+          }
+          return;
+        }
+        playFallbackTone();
+      }
+    </script>
+    <audio id="notificationSound" src="assets/notification.mp3" preload="auto"></audio>
+  </body>
+</html>

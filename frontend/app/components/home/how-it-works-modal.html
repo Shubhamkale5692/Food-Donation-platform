@@ -1,0 +1,52 @@
+<!-- How It Works Modal -->
+<div class="modal fade" id="howItWorksModal" tabindex="-1" aria-hidden="true" ng-controller="HowItWorksController">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content how-it-works-modal">
+      <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+      
+      <div class="modal-body p-4 p-lg-5">
+        <!-- Progress Indicator -->
+        <div class="progress-indicator mb-4">
+          <div class="progress-steps d-flex justify-content-center gap-2">
+            <div class="step-dot" ng-class="{'active': currentStep === $index, 'completed': currentStep > $index}" ng-repeat="step in steps track by $index" ng-click="currentStep = $index">
+              <span class="step-number" ng-if="currentStep > $index">✓</span>
+              <span class="step-number" ng-if="currentStep <= $index">{{$index + 1}}</span>
+            </div>
+          </div>
+          <div class="progress-bar-container mt-3">
+            <div class="progress-bar" ng-style="{'width': ((currentStep + 1) / steps.length * 100) + '%'}"></div>
+          </div>
+        </div>
+
+        <!-- Step Content -->
+        <div class="step-content text-center" ng-class="{'animate-slide-in': true}">
+          <div class="step-icon mb-4" ng-class="'step-icon-' + currentStep">
+            <i class="bi" ng-class="steps[currentStep].icon"></i>
+          </div>
+          <h3 class="step-title fw-bold mb-3">{{steps[currentStep].title}}</h3>
+          <p class="step-description text-muted mb-4">{{steps[currentStep].description}}</p>
+          
+          <!-- Step Details -->
+          <div class="step-details text-start p-3 bg-light rounded-3" ng-if="steps[currentStep].details">
+            <ul class="mb-0 ps-3">
+              <li ng-repeat="detail in steps[currentStep].details" class="mb-2">{{detail}}</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="step-navigation d-flex justify-content-between mt-4">
+          <button class="btn btn-outline-secondary rounded-pill px-4" ng-click="prevStep()" ng-disabled="currentStep === 0">
+            <i class="bi bi-arrow-left me-2"></i> Back
+          </button>
+          <button class="btn btn-success rounded-pill px-4" ng-click="nextStep()" ng-if="currentStep < steps.length - 1">
+            Next <i class="bi bi-arrow-right ms-2"></i>
+          </button>
+          <button class="btn btn-success rounded-pill px-4" ng-click="closeModal()" ng-if="currentStep === steps.length - 1">
+            <i class="bi bi-check-lg me-2"></i> Done
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

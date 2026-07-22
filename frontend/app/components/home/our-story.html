@@ -1,0 +1,228 @@
+<!-- Our Story Page -->
+<div class="our-story-page" ng-controller="OurStoryController">
+  <!-- Hero Section -->
+  <section class="story-hero d-flex align-items-center justify-content-center text-center">
+    <div class="container">
+      <h1 class="display-2 fw-bold mb-4 story-fade-in">Our Story</h1>
+      <p class="lead story-fade-in delay-1">The journey from a simple idea to a movement that's changing lives</p>
+      <div class="scroll-indicator mt-5 story-fade-in delay-2">
+        <span class="fw-medium">Scroll to explore</span>
+        <i class="bi bi-arrow-down bounce"></i>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 1: Problem -->
+  <section class="story-section problem-section py-5" id="problem">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 story-scroll-reveal">
+          <div class="section-number text-success fw-bold mb-3">01</div>
+          <h2 class="display-4 fw-bold mb-4">The Problem We Saw</h2>
+          <p class="lead text-muted mb-4">
+            Every day, thousands of restaurants, hotels, and grocery stores discard perfectly good food while millions go hungry.
+          </p>
+          <div class="problem-stats mt-4">
+            <div class="stat-box p-4 bg-white rounded-4 shadow-sm">
+              <h3 class="text-success fw-bold counter" data-target="40">0%</h3>
+              <p class="text-muted mb-0">of food produced is wasted globally</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 text-center mt-5 mt-lg-0 story-scroll-reveal delay-1">
+          <div class="problem-illustration">
+            <i class="bi bi-exclamation-triangle display-1 text-warning"></i>
+            <p class="mt-3 text-muted">1/3 of all food produced is wasted</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Idea -->
+  <section class="story-section idea-section py-5 bg-light">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 text-center order-lg-2 story-scroll-reveal">
+          <div class="idea-icon bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center">
+            <i class="bi bi-lightbulb fs-1"></i>
+          </div>
+        </div>
+        <div class="col-lg-6 order-lg-1 mt-5 mt-lg-0 story-scroll-reveal delay-1">
+          <div class="section-number text-success fw-bold mb-3">02</div>
+          <h2 class="display-4 fw-bold mb-4">The Idea</h2>
+          <p class="lead text-muted mb-4">
+            What if we could connect surplus food with those who need it most? A simple idea that could change everything.
+          </p>
+          <div class="idea-quote p-4 bg-white rounded-4 border-start border-success border-4">
+            <blockquote class="mb-0 fw-medium">
+              <i class="bi bi-quote text-success me-2"></i>
+              "We saw food going to waste when it could nourish someone. We knew there had to be a better way."
+            </blockquote>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: Solution -->
+  <section class="story-section solution-section py-5">
+    <div class="container">
+      <div class="text-center mb-5 story-scroll-reveal">
+        <div class="section-number text-success fw-bold mb-3">03</div>
+        <h2 class="display-4 fw-bold mb-4">Introducing FoodBridge</h2>
+        <p class="lead text-muted mx-auto" style="max-width: 600px;">
+          A smart platform connecting food donors, NGOs, and Delivery Partners in a seamless ecosystem.
+        </p>
+      </div>
+      <div class="row g-4 justify-content-center">
+        <div class="col-md-6 col-lg-3 story-scroll-reveal delay-1">
+          <div class="solution-card card h-100 border-0 p-4 rounded-4 shadow-sm text-center">
+            <div class="solution-icon bg-primary-subtle text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+              <i class="bi bi-shop fs-3"></i>
+            </div>
+            <h5 class="fw-bold">Donors</h5>
+            <p class="text-muted small mb-0">Restaurants & businesses donate surplus</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3 story-scroll-reveal delay-2">
+          <div class="solution-card card h-100 border-0 p-4 rounded-4 shadow-sm text-center">
+            <div class="solution-icon bg-success-subtle text-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+              <i class="bi bi-cpu fs-3"></i>
+            </div>
+            <h5 class="fw-bold">AI Matching</h5>
+            <p class="text-muted small mb-0">Smart algorithm matches donations</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3 story-scroll-reveal delay-3">
+          <div class="solution-card card h-100 border-0 p-4 rounded-4 shadow-sm text-center">
+            <div class="solution-icon bg-warning-subtle text-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+              <i class="bi bi-person-badge fs-3"></i>
+            </div>
+            <h5 class="fw-bold">Delivery Partners</h5>
+            <p class="text-muted small mb-0">Verified helpers pickup & deliver</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3 story-scroll-reveal delay-4">
+          <div class="solution-card card h-100 border-0 p-4 rounded-4 shadow-sm text-center">
+            <div class="solution-icon bg-info-subtle text-info rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+              <i class="bi bi-building fs-3"></i>
+            </div>
+            <h5 class="fw-bold">NGOs</h5>
+            <p class="text-muted small mb-0">Receive & distribute to those in need</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Impact -->
+  <section class="story-section impact-section py-5 bg-success text-white">
+    <div class="container">
+      <div class="text-center mb-5 story-scroll-reveal">
+        <div class="section-number text-white fw-bold mb-3">04</div>
+        <h2 class="display-4 fw-bold mb-4">Making a Difference</h2>
+        <p class="lead text-white-50 mx-auto" style="max-width: 600px;">
+          Together with our community, we're creating real impact.
+        </p>
+      </div>
+      <div class="row g-4 justify-content-center text-center">
+        <div class="col-6 col-md-3 story-scroll-reveal delay-1">
+          <div class="impact-stat">
+            <h2 class="display-3 fw-bold impact-counter" data-target="{{impactStats.mealsDelivered}}">0</h2>
+            <p class="text-white-50 text-uppercase fw-semibold tracking-wide">Meals Delivered</p>
+          </div>
+        </div>
+        <div class="col-6 col-md-3 story-scroll-reveal delay-2">
+          <div class="impact-stat">
+            <h2 class="display-3 fw-bold impact-counter" data-target="{{impactStats.activeDonors}}">0</h2>
+            <p class="text-white-50 text-uppercase fw-semibold tracking-wide">Active Donors</p>
+          </div>
+        </div>
+        <div class="col-6 col-md-3 story-scroll-reveal delay-3">
+          <div class="impact-stat">
+            <h2 class="display-3 fw-bold impact-counter" data-target="{{impactStats.partnerNGOs}}">0</h2>
+            <p class="text-white-50 text-uppercase fw-semibold tracking-wide">Partner NGOs</p>
+          </div>
+        </div>
+        <div class="col-6 col-md-3 story-scroll-reveal delay-4">
+          <div class="impact-stat">
+            <h2 class="display-3 fw-bold impact-counter" data-target="{{impactStats.volunteers}}">0</h2>
+            <p class="text-white-50 text-uppercase fw-semibold tracking-wide">Delivery Partners</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: Vision -->
+  <section class="story-section vision-section py-5 bg-light">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 story-scroll-reveal">
+          <div class="section-number text-success fw-bold mb-3">05</div>
+          <h2 class="display-4 fw-bold mb-4">Our Vision</h2>
+          <p class="lead text-muted mb-4">
+            We envision a world where no food goes to waste while someone goes hungry.
+          </p>
+          <ul class="vision-list list-unstyled">
+            <li class="d-flex align-items-center mb-3">
+              <i class="bi bi-check-circle-fill text-success fs-4 me-3"></i>
+              <span class="fw-medium">Zero food waste through intelligent distribution</span>
+            </li>
+            <li class="d-flex align-items-center mb-3">
+              <i class="bi bi-check-circle-fill text-success fs-4 me-3"></i>
+              <span class="fw-medium">Every meal reaches someone in need</span>
+            </li>
+            <li class="d-flex align-items-center mb-3">
+              <i class="bi bi-check-circle-fill text-success fs-4 me-3"></i>
+              <span class="fw-medium">Building a sustainable food ecosystem</span>
+            </li>
+            <li class="d-flex align-items-center">
+              <i class="bi bi-check-circle-fill text-success fs-4 me-3"></i>
+              <span class="fw-medium">Empowering communities through sharing</span>
+            </li>
+          </ul>
+        </div>
+        <div class="col-lg-6 text-center mt-5 mt-lg-0 story-scroll-reveal delay-1">
+          <div class="vision-illustration">
+            <div class="globe-icon bg-white rounded-circle shadow-lg d-inline-flex align-items-center justify-content-center">
+              <i class="bi bi-globe fs-1 text-success"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6: Call to Action -->
+  <section class="story-section cta-section py-5">
+    <div class="container text-center">
+      <div class="story-scroll-reveal">
+        <div class="section-number text-success fw-bold mb-3">06</div>
+        <h2 class="display-4 fw-bold mb-4">Join Us</h2>
+        <p class="lead text-muted mx-auto mb-5" style="max-width: 600px;">
+          Be part of the solution. Every action counts in creating a hunger-free world.
+        </p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+          <button class="btn btn-success btn-lg rounded-pill px-5 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#authModal" ng-if="!isLoggedIn">
+            <i class="bi bi-basket me-2"></i> Donate Food
+          </button>
+          <a href="#!/donor-dashboard" class="btn btn-success btn-lg rounded-pill px-5 fw-bold shadow-sm" ng-if="isLoggedIn">
+            <i class="bi bi-basket me-2"></i> Go to Dashboard
+          </a>
+          <button class="btn btn-outline-success btn-lg rounded-pill px-5 fw-semibold" data-bs-toggle="modal" data-bs-target="#authModal" ng-if="!isLoggedIn">
+            <i class="bi bi-heart me-2"></i> Become Delivery Partner
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Back to Home -->
+  <div class="story-back-to-top text-center py-4">
+    <a href="#!/" class="btn btn-link text-success fw-medium">
+      <i class="bi bi-arrow-left me-2"></i> Back to Home
+    </a>
+  </div>
+</div>

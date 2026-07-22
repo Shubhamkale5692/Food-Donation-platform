@@ -1,0 +1,343 @@
+<!-- Terms & Conditions Page -->
+<div class="terms-page" ng-controller="TermsController">
+  <!-- Page Header -->
+  <section class="terms-header py-5 bg-success text-white">
+    <div class="container text-center">
+      <h1 class="display-3 fw-bold mb-2 terms-fade-in">
+        <i class="bi bi-file-text me-3"></i>Terms & Conditions
+      </h1>
+      <p class="lead terms-fade-in delay-1">Please read our terms carefully</p>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <section class="terms-content py-5">
+    <div class="container">
+      <div class="row">
+        <!-- Side Navigation -->
+        <div class="col-lg-3 mb-4">
+          <div class="terms-nav card border-0 rounded-4 shadow-sm sticky-top" style="top: 100px;">
+            <div class="card-body p-4">
+              <h5 class="fw-bold mb-3">
+                <i class="bi bi-list-ul me-2 text-success"></i>Sections
+              </h5>
+              <nav class="nav flex-column">
+                <a class="nav-link" ng-class="{'active': activeSection === 'intro'}" href="#intro" ng-click="setActiveSection('intro')">
+                  <i class="bi bi-chevron-right me-2"></i>Introduction
+                </a>
+                <a class="nav-link" ng-class="{'active': activeSection === 'responsibilities'}" href="#responsibilities" ng-click="setActiveSection('responsibilities')">
+                  <i class="bi bi-chevron-right me-2"></i>User Responsibilities
+                </a>
+                <a class="nav-link" ng-class="{'active': activeSection === 'donation'}" href="#donation" ng-click="setActiveSection('donation')">
+                  <i class="bi bi-chevron-right me-2"></i>Donation Rules
+                </a>
+                <a class="nav-link" ng-class="{'active': activeSection === 'platform'}" href="#platform" ng-click="setActiveSection('platform')">
+                  <i class="bi bi-chevron-right me-2"></i>Platform Usage
+                </a>
+                <a class="nav-link" ng-class="{'active': activeSection === 'actions'}" href="#actions" ng-click="setActiveSection('actions')">
+                  <i class="bi bi-chevron-right me-2"></i>Account Actions
+                </a>
+                <a class="nav-link" ng-class="{'active': activeSection === 'liability'}" href="#liability" ng-click="setActiveSection('liability')">
+                  <i class="bi bi-chevron-right me-2"></i>Limitation
+                </a>
+                <a class="nav-link" ng-class="{'active': activeSection === 'contact'}" href="#contact" ng-click="setActiveSection('contact')">
+                  <i class="bi bi-chevron-right me-2"></i>Contact
+                </a>
+              </nav>
+            </div>
+          </div>
+        </div>
+
+        <!-- Content Sections -->
+        <div class="col-lg-9">
+          <!-- Introduction -->
+          <div class="terms-section mb-5" id="intro">
+            <div class="card border-0 rounded-4 shadow-sm">
+              <div class="card-body p-4">
+                <div class="d-flex align-items-center mb-4">
+                  <div class="section-icon bg-success-subtle text-success rounded-3 me-3">
+                    <i class="bi bi-info-circle fs-4"></i>
+                  </div>
+                  <h2 class="fw-bold mb-0">Introduction</h2>
+                </div>
+                <p class="text-muted lh-lg">
+                  Welcome to FoodBridge. By accessing and using our platform, you agree to be bound by these Terms & Conditions. 
+                  These terms constitute a legally binding agreement between you ("User") and FoodBridge.
+                </p>
+                <p class="text-muted lh-lg mb-0">
+                  If you do not agree to these terms, please do not use our platform. Your continued use of FoodBridge 
+                  constitutes your acceptance of these terms and any modifications we may make to them.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- User Responsibilities -->
+          <div class="terms-section mb-5" id="responsibilities">
+            <div class="card border-0 rounded-4 shadow-sm">
+              <div class="card-header bg-white border-0 p-4">
+                <div class="d-flex align-items-center">
+                  <div class="section-icon bg-primary-subtle text-primary rounded-3 me-3">
+                    <i class="bi bi-person-check fs-4"></i>
+                  </div>
+                  <h2 class="fw-bold mb-0">User Responsibilities</h2>
+                </div>
+              </div>
+              <div class="card-body p-4 pt-0">
+                <p class="text-muted mb-4">As a user of FoodBridge, you agree to:</p>
+                <ul class="responsibility-list list-unstyled">
+                  <li class="d-flex align-items-start mb-3 p-3 bg-light rounded-3">
+                    <i class="bi bi-check-circle text-success fs-5 me-3 mt-1"></i>
+                    <div>
+                      <strong>Provide Accurate Information</strong>
+                      <p class="text-muted small mb-0">Ensure all personal and donation details are accurate and up-to-date</p>
+                    </div>
+                  </li>
+                  <li class="d-flex align-items-start mb-3 p-3 bg-light rounded-3">
+                    <i class="bi bi-check-circle text-success fs-5 me-3 mt-1"></i>
+                    <div>
+                      <strong>Follow Safety Guidelines</strong>
+                      <p class="text-muted small mb-0">Adhere to all safety and hygiene guidelines outlined in our platform</p>
+                    </div>
+                  </li>
+                  <li class="d-flex align-items-start mb-3 p-3 bg-light rounded-3">
+                    <i class="bi bi-check-circle text-success fs-5 me-3 mt-1"></i>
+                    <div>
+                      <strong>Respect Other Users</strong>
+                      <p class="text-muted small mb-0">Treat all donors, NGOs, and Delivery Partners with respect and professionalism</p>
+                    </div>
+                  </li>
+                  <li class="d-flex align-items-start p-3 bg-light rounded-3">
+                    <i class="bi bi-check-circle text-success fs-5 me-3 mt-1"></i>
+                    <div>
+                      <strong>Maintain Account Security</strong>
+                      <p class="text-muted small mb-0">Keep your login credentials confidential and secure</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Donation Rules -->
+          <div class="terms-section mb-5" id="donation">
+            <div class="card border-0 rounded-4 shadow-sm">
+              <div class="card-header bg-white border-0 p-4">
+                <div class="d-flex align-items-center">
+                  <div class="section-icon bg-warning-subtle text-warning rounded-3 me-3">
+                    <i class="bi bi-basket fs-4"></i>
+                  </div>
+                  <h2 class="fw-bold mb-0">Donation Rules</h2>
+                </div>
+              </div>
+              <div class="card-body p-4 pt-0">
+                <p class="text-muted mb-4">All food donations must meet the following requirements:</p>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <div class="rule-item d-flex align-items-start p-3 border rounded-3 h-100">
+                      <i class="bi bi-check-circle-fill text-success fs-4 me-3"></i>
+                      <div>
+                        <strong>Safe & Edible</strong>
+                        <p class="text-muted small mb-0">Only donate food that is safe for consumption</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="rule-item d-flex align-items-start p-3 border rounded-3 h-100">
+                      <i class="bi bi-x-circle-fill text-danger fs-4 me-3"></i>
+                      <div>
+                        <strong>No Harmful Items</strong>
+                        <p class="text-muted small mb-0">No alcohol, tobacco, or illegal substances</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="rule-item d-flex align-items-start p-3 border rounded-3 h-100">
+                      <i class="bi bi-exclamation-triangle text-warning fs-4 me-3"></i>
+                      <div>
+                        <strong>Accurate Details</strong>
+                        <p class="text-muted small mb-0">Provide correct food type, quantity, and expiry</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="rule-item d-flex align-items-start p-3 border rounded-3 h-100">
+                      <i class="bi bi-shield-check text-success fs-4 me-3"></i>
+                      <div>
+                        <strong>Proper Packaging</strong>
+                        <p class="text-muted small mb-0">Use clean, hygienic containers</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Platform Usage -->
+          <div class="terms-section mb-5" id="platform">
+            <div class="card border-0 rounded-4 shadow-sm">
+              <div class="card-header bg-white border-0 p-4">
+                <div class="d-flex align-items-center">
+                  <div class="section-icon bg-info-subtle text-info rounded-3 me-3">
+                    <i class="bi bi-gear fs-4"></i>
+                  </div>
+                  <h2 class="fw-bold mb-0">Platform Usage</h2>
+                </div>
+              </div>
+              <div class="card-body p-4 pt-0">
+                <p class="text-muted mb-4">Prohibited activities on FoodBridge:</p>
+                <ul class="prohibited-list list-unstyled">
+                  <li class="d-flex align-items-center mb-3 p-3 bg-danger-subtle rounded-3">
+                    <i class="bi bi-x-circle text-danger fs-5 me-3"></i>
+                    <span class="fw-medium">Creating fake or multiple accounts</span>
+                  </li>
+                  <li class="d-flex align-items-center mb-3 p-3 bg-danger-subtle rounded-3">
+                    <i class="bi bi-x-circle text-danger fs-5 me-3"></i>
+                    <span class="fw-medium">Posting non-food items for donation</span>
+                  </li>
+                  <li class="d-flex align-items-center mb-3 p-3 bg-danger-subtle rounded-3">
+                    <i class="bi bi-x-circle text-danger fs-5 me-3"></i>
+                    <span class="fw-medium">Harassment or abusive behavior</span>
+                  </li>
+                  <li class="d-flex align-items-center mb-3 p-3 bg-danger-subtle rounded-3">
+                    <i class="bi bi-x-circle text-danger fs-5 me-3"></i>
+                    <span class="fw-medium">Spamming or sending unsolicited messages</span>
+                  </li>
+                  <li class="d-flex align-items-center p-3 bg-danger-subtle rounded-3">
+                    <i class="bi bi-x-circle text-danger fs-5 me-3"></i>
+                    <span class="fw-medium">Attempting to bypass platform security</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Account Actions -->
+          <div class="terms-section mb-5" id="actions">
+            <div class="card border-0 rounded-4 shadow-sm">
+              <div class="card-header bg-white border-0 p-4">
+                <div class="d-flex align-items-center">
+                  <div class="section-icon bg-secondary-subtle text-secondary rounded-3 me-3">
+                    <i class="bi bi-exclamation-diamond fs-4"></i>
+                  </div>
+                  <h2 class="fw-bold mb-0">Account Actions</h2>
+                </div>
+              </div>
+              <div class="card-body p-4 pt-0">
+                <p class="text-muted mb-4">FoodBridge reserves the right to take the following actions for violations:</p>
+                <div class="action-timeline">
+                  <div class="action-item d-flex align-items-start mb-4">
+                    <div class="action-badge bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; flex-shrink: 0;">
+                      <span class="fw-bold">1</span>
+                    </div>
+                    <div class="flex-grow-1">
+                      <h5 class="fw-bold mb-1">Warning</h5>
+                      <p class="text-muted mb-0">First-time violations result in a written warning via email</p>
+                    </div>
+                  </div>
+                  <div class="action-item d-flex align-items-start mb-4">
+                    <div class="action-badge bg-danger text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; flex-shrink: 0;">
+                      <span class="fw-bold">2</span>
+                    </div>
+                    <div class="flex-grow-1">
+                      <h5 class="fw-bold mb-1">Temporary Suspension</h5>
+                      <p class="text-muted mb-0">Repeated violations may result in 7-30 day account suspension</p>
+                    </div>
+                  </div>
+                  <div class="action-item d-flex align-items-start">
+                    <div class="action-badge bg-dark text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; flex-shrink: 0;">
+                      <span class="fw-bold">3</span>
+                    </div>
+                    <div class="flex-grow-1">
+                      <h5 class="fw-bold mb-1">Permanent Removal</h5>
+                      <p class="text-muted mb-0">Severe violations or continued non-compliance leads to permanent account deletion</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Limitation of Liability -->
+          <div class="terms-section mb-5" id="liability">
+            <div class="card border-0 rounded-4 shadow-sm">
+              <div class="card-header bg-white border-0 p-4">
+                <div class="d-flex align-items-center">
+                  <div class="section-icon bg-dark-subtle text-dark rounded-3 me-3">
+                    <i class="bi bi-shield fs-4"></i>
+                  </div>
+                  <h2 class="fw-bold mb-0">Limitation of Liability</h2>
+                </div>
+              </div>
+              <div class="card-body p-4 pt-0">
+                <div class="liability-content p-4 bg-light rounded-4">
+                  <p class="text-muted mb-3">
+                    <strong>FoodBridge serves as a platform</strong> that connects food donors with NGOs and facilitates 
+                    deliveries through Delivery Partners. We are not responsible for:
+                  </p>
+                  <ul class="liability-list list-unstyled ps-3">
+                    <li class="mb-2">• The quality or safety of food after it has been delivered</li>
+                    <li class="mb-2">• Any disputes between donors, NGOs, or Delivery Partners</li>
+                    <li class="mb-2">• Loss or damage to property during transportation</li>
+                    <li class="mb-2">• Any illegal activities conducted through the platform</li>
+                    <li class="mb-0">• User actions that violate these terms</li>
+                  </ul>
+                  <p class="text-muted mt-4 mb-0">
+                    <strong>Disclaimer:</strong> By using FoodBridge, you acknowledge that you use the platform 
+                    at your own risk and release FoodBridge from any liability arising from your use of the service.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact -->
+          <div class="terms-section mb-5" id="contact">
+            <div class="card border-0 rounded-4 shadow-sm">
+              <div class="card-header bg-white border-0 p-4">
+                <div class="d-flex align-items-center">
+                  <div class="section-icon bg-info-subtle text-info rounded-3 me-3">
+                    <i class="bi bi-envelope fs-4"></i>
+                  </div>
+                  <h2 class="fw-bold mb-0">Contact Us</h2>
+                </div>
+              </div>
+              <div class="card-body p-4 pt-0">
+                <p class="text-muted mb-4">For legal matters or questions about these terms:</p>
+                <div class="contact-box p-4 bg-light rounded-4 text-center">
+                  <i class="bi bi-headset fs-1 text-success mb-3 d-block"></i>
+                  <h5 class="fw-bold">Legal & Support</h5>
+                  <p class="mb-0">
+                    <a href="mailto:legal@foodbridge.com" class="text-success fw-medium text-decoration-none">
+                      legal@foodbridge.com
+                    </a>
+                  </p>
+                  <p class="text-muted small mt-2 mb-0">We'll respond within 48 hours</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Last Updated -->
+          <div class="text-center text-muted py-4">
+            <p class="mb-1">Last updated: March 2026</p>
+            <p class="small mb-0">By using FoodBridge, you agree to these terms</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top btn btn-success rounded-circle shadow" ng-click="scrollToTop()" ng-show="showBackToTop">
+    <i class="bi bi-arrow-up"></i>
+  </button>
+
+  <!-- Back Link -->
+  <div class="text-center py-4 mb-4">
+    <a href="#!/" class="btn btn-link text-success fw-medium">
+      <i class="bi bi-arrow-left me-2"></i> Back to Home
+    </a>
+  </div>
+</div>

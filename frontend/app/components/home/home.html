@@ -1,0 +1,327 @@
+<!-- 1) HERO SECTION -->
+<div class="home-hero-section d-flex align-items-center fade-in">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 text-start position-relative z-index-1">
+                <span class="badge bg-success-subtle text-success mb-3 rounded-pill px-3 py-2 fw-semibold"><i class="bi bi-stars me-1"></i> AI-POWERED LOGISTICS</span>
+                <h1 class="display-3 fw-bold mb-4 hero-title">
+                    Every plate has<br>a <span class="text-success glow-text">purpose</span>.
+                </h1>
+                <p class="lead text-muted mb-5 hero-subtitle">
+                    FoodBridge is the modern network connecting surplus food from businesses to those who need it most. Friendly, fast, and driven by community impact.
+                </p>
+                <div class="d-flex gap-3 mt-4">
+                    <button class="btn btn-success rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#authModal" ng-if="!isLoggedIn">
+                        Start Donating Today
+                    </button>
+                    <a href="#!/donor-dashboard" class="btn btn-success rounded-pill px-4 fw-bold shadow-sm" ng-if="isLoggedIn">
+                        Go to Dashboard
+                    </a>
+                    <button class="btn btn-white rounded-pill px-4 d-flex align-items-center shadow-sm fw-medium border-0 text-dark bg-white" ng-click="openHowItWorks()">
+                        <i class="bi bi-play-circle-fill me-2 fs-5 text-dark"></i> How it works
+                    </button>
+                </div>
+            </div>
+            <div class="col-lg-6 mt-5 mt-lg-0 text-center">
+                <div class="hero-illustration-wrapper fade-in-up delay-1">
+                    <img src="app/components/home/homepage image.png" alt="Food Delivery Illustration" class="img-fluid hero-illustration" onerror="this.src='https://placehold.co/600x400/e9ecef/a3a3a3?text=Illustration'">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 2) FLOW SECTION -->
+<section id="process" class="home-flow-section py-5 bg-white position-relative fade-in-up delay-2">
+    <div class="container py-5 text-center">
+        <h2 class="fw-bold mb-2">The FoodBridge Flow</h2>
+        <p class="text-muted mb-5">Simple, transparent, and efficient. We handle the complexity so you can focus on giving.</p>
+        
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-4">
+                <div class="p-4 h-100 text-center">
+                    <div class="icon-box bg-success-subtle text-success mx-auto mb-4 rounded-4 d-flex align-items-center justify-content-center">
+                        <i class="bi bi-shop fs-4"></i>
+                    </div>
+                    <h6 class="fw-bold mb-3 text-dark">List Surplus</h6>
+                    <p class="text-muted small px-2">Businesses log excess food in 30 seconds via our mobile app.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4 h-100 text-center">
+                    <div class="icon-box bg-primary-subtle text-primary mx-auto mb-4 rounded-4 d-flex align-items-center justify-content-center">
+                        <i class="bi bi-cpu fs-4"></i>
+                    </div>
+                    <h6 class="fw-bold mb-3 text-dark">AI Matching</h6>
+                    <p class="text-muted small px-2">Our AI identifies the nearest NGO based on urgency and type of food.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4 h-100 text-center">
+                    <div class="icon-box bg-warning-subtle text-warning mx-auto mb-4 rounded-4 d-flex align-items-center justify-content-center">
+                        <i class="bi bi-truck fs-4"></i>
+                    </div>
+                    <h6 class="fw-bold mb-3 text-dark">Smart Delivery</h6>
+                    <p class="text-muted small px-2">Verified Delivery Partners claim and deliver with turn-by-turn routing.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 3) FEATURES SECTION (4 CARDS) -->
+<section id="features" class="home-features-section py-5 fade-in-up delay-3 bg-light-grey">
+    <div class="container py-4">
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <a href="#!/safety-guidelines" class="text-decoration-none">
+                    <div class="feature-card card h-100 border-0 p-4 rounded-4 shadow-sm">
+                        <div class="feature-icon bg-success-subtle text-success mb-4 rounded-3">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <h6 class="fw-bold mb-3 fs-6 text-dark">Safe & Verified</h6>
+                        <p class="text-muted small mb-0 lh-lg">Every participant undergoes a rigorous rating process for safety.</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <a href="#!/impact-report" class="text-decoration-none">
+                    <div class="feature-card card h-100 border-0 p-4 rounded-4 shadow-sm">
+                        <div class="feature-icon bg-success-subtle text-success mb-4 rounded-3">
+                            <i class="bi bi-geo-alt"></i>
+                        </div>
+                        <h6 class="fw-bold mb-3 fs-6 text-dark">Real-time Tracking</h6>
+                        <p class="text-muted small mb-0 lh-lg">Track locations minute-by-minute from input source to delivery.</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <a href="#!/impact-report" class="text-decoration-none">
+                    <div class="feature-card card h-100 border-0 p-4 rounded-4 shadow-sm">
+                        <div class="feature-icon bg-success-subtle text-success mb-4 rounded-3">
+                            <i class="bi bi-graph-up"></i>
+                        </div>
+                        <h6 class="fw-bold mb-3 fs-6 text-dark">Impact Reports</h6>
+                        <p class="text-muted small mb-0 lh-lg">Get monthly certificates showing your CO2 savings and lives touched.</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <a href="#!/help-center" class="text-decoration-none">
+                    <div class="feature-card card h-100 border-0 p-4 rounded-4 shadow-sm">
+                        <div class="feature-icon bg-success-subtle text-success mb-4 rounded-3">
+                            <i class="bi bi-cash-stack"></i>
+                        </div>
+                        <h6 class="fw-bold mb-3 fs-6 text-dark">Tax Benefits</h6>
+                        <p class="text-muted small mb-0 lh-lg">Automated docs mandated for tax-deductible charitable contributions.</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 4) STATS GREEN STRIP -->
+<section id="impact" class="home-stats-strip py-5 text-white fade-in-up delay-4 bg-success" ng-controller="HomeController">
+    <div class="container py-3">
+        <div class="row text-center g-4">
+            <div class="col-6 col-md-3 stat-item">
+                <h2 class="display-4 fw-bold mb-2" ng-bind="animatedStats.mealsDelivered | number"></h2>
+                <div class="stat-divider mx-auto mb-3"></div>
+                <p class="mb-0 text-white-50 fw-semibold text-uppercase tracking-wide">Meals Delivered</p>
+            </div>
+            <div class="col-6 col-md-3 stat-item">
+                <h2 class="display-4 fw-bold mb-2" ng-bind="animatedStats.activeDonors | number"></h2>
+                <div class="stat-divider mx-auto mb-3"></div>
+                <p class="mb-0 text-white-50 fw-semibold text-uppercase tracking-wide">Active Donors</p>
+            </div>
+            <div class="col-6 col-md-3 stat-item">
+                <h2 class="display-4 fw-bold mb-2" ng-bind="animatedStats.partnerNGOs | number"></h2>
+                <div class="stat-divider mx-auto mb-3"></div>
+                <p class="mb-0 text-white-50 fw-semibold text-uppercase tracking-wide">Partner NGOs</p>
+            </div>
+            <div class="col-6 col-md-3 stat-item">
+                <h2 class="display-4 fw-bold mb-2" ng-bind="animatedStats.volunteers | number"></h2>
+                <div class="stat-divider mx-auto mb-3"></div>
+                <p class="mb-0 text-white-50 fw-semibold text-uppercase tracking-wide">Delivery Partners</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 5) ROLE CARDS SECTION -->
+<section id="network" class="home-roles-section py-5 bg-light-grey fade-in-up delay-5">
+    <div class="container py-4">
+        <div class="text-center mb-5">
+            <h3 class="fw-bold fs-2">Choose Your Role</h3>
+        </div>
+        <div class="row g-4 justify-content-center">
+            <!-- Donor Card -->
+            <div class="col-md-4">
+                <div class="card h-100 border-0 p-4 p-xl-5 rounded-4 shadow-sm text-start">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-success text-white rounded-3 mb-4" style="width: 48px; height: 48px; font-size: 1.5rem;">
+                        <i class="bi bi-shop"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3 text-dark">For Donors</h5>
+                    <p class="text-muted small mb-4 flex-grow-1 lh-lg">Restaurants, grocery stores, and hotels. Reduce waste and boost your ESG profile.</p>
+                    <ul class="list-unstyled small text-muted mb-4">
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Instant pickup</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Tax automation</li>
+                    </ul>
+                    <a href="#!/donor-dashboard" class="btn btn-outline-success w-100 rounded-pill fw-medium py-2 mt-auto">Sign up as Donor</a>
+                </div>
+            </div>
+            <!-- NGO Card -->
+            <div class="col-md-4">
+                <div class="card h-100 border-0 p-4 p-xl-5 rounded-4 shadow-sm text-start">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-primary text-white rounded-3 mb-4" style="width: 48px; height: 48px; font-size: 1.5rem;">
+                        <i class="bi bi-building"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3 text-dark">For NGOs</h5>
+                    <p class="text-muted small mb-4 flex-grow-1 lh-lg">Shelters, food banks, and charities. Access high-quality surplus food for your community.</p>
+                    <ul class="list-unstyled small text-muted mb-4">
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i> Reliable supply</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i> Zero cost food</li>
+                    </ul>
+                    <a href="#!/ngo-dashboard" class="btn btn-outline-primary w-100 rounded-pill fw-medium py-2 mt-auto">Sign up as NGO</a>
+                </div>
+            </div>
+            <!-- Volunteer Card -->
+            <div class="col-md-4">
+                <div class="card h-100 border-0 p-4 p-xl-5 rounded-4 shadow-sm text-start">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-warning text-white rounded-3 mb-4" style="width: 48px; height: 48px; font-size: 1.5rem;">
+                        <i class="bi bi-person-walking"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3 text-dark">For Delivery Partners</h5>
+                    <p class="text-muted small mb-4 flex-grow-1 lh-lg">Eco-conscious individuals. Spend 30 minutes delivering food and making a real difference.</p>
+                    <ul class="list-unstyled small text-muted mb-4">
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-warning me-2"></i> Flexible hours</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-warning me-2"></i> Community impact</li>
+                    </ul>
+                    <a href="#!/volunteer-dashboard" class="btn btn-outline-warning w-100 rounded-pill fw-medium py-2 mt-auto">Join as Delivery Partner</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 6) DARK GRADIENT LOGISTICS SECTION -->
+<section class="home-logistics-section py-5 fade-in-up delay-6">
+    <div class="container">
+        <div class="logistics-container rounded-5 text-white position-relative overflow-hidden p-5">
+            <div class="row align-items-center position-relative z-index-1">
+                <div class="col-lg-5 mb-5 mb-lg-0">
+                    <span class="badge bg-white text-dark mb-3 px-3 py-2 rounded-pill fw-bold"><i class="bi bi-robot me-1"></i> INNOVATION HUB</span>
+                    <h2 class="display-5 fw-bold mb-4 pe-lg-4">Smart Logistics for a Zero-Waste World</h2>
+                </div>
+                <div class="col-lg-7">
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <div class="logistic-box p-4 rounded-4 h-100">
+                                <h6 class="fw-bold mb-2">Predictive Surplus</h6>
+                                <p class="small text-white-50 mb-0">AI predicts excess before it happens using point-of-sale integrations.</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="logistic-box p-4 rounded-4 h-100">
+                                <h6 class="fw-bold mb-2">Dynamic Routing</h6>
+                                <p class="small text-white-50 mb-0">Optimized delivery paths to reduce carbon footprint and time.</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="logistic-box p-4 rounded-4 h-100">
+                                <h6 class="fw-bold mb-2">Shelf-life AI</h6>
+                                <p class="small text-white-50 mb-0">Visual recognition ensures food quality and safety standards.</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="logistic-box p-4 rounded-4 h-100">
+                                <h6 class="fw-bold mb-2">Secure Ledger</h6>
+                                <p class="small text-white-50 mb-0">Blockchain-based transparency for every single transaction.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Decorative blur blobs -->
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+        </div>
+    </div>
+</section>
+
+<!-- 7) TESTIMONIAL SECTION -->
+<section class="home-testimonial-section py-5 bg-light-grey fade-in-up delay-7">
+    <div class="container py-5">
+        <h3 class="text-center fw-bold mb-5 fs-3">Loved by the Community</h3>
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-4">
+                <div class="testimonial-card card border-0 h-100 p-4">
+                    <div class="stars text-success mb-3">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="fst-italic text-muted mb-4 small flex-grow-1">"FoodBridge has transformed how we handle leftover inventory. It's so much easier than calling around to individual shelters."</p>
+                    <div class="d-flex align-items-center">
+                        <img src="https://i.pravatar.cc/150?img=11" alt="Avatar" class="rounded-circle me-3" width="45" height="45">
+                        <div>
+                            <h6 class="fw-bold mb-0">Marcus Chen</h6>
+                            <span class="small text-muted">Green Cafe Restaurant</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="testimonial-card card border-0 h-100 p-4">
+                    <div class="stars text-success mb-3">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="fst-italic text-muted mb-4 small flex-grow-1">"Being a Delivery Partner is incredibly rewarding. I can pick up a donation on my way home from work. The app is flawless."</p>
+                    <div class="d-flex align-items-center">
+                        <img src="https://i.pravatar.cc/150?img=47" alt="Avatar" class="rounded-circle me-3" width="45" height="45">
+                        <div>
+                            <h6 class="fw-bold mb-0">Sarah Jenkins</h6>
+                            <span class="small text-muted">Active Delivery Partner</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="testimonial-card card border-0 h-100 p-4">
+                    <div class="stars text-success mb-3">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="fst-italic text-muted mb-4 small flex-grow-1">"The consistency of food we receive now has allowed us to serve 30% more people every week. A literal lifesaver."</p>
+                    <div class="d-flex align-items-center">
+                        <img src="https://i.pravatar.cc/150?img=68" alt="Avatar" class="rounded-circle me-3" width="45" height="45">
+                        <div>
+                            <h6 class="fw-bold mb-0">David Miller</h6>
+                            <span class="small text-muted">Director, Hope Shelter</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 8) FINAL CTA SECTION -->
+<section class="home-cta-section py-5 bg-light-grey mb-0 fade-in-up delay-8">
+    <div class="container pb-5">
+        <div class="cta-card text-center text-white rounded-5 p-5 position-relative overflow-hidden bg-success shadow-sm">
+            <h2 class="display-5 fw-bold mb-3 position-relative z-index-1 text-white">Ready to bridge the gap?</h2>
+            <p class="lead mb-4 position-relative z-index-1 fw-normal" style="max-width: 600px; margin: 0 auto; color: rgba(255,255,255,0.95);">Join thousands of businesses and Delivery Partners making zero hunger a reality in our city.</p>
+            <div class="d-flex gap-3 justify-content-center position-relative z-index-1 flex-wrap mt-4">
+                <button class="btn btn-white text-success btn-lg px-5 fw-bold shadow-sm rounded-pill cta-primary-btn" ng-click="handleCtaPrimary()">
+                    Get Started
+                </button>
+                <button class="btn btn-outline-light btn-lg px-5 rounded-pill border-2 fw-semibold cta-secondary-btn" ng-click="openPartnershipModal()">
+                    Partner With Us
+                </button>
+            </div>
+             <!-- Decorative -->
+             <div class="position-absolute top-0 end-0 opacity-25 p-5">
+                 <i class="bi bi-cloud-arrow-up-fill" style="font-size: 15rem;"></i>
+             </div>
+        </div>
+    </div>
+</section>

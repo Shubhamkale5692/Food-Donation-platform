@@ -1,0 +1,65 @@
+// NGO Chat Functions - Add these to NgoController
+
+    // NGO: Open chat with specific volunteer
+    $scope.openChatToVolunteer = function(donation) {
+      console.log("[NGO] Opening chat with volunteer for donation:", donation.id);
+      $scope.chatPanelOpen = true;
+      $scope.currentDonationId = donation.id;
+      $scope.chatMessageText = "";
+      $scope.chatLoading = true;
+
+      var token = AuthService.getToken();
+      ChatService.connect(donation.id, token);
+
+      ChatService.getParticipants(donation.id).then(function(res) {
+        $scope.chatParticipants = res.data.participants || [];
+        var volunteer = $scope.chatParticipants.find(function(p) { return p.role === 'Volunteer'; });
+        if (volunteer) {
+          $scope.chatSelectedReceiver = volunteer.user_id;
+          console.log("[NGO] Selected volunteer:", volunteer.name);
+        }
+      }).catch(function(err) {
+        console.error("[NGO] Failed to load participants:", err);
+      });
+
+      ChatService.getMessages(donation.id).then(function(res) {
+        $scope.chatMessages = res.data || [];
+        $scope.chatLoading = false;
+        scrollChatToBottom();
+      }).catch(function(err) {
+        console.error("[NGO] Failed to load messages:", err);
+        $scope.chatLoading = false;
+      });
+    };
+
+    // NGO: Open chat with specific donor
+    $scope.openChatToDonor = function(donation) {
+      console.log("[NGO] Opening chat with donor for donation:", donation.id);
+      $scope.chatPanelOpen = true;
+      $scope.currentDonationId = donation.id;
+      $scope.chatMessageText = "";
+      $scope.chatLoading = true;
+
+      var token = AuthService.getToken();
+      ChatService.connect(donation.id, token);
+
+      ChatService.getParticipants(donation.id).then(function(res) {
+        $scope.chatParticipants = res.data.participants || [];
+        var donor = $scope.chatParticipants.find(function(p) { return p.role === 'Donor'; });
+        if (donor) {
+          $scope.chatSelectedReceiver = donor.user_id;
+          console.log("[NGO] Selected donor:", donor.name);
+        }
+      }).catch(function(err) {
+        console.error("[NGO] Failed to load participants:", err);
+      });
+
+      ChatService.getMessages(donation.id).then(function(res) {
+        $scope.chatMessages = res.data || [];
+        $scope.chatLoading = false;
+        scrollChatToBottom();
+      }).catch(function(err) {
+        console.error("[NGO] Failed to load messages:", err);
+        $scope.chatLoading = false;
+      });
+    };

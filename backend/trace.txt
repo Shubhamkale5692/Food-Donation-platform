@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "F:\Food Donation Platform\backend\test_direct.py", line 5, in run
+    from app.interfaces.auth_router import login
+  File "F:\Food Donation Platform\backend\app\interfaces\auth_router.py", line 2, in <module>
+    from fastapi import APIRouter, Depends, HTTPException, status
+ModuleNotFoundError: No module named 'fastapi'

@@ -1,0 +1,179 @@
+================================================================================
+                    FOODBRIDGE - PROJECT DETAILS
+================================================================================
+
+1. PROJECT OVERVIEW AND HOW IT WORKS
+--------------------------------------------------------------------------------
+Project Name: FoodBridge - Smart Food Donation Platform
+Project Type: Full-Stack Web Application (Food Logistics & Donation System)
+
+HOW IT WORKS:
+FoodBridge connects surplus food from donors (like hotels/restaurants) to NGOs and delivery partners for delivery. It uses AI to match donations and tracks deliveries in real-time.
+
+WORKFLOW AND DETAILED ROLE FUNCTIONALITIES:
+
+1. DONOR (Food Business/Hotel/Restaurant)
+   Functions & Workflow:
+   - Registration & Login: Donors register and access their dedicated dashboard.
+   - Create Donations: They can create a donation listing in seconds by specifying the food type, quantity, expiry time, pickup location (with GPS coordinates), and optional food images.
+   - Status Tracking: Allows donors to view the real-time status of their donations (e.g., from "pending" to "completed") via the "My Donations" tab.
+   - Communication: Offers a built-in chat and call system to coordinate directly with the assigned NGO or Delivery Partner.
+   - Impact & Rewards: Donors have an impact dashboard to view total meals contributed and can download certificates for tax benefits once deliveries are completed.
+
+2. NGO (Non-Government Organization)
+   Functions & Workflow:
+   - Verification & Access: Register on the platform and log into the NGO dashboard after Admin approval.
+   - AI-Powered Matching: View available nearby donations automatically matched by AI according to food type and location suitability in the "Available Donations" tab.
+   - Claim & Assign: Claim viable donations and assign them to registered delivery partners in their network.
+   - Live Tracking & Security: Track delivery partners in real-time on a map and ensure safe food handover using a secure OTP verification system.
+   - Management Dashboard: Utilize statistics dashboards displaying accepted donations and total meals delivered.
+
+3. DELIVERY PARTNER
+   Functions & Workflow:
+   - Registration: Sign up and get approval from their respective NGO.
+   - Assignment Dashboard: View a clear dashboard populated with assigned deliveries, complete with pickup/drop-off details and integrated GPS turn-by-turn navigation.
+   - OTP Verification System: Initiate delivery by entering a secure OTP from the donor upon pickup, and complete the delivery using another OTP from the NGO upon arrival.
+   - Communication: Built-in chat and call features to interact seamlessly with Donors and NGOs during transit.
+   - Gamification & Rewards: Earn points for every completed delivery, achieve higher tier levels (Bronze/Silver/Gold), and obtain digital certificates based on their reliability and ratings.
+
+4. ADMIN
+   Functions & Workflow:
+   - User Management: Act as the central authority to manually vet, approve, or reject NGO and delivery partner registrations to ensure platform safety.
+   - Analytics & Monitoring: Access a master dashboard to view comprehensive platform statistics such as total donations, active users, and delivery metrics.
+   - System Health: Monitor overall platform health and resolve any system-wide discrepancies.
+   - Reward Issuance: Manage and issue digital certificates and achievements to high-performing users.
+
+
+2. PROJECT TECH STACK (IN DETAIL)
+--------------------------------------------------------------------------------
+BACKEND:
+- FastAPI (0.110+): A modern, high-performance Python web framework used for building the REST APIs.
+- SQLAlchemy (2.0+): The Object Relational Mapper (ORM) used to interact with the database using Python objects.
+- PostgreSQL (14+): The primary robust relational database management system.
+- Pydantic: Used for data validation and settings management.
+- Uvicorn: The ASGI web server used to run the FastAPI application.
+- Python-Jose: Used for handling JWT authentication.
+- Passlib & bcrypt: Used for secure password hashing.
+- Alembic: Handles database migrations and schema changes.
+- Celery + Redis: Used for background task processing and asynchronous job queues.
+- SlowAPI: Implements rate limiting on API endpoints to prevent abuse.
+
+FRONTEND:
+- AngularJS (1.x): The core frontend framework used to build the single-page application structure and controllers.
+- Bootstrap 5: Used for responsive UI design and layout.
+- Leaflet.js: Powers the interactive maps display.
+- MapLibre GL: Used for live/real-time tracking maps for delivery partner deliveries.
+- Chart.js: Generates visually appealing statistics charts on dashboards.
+- Bootstrap Icons: Provides the user interface iconography.
+
+EXTERNAL SERVICES:
+- OpenStreetMap / Mapbox: Used for geocoding addresses and rendering map tiles.
+- SMTP Server: Implements email notifications (scalable and configurable).
+
+
+3. DATABASE FIELDS AND THEIR FUNCTIONALITIES
+--------------------------------------------------------------------------------
+A. USER MODEL (Handles all users: Donor, NGO, Delivery Partner, Admin)
+- id (UUID): Primary key, unique identifier for the user.
+- name (String): User's display name.
+- email (String): Unique email used for login.
+- password_hash (String): Securely hashed password.
+- role (Enum): Distinguishes the type of user (ADMIN, NGO, DONOR, DELIVERY PARTNER).
+- is_active (Boolean): Indicates if the account is currently active.
+- is_verified (Boolean): Shows if email is verified or if an NGO is approved.
+- trust_score (Integer): Used for fraud detection (default is 100).
+- created_at (DateTime): Timestamp of account creation.
+- ngo_id (UUID): For delivery partners, this links them to a specific NGO.
+- volunteer_status/status (String): Shows if a delivery partner is pending, approved, or rejected.
+- availability (String): Shows if a delivery partner is currently available or busy.
+- location_lat/lng (Float): Current GPS geographic coordinates of the user.
+- rating (Float): Performance rating for delivery partners (out of 5.0).
+- completed_deliveries (Integer): Tracks the total successful deliveries by a delivery partner.
+
+B. PROFILE MODEL (Extended user location and contact data)
+- id (UUID): Primary key.
+- user_id (UUID): Links back to the User.
+- name (String): Profile display name.
+- phone (String): Contact phone number.
+- address (String): Physical text address.
+- latitude/longitude (Float): Fixed geographic location.
+- current_lat/lng (Float): Variables for live tracking during deliveries.
+- certificate_url (String): Link to the uploaded NGO verification document.
+
+C. DONATION MODEL (Core entity tracking the food lifecycle)
+- id (UUID): Primary key.
+- donor_id (UUID): Links to the user who donated.
+- food_type (String): Categorizes the food (e.g., Rice, Curry).
+- quantity (Integer): Number of units or meals.
+- expiry_time (DateTime): The deadline before the food goes bad.
+- status (Enum): Tracks the stage (PENDING -> ACCEPTED -> ASSIGNED -> CLAIMED -> IN_PROGRESS -> PICKED_UP -> COMPLETED -> CANCELLED).
+- freshness_status (Enum): AI evaluation result of food freshness (UNKNOWN, FRESH, MEDIUM, SPOILED).
+- image_url (String): Link to the uploaded food picture.
+- latitude/longitude (Float) & pickup_lat/lng (Float): GPS coordinates for pickup.
+- pickup_address (String): Human-readable location text.
+- created_at (DateTime): Timestamp when the donation was listed.
+- ngo_id (UUID): The NGO that claimed this donation.
+- volunteer_id (UUID): The delivery partner assigned to deliver.
+- delivery_status (String): Granular delivery tracking state.
+- otp_code (String): The 6-digit security code for verification.
+- otp_verified (Boolean): Confirms if the OTP was successfully matched.
+- volunteer_reached_donor (Boolean): Flag indicating delivery partner arrival.
+- donation_received (Boolean): Flag indicating NGO received the food.
+- pickup_time / delivery_time / assignment_time (DateTime): Operational timestamps.
+- cancel_reason (String): Text explanation if the donation was cancelled.
+
+D. DELIVERY MODEL (Tracks assignments specifically)
+- id (UUID): Primary key.
+- donation_id (UUID): The donation being delivered.
+- ngo_id (UUID): Destination target.
+- volunteer_id (UUID): Who is delivering.
+- status (Enum): Current stage (PENDING, ASSIGNED, IN_PROGRESS, PICKED_UP, DELIVERED, FAILED).
+- otp (String): The pickup verification code.
+- assigned_at / completed_at (DateTime): Operational timestamps.
+
+E. OTHER SUPPORTING MODELS
+- VOLUNTEER_LOCATION: Logs historical GPS movements (latitude/longitude/timestamp) for tracking paths.
+- NOTIFICATION: Stores system alerts (message, type, is_read) for specific users.
+- MESSAGE: Stores chat logs between parties (sender, receiver, content, timestamp, seen status).
+- CERTIFICATE: Tracks rewards & achievements issued to top-performing delivery partners.
+
+
+4. CURRENT LIMITATIONS OF THE PROJECT
+--------------------------------------------------------------------------------
+1. No Payment Integration: The platform is strictly free and does not process logistics costs or monetary donations.
+2. Scope constraint: Dedicated entirely to food (no clothes or other supplies).
+3. Localization: Currently lacks multi-language support.
+4. Notifications: Only in-app notifications exist (no real-time push/SMS notifications).
+5. WebSocket Chat: The real-time chat feature can occasionally be unstable.
+6. Offline Constraints: No offline mode; requires a continuous internet connection.
+7. Analytics: Reporting features and analytics dashboards are currently limited.
+8. Platform: Exists only as a web app (mobile-responsive but lacks native Android/iOS apps).
+9. Manual Approvals: The approval process for NGOs and delivery partners is completely manual by admins.
+10. Safety Certifications: No automated integration or verification with official government food safety standards.
+
+
+5. FUTURE ENHANCEMENTS
+--------------------------------------------------------------------------------
+Short-Term Goals:
+- Fix WebSocket chat stability and connectivity issues.
+- Implement Push Notifications to improve user responsiveness.
+- Improve the reliability of real-time maps tracking.
+- Add estimated time of delivery (ETA) metrics.
+
+Medium-Term Goals:
+- Develop native Mobile Apps (iOS and Android).
+- Add Food Safety Certification verification flows.
+- Introduce Multi-Language support (e.g., Hindi and regional dialects).
+- Integrate SMS notifications for offline alerts.
+- Develop an advanced, detailed analytics dashboard.
+- Introduce a rating system across all users and auto-approve algorithms for highly trusted donors.
+
+Long-Term Goals:
+- Integrate payments for covering logistics/delivery costs.
+- Implement an AI demand prediction system for better distribution.
+- Provide a Public API for large restaurant chains to integrate their POS systems directly.
+- Government food safety API integration.
+- Expand to a multi-city architecture.
+- Offer a dedicated Corporate CSR portal.
+- Implement blockchain for complete transparency and a carbon footprint tracking module to show environmental impact.
+

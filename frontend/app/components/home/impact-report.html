@@ -1,0 +1,211 @@
+<!-- Impact Report Page -->
+<div class="impact-report-page" ng-controller="ImpactReportController">
+  <!-- Page Header -->
+  <section class="impact-header py-5 bg-success text-white">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-8">
+          <h1 class="display-3 fw-bold mb-2 impact-fade-in">Impact Report</h1>
+          <p class="lead impact-fade-in delay-1">Real-time insights into our collective impact</p>
+        </div>
+        <div class="col-lg-4 text-lg-end mt-3 mt-lg-0 impact-fade-in delay-2">
+          <div class="report-date text-white-50">
+            <i class="bi bi-calendar3 me-2"></i>
+            <span>{{currentDate | date:'MMMM yyyy'}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Loading State -->
+  <div class="loading-state text-center py-5" ng-if="loading">
+    <div class="spinner-border text-success" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-3 text-muted">Loading impact data...</p>
+  </div>
+
+  <!-- Dashboard Content -->
+  <div class="impact-content" ng-if="!loading">
+    <!-- Overview Stats -->
+    <section class="stats-section py-5">
+      <div class="container">
+        <h2 class="section-title fw-bold mb-4">Overview</h2>
+        <div class="row g-4">
+          <div class="col-sm-6 col-lg-3 impact-fade-in">
+            <div class="stat-card card h-100 border-0 rounded-4 shadow-sm p-4">
+              <div class="stat-icon bg-success-subtle text-success rounded-3 mb-3">
+                <i class="bi bi-basket-fill fs-4"></i>
+              </div>
+              <h3 class="stat-number fw-bold counter" data-target="{{overviewStats.totalDonations}}">0</h3>
+              <p class="stat-label text-muted mb-0">Total Donations</p>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-3 impact-fade-in delay-1">
+            <div class="stat-card card h-100 border-0 rounded-4 shadow-sm p-4">
+              <div class="stat-icon bg-primary-subtle text-primary rounded-3 mb-3">
+                <i class="bi bi-people-fill fs-4"></i>
+              </div>
+              <h3 class="stat-number fw-bold counter" data-target="{{overviewStats.mealsServed}}">0</h3>
+              <p class="stat-label text-muted mb-0">Meals Served</p>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-3 impact-fade-in delay-2">
+            <div class="stat-card card h-100 border-0 rounded-4 shadow-sm p-4">
+              <div class="stat-icon bg-warning-subtle text-warning rounded-3 mb-3">
+                <i class="bi bi-building-fill fs-4"></i>
+              </div>
+              <h3 class="stat-number fw-bold counter" data-target="{{overviewStats.ngosConnected}}">0</h3>
+              <p class="stat-label text-muted mb-0">NGOs Connected</p>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-3 impact-fade-in delay-3">
+            <div class="stat-card card h-100 border-0 rounded-4 shadow-sm p-4">
+              <div class="stat-icon bg-info-subtle text-info rounded-3 mb-3">
+                <i class="bi bi-truck fs-4"></i>
+              </div>
+              <h3 class="stat-number fw-bold counter" data-target="{{overviewStats.deliveriesCompleted}}">0</h3>
+              <p class="stat-label text-muted mb-0">Deliveries Completed</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Donation Trends Chart -->
+    <section class="chart-section py-5 bg-light">
+      <div class="container">
+        <div class="row align-items-center mb-4">
+          <div class="col-md-6">
+            <h2 class="section-title fw-bold mb-0">Donation Trends</h2>
+          </div>
+          <div class="col-md-6 text-md-end">
+            <div class="chart-filters btn-group">
+              <button class="btn btn-sm" ng-class="trendFilter === 'today' ? 'btn-success' : 'btn-outline-success'" ng-click="setTrendFilter('today')">Today</button>
+              <button class="btn btn-sm" ng-class="trendFilter === 'weekly' ? 'btn-success' : 'btn-outline-success'" ng-click="setTrendFilter('weekly')">Weekly</button>
+              <button class="btn btn-sm" ng-class="trendFilter === 'monthly' ? 'btn-success' : 'btn-outline-success'" ng-click="setTrendFilter('monthly')">Monthly</button>
+            </div>
+          </div>
+        </div>
+        <div class="card border-0 rounded-4 shadow-sm p-4 impact-fade-in">
+          <canvas id="donationTrendChart" height="100"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- NGO Contribution & Delivery Partner Impact -->
+    <section class="details-section py-5">
+      <div class="container">
+        <div class="row g-4">
+          <!-- NGO Contribution -->
+          <div class="col-lg-6 impact-fade-in">
+            <div class="card border-0 rounded-4 shadow-sm h-100">
+              <div class="card-body p-4">
+                <h3 class="fw-bold mb-4">
+                  <i class="bi bi-building text-success me-2"></i>Top NGOs
+                </h3>
+                <div class="ngo-list" ng-if="topNgos.length > 0">
+                  <div class="ngo-item d-flex align-items-center mb-3 pb-3 border-bottom" ng-repeat="ngo in topNgos track by $index">
+                    <div class="ngo-rank me-3">
+                      <span class="badge bg-success rounded-circle" style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;">{{$index + 1}}</span>
+                    </div>
+                    <div class="ngo-info flex-grow-1">
+                      <h6 class="mb-1 fw-bold">{{ngo.name || 'NGO ' + ngo.user_id}}</h6>
+                      <p class="mb-0 text-muted small">{{ngo.donationCount}} donations received</p>
+                    </div>
+                    <div class="ngo-stat">
+                      <span class="text-success fw-bold">{{ngo.donationCount}}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-center py-4 text-muted" ng-if="topNgos.length === 0">
+                  <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                  No NGO data available
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Delivery Partner Impact -->
+          <div class="col-lg-6 impact-fade-in delay-1">
+            <div class="card border-0 rounded-4 shadow-sm h-100">
+              <div class="card-body p-4">
+                <h3 class="fw-bold mb-4">
+                  <i class="bi bi-people text-warning me-2"></i>Delivery Partner Impact
+                </h3>
+                <div class="volunteer-stats">
+                  <div class="vol-stat-item mb-4">
+                    <div class="d-flex justify-content-between mb-2">
+                      <span class="fw-medium">Deliveries Completed</span>
+                      <span class="fw-bold">{{volunteerStats.totalDeliveries}}</span>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                      <div class="progress-bar bg-success" role="progressbar" ng-style="{'width': (volunteerStats.totalDeliveries / maxDeliveries * 100) + '%'}"></div>
+                    </div>
+                  </div>
+                  <div class="vol-stat-item">
+                    <div class="d-flex justify-content-between mb-2">
+                      <span class="fw-medium">Reliability Score</span>
+                      <span class="fw-bold" ng-class="getReliabilityClass(volunteerStats.reliabilityScore)">{{volunteerStats.reliabilityScore | number:0}}%</span>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                      <div class="progress-bar" role="progressbar" ng-class="getReliabilityBarClass(volunteerStats.reliabilityScore)" ng-style="{'width': volunteerStats.reliabilityScore + '%'}"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="reliability-legend mt-4 d-flex gap-3">
+                  <div class="legend-item d-flex align-items-center">
+                    <span class="dot bg-success rounded-circle me-2"></span>
+                    <span class="small text-muted">High (70%+)</span>
+                  </div>
+                  <div class="legend-item d-flex align-items-center">
+                    <span class="dot bg-warning rounded-circle me-2"></span>
+                    <span class="small text-muted">Medium (40-70%)</span>
+                  </div>
+                  <div class="legend-item d-flex align-items-center">
+                    <span class="dot bg-danger rounded-circle me-2"></span>
+                    <span class="small text-muted">Low (&lt;40%)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recent Activity -->
+    <section class="activity-section py-5 bg-light">
+      <div class="container">
+        <h2 class="section-title fw-bold mb-4">Recent Activity</h2>
+        <div class="card border-0 rounded-4 shadow-sm impact-fade-in">
+          <div class="card-body p-0">
+            <div class="activity-list" ng-if="recentActivity.length > 0">
+              <div class="activity-item d-flex align-items-center p-3 border-bottom" ng-repeat="activity in recentActivity track by $index">
+                <div class="activity-icon rounded-circle me-3" ng-class="getActivityIconClass(activity.type)">
+                  <i class="bi" ng-class="getActivityIcon(activity.type)"></i>
+                </div>
+                <div class="activity-content flex-grow-1">
+                  <p class="mb-0">{{activity.description}}</p>
+                  <small class="text-muted">{{activity.time | date:'short'}}</small>
+                </div>
+              </div>
+            </div>
+            <div class="text-center py-4 text-muted" ng-if="recentActivity.length === 0">
+              <i class="bi bi-clock-history fs-1 d-block mb-2"></i>
+              No recent activity
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Back Link -->
+  <div class="text-center py-4">
+    <a href="#!/" class="btn btn-link text-success fw-medium">
+      <i class="bi bi-arrow-left me-2"></i> Back to Home
+    </a>
+  </div>
+</div>

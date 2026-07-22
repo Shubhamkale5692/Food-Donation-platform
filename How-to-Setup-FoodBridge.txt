@@ -1,0 +1,210 @@
+FoodBridge - Smart Food Donation Platform
+Professional Setup & Installation Guide
+Welcome to the FoodBridge deployment guide. This document provides industry-level instructions for setting up the entire ecosystem from scratch on a new device.
+
+1. Project Architecture Overview
+FoodBridge is built on a Modular Hexagonal Architecture, ensuring separation of concerns between business logic, data persistence, and external interfaces.
+
+Frontend: Single Page Application (SPA) using AngularJS (1.x) for dynamic data binding and Bootstrap 5 for premium responsiveness.
+Backend: High-performance asynchronous API powered by FastAPI (Python 3.11+).
+Database: PostgreSQL 14+ for relational data and SQLAlchemy 2.0 ORM.
+Real-time: WebSockets for live volunteer tracking and instant chat.
+Background Tasks: Celery + Redis for certificate generation and email notifications.
+
+2. Required Software & Tools
+Ensure the following are installed before proceeding:
+
+Tool	Version	Purpose
+Python	3.11+	Backend execution
+Node.js	18+	Frontend development utilities
+PostgreSQL	14+	Relational Database
+Redis	6.2+	Message Broker for Celery/Cache
+Docker	24+	Containerization (Optional)
+Git	2.x	Version Control
+
+
+3. Backend Setup (FastAPI)
+Step 1: Initialize Environment
+bash
+cd backend
+python -m venv venv
+# Windows
+venv\Scripts\activate
+# Linux/macOS
+source venv/bin/activate
+
+
+Step 2: Install Dependencies
+bash
+pip install -r requirements.txt
+
+
+Step 3: Database Migrations
+The system supports automatic schema synchronization on startup. To run manually:
+
+bash
+# Using Alembic (if configured)
+alembic upgrade head
+# OR run the migration script
+python run_migration.py
+
+
+Step 4: Seed Initial Data
+To populate the system with NGOs and default Admin:
+
+bash
+python seed_data.py
+Step 5: Start Development Server
+bash
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+API Docs: http://localhost:8000/docs
+Health Check: http://localhost:8000/health
+
+
+4. Frontend Setup (AngularJS)
+The frontend is a static SPA. It can be served using any web server.
+
+Option A: VS Code Live Server (Recommended)
+Open the frontend folder in VS Code.
+Right-click index.html and select "Open with Live Server".
+Default URL: http://127.0.0.1:5500
+Option B: Python Simple Server
+bash
+cd frontend
+python -m http.server 8080
+Access at http://localhost:8080
+
+5. Environment Variables (.env)
+Create a .env file in the backend/ directory.
+
+env
+# --- App Configuration ---
+PROJECT_NAME=FoodBridge
+API_V1_STR=/api/v1
+# --- Security ---
+# Generate a secure key: openssl rand -hex 32
+SECRET_KEY=your_super_secret_key_here
+ACCESS_TOKEN_EXPIRE_MINUTES=11520
+# --- Database (PostgreSQL) ---
+POSTGRES_SERVER=localhost
+POSTGRES_PORT=5432
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=your_password
+POSTGRES_DB=foodbridge
+# --- Map Services ---
+# Mapbox token is optional (falls back to OpenStreetMap/OSRM)
+FOODBRIDGE_MAPBOX_TOKEN=pk.your_mapbox_token_here
+# --- Redis / Celery ---
+CELERY_BROKER_URL=redis://localhost:6379/0
+# --- Email (SMTP) ---
+MAIL_USERNAME=notifications@foodbridge.org
+MAIL_PASSWORD=your_smtp_app_password
+MAIL_FROM=notifications@foodbridge.org
+MAIL_SERVER=smtp.gmail.com
+MAIL_PORT=587
+MAIL_STARTTLS=true
+
+
+6. Docker Setup (Containerized)
+The easiest way to run the full stack (DB + Backend + Frontend + Redis).
+
+bash
+# From the root directory
+docker-compose up --build
+Frontend: http://localhost:8080
+Backend API: http://localhost:8000
+Database: Port 5432
+
+
+7. Advanced Feature Setup
+📡 WebSocket & Real-time Tracking
+Endpoint: ws://localhost:8000/ws/location/{donation_id}
+Protocol: Send coordinate objects {lat: float, lng: float} via JSON.
+Map Service: Uses Leaflet.js for UI and OSRM for free routing logic.
+🤖 AI Assignment System
+The system uses a heuristic matching engine (located in backend/app/services/ai_service.py):
+
+Distance Matrix: Calculates travel time between donation and NGOs.
+Capacity Matching: Matches food quantity to NGO handling capacity.
+Freshness Logic: Prioritizes NGOs with the shortest travel time for "Urgent" items.
+📜 Certificate System
+Volunteers earn certificates automatically upon reaching milestones (5, 10, 50 deliveries).
+
+Service: certificate_service.py
+Output: PDF/PNG generated via Jinja2 templates and stored in uploads/certificates.
+8. Common Troubleshooting
+Issue	Solution
+CORS Error	Ensure http://localhost:8080 (or your frontend URL) is in backend/app/main.py -> allow_origins.
+DB Connection Refused	Check if PostgreSQL service is running and POSTGRES_USER has permissions.
+Map Not Loading	Check browser console. Ensure internet connection for Leaflet CDNs or provide a Mapbox token.
+Login "ngo_id" Error	Run python backend/run_migration.py to fix legacy database schema gaps.
+
+
+9. Folder Structure
+text
+FoodBridge/
+├── backend/
+│   ├── app/
+│   │   ├── core/           # Security, Auth, Settings
+│   │   ├── domain/         # Models, Pydantic Schemas
+│   │   ├── infrastructure/ # DB engine, Session management
+│   │   ├── interfaces/     # API Routers (The API Layer)
+│   │   └── services/       # Business Logic (AI, Certificates, Chat)
+│   ├── migrations/         # Database versioning
+│   └── requirements.txt    # Python dependencies
+├── frontend/
+│   ├── app/                # AngularJS Controllers & Services
+│   ├── assets/             # CSS, Images, Scripts
+│   └── index.html          # Main Entry Point
+└── docker-compose.yml      # Infrastructure as Code
+
+10. Deployment Checklist (Production)
+ Use Gunicorn with Uvicorn workers for the backend.
+ Enable HTTPS via Nginx and Let's Encrypt.
+ Set DEBUG=False in environment variables.
+ Configure a persistent volume for the PostgreSQL container.
+ Set up a CDN or Nginx for serving frontend static assets.
+11. 🚀 Quick Start: Running FoodBridge
+Follow these exact steps to launch the platform in a local development environment.
+
+1. Start the Backend
+Open a terminal and navigate to the backend directory:
+
+powershell
+cd backend
+# Activate virtual environment
+.\venv\Scripts\activate
+# Start the API server
+uvicorn app.main:app --reload --port 8000
+The backend is now live at http://localhost:8000.
+
+2. Start the Frontend
+Open a new terminal and navigate to the frontend directory:
+
+powershell
+cd frontend
+# Serve the static files
+python -m http.server 8080
+The frontend is now live at http://localhost:8080.
+
+12. 🗄️ Database Exploration Commands
+To view and manage the database tables directly, use the following PostgreSQL commands.
+
+Accessing the Database (psql)
+powershell
+# Connect to the foodbridge database
+psql -U postgres -d foodbridge
+Essential SQL Commands
+Action	Command
+List all tables	\dt
+View table structure	\d table_name (e.g., \d users)
+View all users	SELECT * FROM users;
+View all donations	SELECT * FROM donations;
+View deliveries	SELECT * FROM deliveries;
+Exit psql	\q
+
+
+NOTE
+
+If you are using Docker, you can access the database using: docker exec -it foodbridge-db psql -U postgres -d foodbridge
+

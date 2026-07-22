@@ -1,0 +1,1814 @@
+<style>
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   Donor Dashboard Professional Redesign - Industry Level
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+
+/* Base Container */
+.donor-dashboard {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1050;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    overflow: hidden;
+    background: #f8f9fa;
+}
+
+/* Sidebar */
+.donor-sidebar {
+    width: 260px;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #1a1f2e 0%, #252b3d 100%);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    flex-shrink: 0;
+}
+
+.donor-sidebar-logo {
+    padding: 20px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.donor-logo-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #20c997, #198754);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: white;
+}
+
+.donor-logo-text {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: white;
+    margin-left: 10px;
+}
+
+.donor-sidebar-profile {
+    padding: 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.donor-profile-avatar {
+    width: 48px;
+    height: 48px;
+    background: rgba(32, 201, 151, 0.2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #20c997;
+    font-size: 1.5rem;
+}
+
+.donor-profile-name {
+    font-weight: 600;
+    color: white;
+    font-size: 0.95rem;
+}
+
+.donor-verified-badge {
+    font-size: 0.75rem;
+    color: #20c997;
+    display: flex;
+    align-items: center;
+}
+
+/* Navigation */
+.donor-nav {
+    padding: 12px 8px;
+}
+
+.donor-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    color: rgba(255,255,255,0.65);
+    text-decoration: none;
+    border-radius: 10px;
+    margin-bottom: 4px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    font-size: 0.9rem;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+}
+
+.donor-nav-item:hover {
+    color: white;
+    background: rgba(255,255,255,0.08);
+    transform: translateX(4px);
+}
+
+.donor-nav-item.active {
+    color: white;
+    background: rgba(32, 201, 151, 0.15);
+    transform: translateX(4px);
+    box-shadow: inset 3px 0 0 #20c997;
+}
+
+.donor-nav-item i {
+    font-size: 1.1rem;
+    width: 20px;
+    text-align: center;
+}
+
+.donor-nav-badge {
+    background: #20c997;
+    color: white;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-left: auto;
+}
+
+.bg-purple {
+    background-color: #6f42c1 !important;
+}
+
+.bg-info {
+    background-color: #0dcaf0 !important;
+}
+
+/* Main Content */
+.donor-main {
+    flex: 1;
+    overflow-y: auto;
+    height: 100vh;
+    background: #f8f9fa;
+}
+
+/* Topbar */
+.donor-topbar {
+    background: white;
+    padding: 12px 24px;
+    border-bottom: 1px solid #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.donor-topbar-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #212529;
+}
+
+.donor-topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.donor-topbar-notif {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.donor-topbar-notif:hover {
+    background: #e9ecef;
+}
+
+.donor-topbar-notif i {
+    font-size: 1.2rem;
+    color: #6c757d;
+}
+
+.donor-notif-dot {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 8px;
+    height: 8px;
+    background: #dc3545;
+    border-radius: 50%;
+}
+
+.donor-topbar-avatar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    color: #495057;
+}
+
+/* Stat Cards */
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+
+.stat-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #212529;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+/* Content Area */
+.donor-content {
+    padding: 24px;
+}
+
+/* Tab Navigation */
+.donor-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 12px;
+}
+
+.donor-tab {
+    padding: 10px 20px;
+    border: none;
+    background: none;
+    color: #6c757d;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.donor-tab:hover {
+    background: #f8f9fa;
+    color: #212529;
+}
+
+.donor-tab.active {
+    background: #20c997;
+    color: white;
+}
+
+/* Form Styles */
+.donor-form-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-bottom: 24px;
+}
+
+.donor-form-label {
+    font-weight: 600;
+    color: #495057;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.donor-form-control {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.donor-form-control:focus {
+    border-color: #20c997;
+    box-shadow: 0 0 0 3px rgba(32, 201, 151, 0.15);
+}
+
+/* Donation List */
+.donation-card {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: all 0.2s;
+    border-left: 4px solid #20c997;
+}
+
+.donation-card:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.donation-card.status-pending { border-left-color: #ffc107; }
+.donation-card.status-accepted { border-left-color: #0d6efd; }
+.donation-card.status-completed { border-left-color: #20c997; }
+.donation-card.status-cancelled { border-left-color: #dc3545; }
+
+/* Toast Notifications */
+.donor-toast-container {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    z-index: 9999;
+    min-width: 300px;
+    max-width: 400px;
+}
+
+.donor-toast {
+    padding: 14px 18px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideInRight 0.3s ease;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(120%); opacity: 0; }
+    to   { transform: translateX(0);   opacity: 1; }
+}
+
+.donor-toast.success { background: #d1fae5; color: #065f46; border-left: 4px solid #10b981; }
+.donor-toast.danger  { background: #fee2e2; color: #7f1d1d; border-left: 4px solid #ef4444; }
+.donor-toast.warning { background: #fef3c7; color: #78350f; border-left: 4px solid #f59e0b; }
+.donor-toast.info    { background: #dbeafe; color: #1e3a8a; border-left: 4px solid #3b82f6; }
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    color: #dee2e6;
+    margin-bottom: 16px;
+}
+
+/* Map Container */
+.donor-map-container {
+    height: calc(100vh - 120px);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Profile Section */
+.profile-header {
+    text-align: center;
+    padding: 30px 20px;
+    background: linear-gradient(135deg, #20c997, #198754);
+    border-radius: 12px;
+    color: white;
+    margin-bottom: 24px;
+}
+
+.profile-avatar-large {
+    width: 100px;
+    height: 100px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    margin: 0 auto 16px;
+}
+
+.profile-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.profile-email {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.profile-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    margin-top: 8px;
+}
+
+.profile-info-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.profile-info-label {
+    font-size: 0.8rem;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.profile-info-value {
+    font-size: 1rem;
+    color: #212529;
+    font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .donor-sidebar { position: fixed; left: -260px; }
+    .donor-sidebar.show { left: 0; }
+    .donor-main { margin-left: 0; }
+}
+</style>
+
+<!-- Toast Container -->
+<div class="donor-toast-container">
+    <div class="donor-toast {{toast.type}}" ng-show="toast.visible">
+        <i class="bi" ng-class="{'bi-check-circle-fill': toast.type==='success', 'bi-exclamation-triangle-fill': toast.type==='warning', 'bi-x-circle-fill': toast.type==='danger', 'bi-info-circle-fill': toast.type==='info'}"></i>
+        <span>{{toast.message}}</span>
+    </div>
+</div>
+
+<div class="donor-dashboard d-flex" ng-controller="DonorController" ng-init="activeSection='new-donation'">
+    
+    <!-- Sidebar -->
+    <aside class="donor-sidebar" ng-class="{'show': sidebarOpen}">
+        <div class="donor-sidebar-logo d-flex align-items-center">
+            <div class="donor-logo-icon"><i class="bi bi-box-seam-fill"></i></div>
+            <span class="donor-logo-text">FoodBridge</span>
+        </div>
+
+        <div class="donor-sidebar-profile" ng-click="openDonorProfile()" style="cursor:pointer;">
+            <div class="donor-profile-avatar"><i class="bi bi-person-fill"></i></div>
+            <div>
+                <div class="donor-profile-name">Donor Account</div>
+                <span class="donor-verified-badge">
+                    <i class="bi bi-patch-check-fill me-1" ng-if="certificate"></i>
+                    {{certificate ? 'Certified Eco-Hero' : 'Verified Donor'}}
+                </span>
+            </div>
+        </div>
+
+        <nav class="donor-nav">
+            <button class="donor-nav-item" ng-class="{active: activeSection==='profile'}" ng-click="openDonorProfile()">
+                <i class="bi bi-person-fill"></i>
+                <span>My Profile</span>
+            </button>
+            <button class="donor-nav-item" ng-class="{active: activeSection==='new-donation'}" ng-click="setDonorSection('new-donation')">
+                <i class="bi bi-plus-circle-fill"></i>
+                <span>New Donation</span>
+            </button>
+            <button class="donor-nav-item" ng-class="{active: activeSection==='my-donations'}" ng-click="setDonorSection('my-donations')">
+                <i class="bi bi-box-seam-fill"></i>
+                <span>My Donations</span>
+                <span class="donor-nav-badge" ng-if="myDonations.length > 0">{{myDonations.length}}</span>
+            </button>
+            <button class="donor-nav-item" ng-class="{active: activeSection==='impact'}" ng-click="setDonorSection('impact')">
+                <i class="bi bi-graph-up-arrow"></i>
+                <span>My Impact</span>
+            </button>
+            <button class="donor-nav-item" ng-class="{active: activeSection==='settings'}" ng-click="setDonorSection('settings')">
+                <i class="bi bi-gear-fill"></i>
+                <span>Settings</span>
+            </button>
+            <button class="donor-nav-item" ng-class="{active: activeSection==='achievements'}" ng-click="setDonorSection('achievements')">
+                <i class="bi bi-trophy-fill"></i>
+                <span>Achievements</span>
+            </button>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="donor-main">
+        <!-- Topbar -->
+        <div class="donor-topbar">
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn btn-outline-secondary d-lg-none" ng-click="sidebarOpen = !sidebarOpen">
+                    <i class="bi bi-list"></i>
+                </button>
+                <span class="donor-topbar-title">
+                    <span ng-if="activeSection==='profile'">My Profile</span>
+                    <span ng-if="activeSection==='new-donation'">Create New Donation</span>
+                    <span ng-if="activeSection==='my-donations'">My Donations</span>
+                    <span ng-if="activeSection==='impact'">My Impact</span>
+                    <span ng-if="activeSection==='achievements'">My Achievements</span>
+                    <span ng-if="activeSection==='settings'">Settings</span>
+                </span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-outline-success btn-sm rounded-pill" ng-click="manualRefresh()" ng-disabled="loading" title="Sync Data">
+                    <i class="bi bi-arrow-clockwise" ng-class="{'fa-spin': loading}"></i>
+                </button>
+                <div class="donor-topbar-notif" ng-click="setDonorSection('my-donations')" title="Notifications">
+                    <i class="bi bi-bell-fill"></i>
+                    <span class="donor-notif-dot" ng-if="pendingCount > 0"></span>
+                </div>
+                <button class="btn btn-outline-danger btn-sm rounded-pill" ng-click="logout()" ng-disabled="logoutInProgress" title="Sign Out">
+                    <span ng-if="logoutInProgress" class="spinner-border spinner-border-sm"></span>
+                    <i class="bi bi-box-arrow-right" ng-if="!logoutInProgress"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="donor-content">
+            
+            <!-- Stats Row - Only show on My Donations -->
+            <div class="row g-3 mb-4" ng-if="activeSection==='my-donations'">
+                <div class="col-md-3">
+                    <div class="stat-card d-flex align-items-center gap-3">
+                        <div class="stat-icon bg-success-subtle text-success">
+                            <i class="bi bi-box-seam-fill"></i>
+                        </div>
+                        <div>
+                            <div class="stat-value">{{donationStats.total || 0}}</div>
+                            <div class="stat-label">Total Donations</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card d-flex align-items-center gap-3">
+                        <div class="stat-icon bg-primary-subtle text-primary">
+                            <i class="bi bi-check-circle-fill"></i>
+                        </div>
+                        <div>
+                            <div class="stat-value">{{donationStats.completed || 0}}</div>
+                            <div class="stat-label">Completed</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card d-flex align-items-center gap-3">
+                        <div class="stat-icon bg-warning-subtle text-warning">
+                            <i class="bi bi-hourglass-split"></i>
+                        </div>
+                        <div>
+                            <div class="stat-value">{{donationStats.pending || 0}}</div>
+                            <div class="stat-label">Pending</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card d-flex align-items-center gap-3">
+                        <div class="stat-icon bg-info-subtle text-info">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+                        <div>
+                            <div class="stat-value">{{donationStats.mealsSaved || 0}}</div>
+                            <div class="stat-label">Meals Saved</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section: New Donation -->
+            <div ng-if="activeSection==='new-donation'">
+                <div class="donor-form-card">
+                    <h5 class="fw-bold mb-4"><i class="bi bi-plus-circle text-success me-2"></i>New Donation Request</h5>
+                    
+                    <!-- Success Banner -->
+                    <div ng-if="donationSubmitted" class="alert border-0 text-white fw-bold text-center py-3 mb-4 rounded-4" style="background: linear-gradient(135deg, #198754, #20c997);">
+                        <i class="bi bi-check-circle-fill fs-4 d-block mb-1"></i>
+                        Donation Successfully Submitted!<br>
+                        <small class="fw-normal opacity-75">Nearby NGOs have been notified.</small>
+                    </div>
+
+                    <!-- Geolocation error banner -->
+                    <div ng-if="geoError" class="alert alert-warning py-2 px-3 mb-3 rounded-3 d-flex align-items-center" style="font-size:12px;">
+                        <i class="bi bi-exclamation-triangle-fill text-warning me-2 flex-shrink-0"></i>
+                        <span>{{geoError}}</span>
+                        <button type="button" class="btn-close ms-auto" style="font-size:10px;" ng-click="geoError=null"></button>
+                    </div>
+
+                    <form name="donorForm" ng-submit="submitDonation()" novalidate>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="donor-form-label">Food Name <span class="text-danger">*</span></label>
+                                <input type="text" ng-model="newDonation.food_type" class="form-control donor-form-control" placeholder="e.g. Veg Biryani, Fresh Meals" required />
+                            </div>
+                            <div class="col-md-3">
+                                <label class="donor-form-label">Quantity <span class="text-danger">*</span></label>
+                                <input type="number" ng-model="newDonation.quantity" class="form-control donor-form-control" placeholder="Units / KG" min="1" required />
+                            </div>
+                            <div class="col-md-3">
+                                <label class="donor-form-label">Category</label>
+                                <select ng-model="newDonation.food_category" class="form-select donor-form-control">
+                                    <option value="">-- Type --</option>
+                                    <option value="Cooked">Cooked Food</option>
+                                    <option value="Raw">Raw / Groceries</option>
+                                    <option value="Packaged">Packaged</option>
+                                    <option value="Beverages">Beverages</option>
+                                    <option value="Bakery">Bakery</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="donor-form-label">Expiry Date & Time <span class="text-danger">*</span></label>
+                            <input type="datetime-local" ng-model="newDonation.expiry_time" class="form-control donor-form-control" required />
+                        </div>
+
+                        <!-- Address Search -->
+                        <div class="mb-3 position-relative">
+                            <label class="donor-form-label"><i class="bi bi-search text-primary"></i> Pickup Location <span class="text-danger">*</span></label>
+                            <input id="donation-address-input" ng-model="newDonation.pickup_address" ng-change="onAddressInput()" type="text" class="form-control donor-form-control" placeholder="Type an address to search..." autocomplete="off" />
+                            <small class="text-muted d-block mt-1" style="font-size:11px;">Double-click on map to drop a pin, or drag the marker.</small>
+                            <div ng-if="showSuggestions && addressSuggestions.length > 0" class="position-absolute bg-white border rounded shadow-sm w-100" style="z-index:1050; top:100%; max-height:180px; overflow-y:auto;">
+                                <div ng-repeat="s in addressSuggestions" class="px-3 py-2 border-bottom small text-dark addr-suggestion" ng-click="selectSuggestion(s)">
+                                    <i class="bi bi-geo-alt text-primary me-1"></i>{{s.display_name}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Location buttons -->
+                        <div class="d-flex gap-2 mb-3">
+                            <button type="button" id="useMyLocationBtn" class="btn btn-primary rounded-pill fw-medium" ng-click="useMyLocation()" ng-disabled="mapLoading">
+                                <span ng-if="mapLoading" class="spinner-border spinner-border-sm me-1"></span>
+                                <i class="bi bi-crosshair2 me-1" ng-if="!mapLoading"></i>
+                                <span ng-if="!mapLoading">Use My Location</span>
+                                <span ng-if="mapLoading">Detecting...</span>
+                            </button>
+                            <button type="button" id="clearLocationBtn" class="btn btn-outline-secondary rounded-pill" ng-click="clearLocation()" ng-disabled="!selectedLatitude">
+                                <i class="bi bi-x-circle me-1"></i> Clear
+                            </button>
+                        </div>
+
+                        <!-- Location mode badge -->
+                        <div ng-if="locationMode" class="mb-3">
+                            <span class="badge rounded-pill px-3 py-2 fw-medium"
+                                ng-class="{
+                                    'bg-success-subtle text-success border border-success'  : locationMode==='gps',
+                                    'bg-danger-subtle  text-danger  border border-danger'   : locationMode==='dblclick',
+                                    'bg-primary-subtle text-primary border border-primary'  : locationMode==='search'
+                                }">
+                                <i class="bi me-1" ng-class="{'bi-crosshair2': locationMode==='gps', 'bi-pin-map-fill': locationMode==='dblclick', 'bi-search': locationMode==='search'}"></i>
+                                <span ng-if="locationMode==='gps'">Live GPS Location</span>
+                                <span ng-if="locationMode==='dblclick'">Double-click Pin</span>
+                                <span ng-if="locationMode==='search'">Address Search</span>
+                            </span>
+                        </div>
+
+                        <!-- Hidden fields -->
+                        <input type="hidden" ng-model="newDonation.pickup_latitude" id="donation-lat" />
+                        <input type="hidden" ng-model="newDonation.pickup_longitude" id="donation-lng" />
+
+                        <!-- Location detail card -->
+                        <div ng-if="selectedLatitude" class="location-detail-card rounded-3 border p-3 mb-3" style="background:#f8f9fa;">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <span class="text-muted fw-bold" style="font-size:10px; text-transform:uppercase;">Selected Coordinates</span>
+                            </div>
+                            <div class="d-flex gap-3">
+                                <div class="px-3 py-2 bg-white rounded border">
+                                    <span class="text-muted small d-block">LAT</span>
+                                    <span class="fw-bold">{{selectedLatitude | number:5}}</span>
+                                </div>
+                                <div class="px-3 py-2 bg-white rounded border">
+                                    <span class="text-muted small d-block">LNG</span>
+                                    <span class="fw-bold">{{selectedLongitude | number:5}}</span>
+                                </div>
+                            </div>
+                            <small class="text-muted d-block mt-2" ng-if="selectedAddress">{{selectedAddress | limitTo:60}}...</small>
+                        </div>
+
+                        <!-- AI Food Image Section -->
+                        <div class="mb-3">
+                            <label class="donor-form-label d-flex align-items-center gap-1">
+                                <i class="bi bi-robot text-success"></i> AI Food Verification
+                                <span class="badge bg-success-subtle text-success border border-success ms-1" style="font-size:9px;">SMART SCAN</span>
+                            </label>
+
+                            <!-- Image source tabs -->
+                            <div class="d-flex gap-2 mb-3">
+                                <button type="button" id="tabCameraBtn" class="btn" ng-class="{'btn-success': imageSourceTab==='camera', 'btn-outline-secondary': imageSourceTab!=='camera'}" ng-click="setImageSourceTab('camera')">
+                                    <i class="bi bi-camera-fill me-1"></i> Camera
+                                </button>
+                                <button type="button" id="tabUploadBtn" class="btn" ng-class="{'btn-success': imageSourceTab==='upload', 'btn-outline-secondary': imageSourceTab!=='upload'}" ng-click="setImageSourceTab('upload')">
+                                    <i class="bi bi-image me-1"></i> Gallery
+                                </button>
+                            </div>
+
+                            <!-- Camera input -->
+                            <div ng-if="imageSourceTab==='camera'" class="text-center">
+                                <label for="foodImageCamera" class="btn btn-success rounded-pill w-100 fw-medium py-2" style="cursor:pointer;">
+                                    <i class="bi bi-camera-fill me-2"></i> Open Camera & Capture
+                                </label>
+                                <input type="file" id="foodImageCamera" class="d-none" accept="image/*" capture="environment" onchange="angular.element(this).scope().handleImageUpload(this.files, 'camera')" />
+                            </div>
+
+                            <!-- Gallery input -->
+                            <div ng-if="imageSourceTab==='upload'">
+                                <input type="file" id="foodImage" class="form-control" accept="image/*" onchange="angular.element(this).scope().handleImageUpload(this.files, 'upload')" />
+                            </div>
+                        </div>
+
+                        <!-- Image Preview & AI Analysis -->
+                        <div ng-if="imagePreviewUrl" class="mb-3">
+                            <div class="d-flex align-items-start gap-3 p-3 bg-light rounded-3">
+                                <img ng-src="{{imagePreviewUrl}}" alt="Food preview" class="rounded-2 border" style="width:80px;height:80px;object-fit:cover;" />
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="fw-bold">Food Image</span>
+                                        <button type="button" class="btn btn-sm btn-outline-danger" ng-click="clearImage()">
+                                            <i class="bi bi-x-lg"></i>
+                                        </button>
+                                    </div>
+                                    <div ng-if="aiAnalyzing" class="text-center py-2">
+                                        <div class="spinner-border spinner-border-sm text-success me-2"></div>
+                                        <span class="text-muted">Analyzing food freshness...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div ng-if="aiAnalysis && !aiAnalyzing" class="mb-3 p-3 rounded-3 border"
+                            ng-class="{
+                                'border-success bg-success-subtle': aiAnalysis.freshness_status==='Fresh',
+                                'border-warning bg-warning-subtle': aiAnalysis.freshness_status==='Medium',
+                                'border-danger bg-danger-subtle': aiAnalysis.freshness_status==='Spoiled'
+                            }">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <i class="bi bi-robot text-success"></i>
+                                <span class="fw-bold">Food Freshness Analysis</span>
+                                <span class="badge" ng-class="{
+                                    'bg-success': aiAnalysis.freshness_status==='Fresh',
+                                    'bg-warning text-dark': aiAnalysis.freshness_status==='Medium',
+                                    'bg-danger': aiAnalysis.freshness_status==='Spoiled'
+                                }">{{aiAnalysis.freshness_status}}</span>
+                            </div>
+                            <div ng-if="aiAnalysis.food_type" class="mb-2">
+                                <span class="small">
+                                    <i class="bi bi-utensils me-1"></i>
+                                    <strong>Detected:</strong>
+                                    <span ng-if="aiAnalysis.food_type==='cooked'">Cooked Food</span>
+                                    <span ng-if="aiAnalysis.food_type==='raw'">Raw / Fresh Produce</span>
+                                    <span ng-if="aiAnalysis.food_type==='packaged'">Packaged Food</span>
+                                </span>
+                            </div>
+                            <div ng-if="aiAnalysis.recommendation" class="p-2 rounded bg-white">
+                                <i class="bi bi-info-circle text-success me-1"></i>
+                                <span class="fw-medium">{{aiAnalysis.recommendation}}</span>
+                            </div>
+                            <div class="mt-2">
+                                <small class="text-muted">Confidence: {{(aiAnalysis.confidence_score * 100) | number:0}}%</small>
+                                <div class="progress" style="height:6px;">
+                                    <div class="progress-bar" ng-class="{
+                                        'bg-success': aiAnalysis.confidence_score >= 0.75,
+                                        'bg-warning': aiAnalysis.confidence_score >= 0.60 && aiAnalysis.confidence_score < 0.75,
+                                        'bg-danger': aiAnalysis.confidence_score < 0.60
+                                    }" ng-style="{'width': (aiAnalysis.confidence_score * 100) + '%'}"></div>
+                                </div>
+                            </div>
+                            <div ng-if="aiAnalysis.freshness_status==='Spoiled'" class="alert alert-danger py-2 mt-2 mb-0">
+                                <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                                <strong>Warning:</strong> Food may not be safe for donation
+                            </div>
+                        </div>
+
+                        <button type="submit" id="confirmDonationBtn" class="btn btn-success w-100 rounded-pill fw-bold py-3"
+                            ng-disabled="submitLoading || donationSubmitted">
+                            <span ng-if="!submitLoading && !donationSubmitted">
+                                <i class="bi bi-check2-circle me-2"></i>Submit Donation
+                            </span>
+                            <span ng-if="submitLoading">
+                                <span class="spinner-border spinner-border-sm me-2"></span>Submitting...
+                            </span>
+                            <span ng-if="!submitLoading && donationSubmitted">
+                                <i class="bi bi-check-circle-fill me-2"></i>Submitted
+                            </span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Map Container -->
+                <div class="donor-map-container">
+                    <div ng-if="mapLoading" class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style="background:rgba(255,255,255,0.9); z-index:100;">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="spinner-border text-primary"></div>
+                            <span>Detecting your location...</span>
+                        </div>
+                    </div>
+                    <div id="donor-interactive-map" style="width:100%;height:100%;"></div>
+                    <div class="position-absolute top-0 start-50 translate-middle-x mt-3" style="z-index:200; pointer-events:none;" ng-if="!selectedLatitude">
+                        <span class="badge bg-dark bg-opacity-75 text-white rounded-pill px-3 py-2">
+                            <i class="bi bi-hand-index-thumb me-1"></i>Double-click map to drop a pin
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section: My Donations -->
+            <div ng-if="activeSection==='my-donations'">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="fw-bold mb-0"><i class="bi bi-box-seam text-success me-2"></i>My Donations</h5>
+                    <button class="btn btn-success rounded-pill" ng-click="setDonorSection('new-donation')">
+                        <i class="bi bi-plus-lg me-1"></i> New Donation
+                    </button>
+                </div>
+
+                <!-- Status Tabs -->
+                <div class="donor-tabs mb-4" style="border-bottom:none; padding:0;">
+                    <button class="donor-tab" ng-class="{'active': donationTab==='all'}" ng-click="donationTab='all'; updateFilteredDonations()">
+                        <i class="bi bi-grid-3x3-gap"></i> All
+                        <span class="badge bg-secondary ms-1">{{myDonations.length}}</span>
+                    </button>
+                    <button class="donor-tab" ng-class="{'active': donationTab==='active'}" ng-click="donationTab='active'; updateFilteredDonations()">
+                        <i class="bi bi-hourglass-split"></i> Active
+                        <span class="badge bg-warning ms-1">{{activeDonations.length}}</span>
+                    </button>
+                    <button class="donor-tab" ng-class="{'active': donationTab==='completed'}" ng-click="donationTab='completed'; updateFilteredDonations()">
+                        <i class="bi bi-check-circle-fill"></i> Completed
+                        <span class="badge bg-success ms-1">{{historyDonations.length}}</span>
+                    </button>
+                    <button class="donor-tab" ng-class="{'active': donationTab==='cancelled'}" ng-click="donationTab='cancelled'; updateFilteredDonations()">
+                        <i class="bi bi-x-circle-fill"></i> Cancelled
+                        <span class="badge bg-danger ms-1">{{cancelledDonations.length}}</span>
+                    </button>
+                </div>
+
+                <!-- Empty State -->
+                <div ng-if="!myDonations || myDonations.length === 0" class="empty-state">
+                    <i class="bi bi-box-seam"></i>
+                    <h5>No donations yet</h5>
+                    <p>Start by creating your first donation to help those in need.</p>
+                    <button class="btn btn-success rounded-pill" ng-click="setDonorSection('new-donation')">
+                        <i class="bi bi-plus-lg me-1"></i> Create Donation
+                    </button>
+                </div>
+
+                <!-- Filtered Donation List -->
+                <div ng-if="myDonations && myDonations.length > 0">
+
+                    <!-- ALL TAB: shows every donation regardless of status -->
+                    <div ng-if="donationTab==='all'">
+                        <div ng-if="filteredDonations.length === 0" class="text-center py-4 text-muted">
+                            <i class="bi bi-inbox fs-1"></i>
+                            <p>No donations found</p>
+                        </div>
+
+                        <div ng-repeat="d in filteredDonations track by d.id"
+                             class="donation-card" ng-class="getStatusClass(d.status)">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <h6 class="fw-bold mb-1">{{d.food_type}}</h6>
+                                    <span class="badge" ng-class="{
+                                        'bg-warning': d.status==='pending',
+                                        'bg-primary': d.status==='accepted',
+                                        'bg-info': d.status==='assigned',
+                                        'bg-purple': d.status==='in_progress',
+                                        'bg-secondary': d.status==='in_transit',
+                                        'bg-success': d.status==='completed' || d.status==='delivered',
+                                        'bg-danger': d.status==='cancelled'
+                                    }">
+                                        <span ng-if="d.status==='pending'">Pending</span>
+                                        <span ng-if="d.status==='accepted'">Accepted</span>
+                                        <span ng-if="d.status==='assigned'">Assigned</span>
+                                        <span ng-if="d.status==='in_transit'">In Transit</span>
+                                        <span ng-if="d.status==='in_progress'">In Progress</span>
+                                        <span ng-if="d.status==='picked_up'">Picked Up</span>
+                                        <span ng-if="d.status==='completed'">Completed</span>
+                                        <span ng-if="d.status==='delivered'">Delivered</span>
+                                        <span ng-if="d.status==='cancelled'">Cancelled</span>
+                                    </span>
+                                </div>
+                                <div class="text-end">
+                                    <div class="fw-bold">{{d.quantity}}</div>
+                                    <small class="text-muted">{{d.created_at | utcToLocal:'MMM d, h:mm a'}}</small>
+                                </div>
+                            </div>
+
+                            <!-- Professional Donation Lifecycle Timeline -->
+                            <div class="donation-timeline-container my-4 px-2">
+                                <div class="donation-timeline">
+                                    <div class="timeline-progress-bar" ng-style="{
+                                        'width': (d.lifecycle_status === 'RECEIVED' ? '100%' : 
+                                                 d.lifecycle_status === 'DELIVERED' ? '75%' :
+                                                 d.lifecycle_status === 'PICKED_UP' ? '50%' :
+                                                 d.lifecycle_status === 'ACCEPTED' ? '25%' : '0%')
+                                    }"></div>
+                                    <div class="timeline-step" ng-repeat="step in getTimelineSteps(d)" 
+                                         ng-class="{'active': step.isActive, 'completed': step.isCompleted}">
+                                        <div class="step-icon" title="{{step.label}}">
+                                            <i class="bi" ng-class="step.icon"></i>
+                                        </div>
+                                        <div class="step-label">{{step.label}}</div>
+                                        <div class="step-time" ng-if="step.time">{{step.time | utcToLocal:'h:mm a'}}</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- OTP Display -->
+                            <div ng-if="d.otp_code && !d.otp_verified && d.status==='assigned'" class="alert alert-info py-2 px-3 mb-2 rounded">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <small class="text-muted">Pickup OTP</small>
+                                        <div class="fs-5 fw-bold font-monospace">{{d.otp_code}}</div>
+                                    </div>
+                                    <i class="bi bi-shield-lock-fill text-primary"></i>
+                                </div>
+                            </div>
+
+                            <!-- NGO/Volunteer Info -->
+                            <div ng-if="d.ngo_name || d.volunteer_name" class="d-flex gap-2 mb-2 flex-wrap">
+                                <small ng-if="d.ngo_name" class="text-success"><i class="bi bi-building me-1"></i>{{d.ngo_name}}</small>
+                                <small ng-if="d.volunteer_name" class="text-primary"><i class="bi bi-person me-1"></i>{{d.volunteer_name}}</small>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="d-flex gap-2 flex-wrap">
+                                <button class="btn btn-sm btn-primary rounded-pill" ng-if="d.status==='in_progress' || d.status==='completed' || d.status==='delivered' || (d.status==='picked_up' && d.donation_received)" ng-click="trackVolunteer(d)">
+                                    <i class="bi bi-geo-alt-fill me-1"></i> Track
+                                </button>
+                                <a ng-if="d.volunteer_phone && (d.status==='assigned' || d.status==='picked_up' || d.status==='in_progress')"
+                                   href="tel:{{d.volunteer_phone}}" class="btn btn-sm btn-success rounded-pill">
+                                    <i class="bi bi-telephone-fill me-1"></i> Call
+                                </a>
+                                <button class="btn btn-sm btn-outline-danger rounded-pill" ng-if="d.status==='pending' || d.status==='accepted' || d.status==='assigned'" ng-click="cancelDonation(d)" ng-disabled="d.cancelling">
+                                    {{d.cancelling ? 'Cancelling...' : 'Cancel'}}
+                                </button>
+                                <span ng-if="d.status==='completed' || d.status==='delivered'" class="badge bg-success-subtle text-success py-2 px-3">
+                                    <i class="bi bi-check-circle-fill me-1"></i> Thank you for your donation!
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ACTIVE TAB: shows only non-completed, non-cancelled donations -->
+                    <div ng-if="donationTab==='active'">
+                        <div ng-if="activeDonations.length === 0" class="text-center py-4 text-muted">
+                            <i class="bi bi-hourglass-split fs-1"></i>
+                            <p>No active donations</p>
+                        </div>
+
+                        <div ng-repeat="d in filteredDonations track by d.id"
+                             class="donation-card" ng-class="getStatusClass(d.status)">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <h6 class="fw-bold mb-1">{{d.food_type}}</h6>
+                                    <span class="badge" ng-class="{
+                                        'bg-warning': d.status==='pending',
+                                        'bg-primary': d.status==='accepted',
+                                        'bg-info': d.status==='assigned',
+                                        'bg-purple': d.status==='in_progress',
+                                        'bg-secondary': d.status==='in_transit',
+                                        'bg-success': d.status==='completed' || d.status==='delivered',
+                                        'bg-danger': d.status==='cancelled'
+                                    }">
+                                        <span ng-if="d.status==='pending'">Pending</span>
+                                        <span ng-if="d.status==='accepted'">Accepted</span>
+                                        <span ng-if="d.status==='assigned'">Assigned</span>
+                                        <span ng-if="d.status==='in_transit'">In Transit</span>
+                                        <span ng-if="d.status==='in_progress'">In Progress</span>
+                                        <span ng-if="d.status==='picked_up'">Picked Up</span>
+                                        <span ng-if="d.status==='completed'">Completed</span>
+                                        <span ng-if="d.status==='delivered'">Delivered</span>
+                                        <span ng-if="d.status==='cancelled'">Cancelled</span>
+                                    </span>
+                                </div>
+                                <div class="text-end">
+                                    <div class="fw-bold">{{d.quantity}}</div>
+                                    <small class="text-muted">{{d.created_at | utcToLocal:'MMM d, h:mm a'}}</small>
+                                </div>
+                            </div>
+
+                            <!-- Progress Steps -->
+                            <div class="donation-progress mb-2" style="display:flex; align-items:center; gap:4px; font-size:9px; padding:8px 0;">
+                                <div class="text-center" style="flex:1;">
+                                    <div style="width:10px;height:10px;margin:0 auto;background:#20c997;border-radius:50%;" ng-class="{'bg-warning': d.status==='pending'}"></div>
+                                    <div class="mt-1 text-muted">Created</div>
+                                </div>
+                                <div style="flex:1;height:2px;background:#e9ecef;">
+                                    <div style="height:100%;background:#20c997;" ng-style="{'width': (['accepted','assigned','picked_up','in_progress','completed','delivered'].indexOf(d.status)>=0 ? '100' : '0') + '%'}"></div>
+                                </div>
+                                <div class="text-center" style="flex:1;">
+                                    <div style="width:10px;height:10px;margin:0 auto;background:#20c997;border-radius:50%;" ng-class="{'bg-warning': d.status==='pending', 'bg-primary': d.status==='accepted'}"></div>
+                                    <div class="mt-1 text-muted">Accepted</div>
+                                </div>
+                                <div style="flex:1;height:2px;background:#e9ecef;">
+                                    <div style="height:100%;background:#20c997;" ng-style="{'width': (['assigned','picked_up','in_progress','completed','delivered'].indexOf(d.status)>=0 ? '100' : '0') + '%'}"></div>
+                                </div>
+                                <div class="text-center" style="flex:1;">
+                                    <div style="width:10px;height:10px;margin:0 auto;background:#20c997;border-radius:50%;" ng-class="{'bg-warning': ['pending','accepted'].indexOf(d.status)>=0}"></div>
+                                    <div class="mt-1 text-muted">Picked Up</div>
+                                </div>
+                                <div style="flex:1;height:2px;background:#e9ecef;">
+                                    <div style="height:100%;background:#20c997;" ng-style="{'width': (['completed','delivered'].indexOf(d.status)>=0 ? '100' : '0') + '%'}"></div>
+                                </div>
+                                <div class="text-center" style="flex:1;">
+                                    <div style="width:10px;height:10px;margin:0 auto;background:#20c997;border-radius:50%;" ng-class="{'bg-warning': ['pending','accepted','assigned','in_progress'].indexOf(d.status)>=0}"></div>
+                                    <div class="mt-1 text-muted">Delivered</div>
+                                </div>
+                            </div>
+
+                            <!-- OTP Display -->
+                            <div ng-if="d.otp_code && !d.otp_verified && d.status==='assigned'" class="alert alert-info py-2 px-3 mb-2 rounded">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <small class="text-muted">Pickup OTP</small>
+                                        <div class="fs-5 fw-bold font-monospace">{{d.otp_code}}</div>
+                                    </div>
+                                    <i class="bi bi-shield-lock-fill text-primary"></i>
+                                </div>
+                            </div>
+
+                            <!-- NGO/Volunteer Info -->
+                            <div ng-if="d.ngo_name || d.volunteer_name" class="d-flex gap-2 mb-2 flex-wrap">
+                                <small ng-if="d.ngo_name" class="text-success"><i class="bi bi-building me-1"></i>{{d.ngo_name}}</small>
+                                <small ng-if="d.volunteer_name" class="text-primary"><i class="bi bi-person me-1"></i>{{d.volunteer_name}}</small>
+                            </div>
+
+                            <!-- Tracking Info Display -->
+                            <div ng-if="trackingInfo && trackingInfo.donation_id === d.id" class="alert alert-info py-2 px-3 mb-2 rounded">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-geo-alt-fill"></i>
+                                    <span class="small">
+                                        <strong>Tracking:</strong>
+                                        <span ng-if="trackingInfo.status === 'picked_up'">Delivery Partner picked up - heading to NGO</span>
+                                        <span ng-if="trackingInfo.status === 'in_progress'">In transit to NGO</span>
+                                        <span ng-if="trackingInfo.status === 'delivered'">Delivered to NGO</span>
+                                    </span>
+                                </div>
+                                <!-- Delivery Timer & Stage -->
+                                <div class="d-flex align-items-center gap-3 mt-2 small">
+                                    <span ng-if="d.status !== 'completed' && d.status !== 'delivered' && d.start_time">
+                                        <i class="bi bi-clock me-1"></i>
+                                        <strong>Time:</strong> {{getElapsedTime(d.start_time)}}
+                                    </span>
+                                    <span ng-if="d.status === 'completed' || d.status === 'delivered'" class="text-success">
+                                        <i class="bi bi-check-circle me-1"></i>
+                                        Delivered in {{d.total_duration || 0}} mins
+                                    </span>
+                                    <span ng-if="getDeliveryStage(d)">
+                                        <i class="bi bi-signpost-split me-1"></i>
+                                        {{getDeliveryStage(d)}}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="d-flex gap-2 flex-wrap">
+                                <button class="btn btn-sm btn-primary rounded-pill" ng-if="d.status==='in_progress' || d.status==='completed' || d.status==='delivered' || (d.status==='picked_up' && d.donation_received)" ng-click="trackVolunteer(d)">
+                                    <i class="bi bi-geo-alt-fill me-1"></i> Track
+                                </button>
+                                <a ng-if="d.volunteer_phone && (d.status==='assigned' || d.status==='picked_up' || d.status==='in_progress')"
+                                   href="tel:{{d.volunteer_phone}}" class="btn btn-sm btn-success rounded-pill">
+                                    <i class="bi bi-telephone-fill me-1"></i> Call
+                                </a>
+                                <div class="dropdown" ng-if="d.ngo_name || d.volunteer_name">
+                                    <button class="btn btn-sm btn-outline-secondary rounded-pill dropdown-toggle" data-bs-toggle="dropdown">
+                                        <i class="bi bi-chat-dots-fill me-1"></i> Chat
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li ng-if="d.volunteer_name">
+                                            <a class="dropdown-item" href="javascript:void(0)" ng-click="openChat(d, 'volunteer')">
+                                                <i class="bi bi-person me-1"></i> Chat with Delivery Partner
+                                            </a>
+                                        </li>
+                                        <li ng-if="d.ngo_name">
+                                            <a class="dropdown-item" href="javascript:void(0)" ng-click="openChat(d, 'ngo')">
+                                                <i class="bi bi-building me-1"></i> Chat with NGO
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <button class="btn btn-sm btn-outline-danger rounded-pill" ng-if="d.status==='pending' || d.status==='accepted' || d.status==='assigned'" ng-click="cancelDonation(d)" ng-disabled="d.cancelling">
+                                    {{d.cancelling ? 'Cancelling...' : 'Cancel'}}
+                                </button>
+                                <span ng-if="d.status==='completed' || d.status==='delivered'" class="badge bg-success-subtle text-success py-2 px-3">
+                                    <i class="bi bi-check-circle-fill me-1"></i> Thank you for your donation!
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Completed Tab -->
+                    <div ng-if="donationTab==='completed'">
+                        <div ng-if="historyDonations.length === 0" class="text-center py-4 text-muted">
+                            <i class="bi bi-check-circle fs-1"></i>
+                            <p>No completed donations</p>
+                        </div>
+                        
+                        <div ng-repeat="d in filteredDonations track by d.id" 
+                             class="donation-card" ng-class="getStatusClass(d.status)">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <h6 class="fw-bold mb-1">{{d.food_type}}</h6>
+                                    <span class="badge bg-success">Delivered</span>
+                                </div>
+                                <div class="text-end">
+                                    <div class="fw-bold">{{d.quantity}}</div>
+                                    <small class="text-muted">{{d.created_at | utcToLocal:'MMM d, h:mm a'}}</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-3 small text-success mt-2">
+                                <span ng-if="d.total_duration">
+                                    <i class="bi bi-clock me-1"></i>Delivered in {{d.total_duration}} mins
+                                </span>
+                                <span ng-if="!d.total_duration">
+                                    <i class="bi bi-check-circle-fill me-1"></i>Completed
+                                </span>
+                            </div>
+                            <div class="text-success small">
+                                <i class="bi bi-check-circle-fill me-1"></i>Thank you for your donation!
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cancelled Tab -->
+                    <div ng-if="donationTab==='cancelled'">
+                        <div ng-if="cancelledDonations.length === 0" class="text-center py-4 text-muted">
+                            <i class="bi bi-x-circle fs-1"></i>
+                            <p>No cancelled donations</p>
+                        </div>
+                        
+                        <div ng-repeat="d in filteredDonations track by d.id" 
+                             class="donation-card" ng-class="getStatusClass(d.status)">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <h6 class="fw-bold mb-1">{{d.food_type}}</h6>
+                                    <span class="badge bg-danger">Cancelled</span>
+                                </div>
+                                <div class="text-end">
+                                    <div class="fw-bold">{{d.quantity}}</div>
+                                    <small class="text-muted">{{d.created_at | utcToLocal:'MMM d, h:mm a'}}</small>
+                                </div>
+                            </div>
+                            <div ng-if="d.cancel_reason" class="text-muted small">
+                                <i class="bi bi-info-circle me-1"></i>Reason: {{d.cancel_reason}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tracking Map Panel (shown when tracking) -->
+            <div ng-if="trackingInfo && activeSection === 'my-donations'" class="donor-form-card mt-3">
+                <h6 class="fw-bold mb-3"><i class="bi bi-geo-alt text-primary me-2"></i>Live Tracking</h6>
+                <div id="tracking-map" style="width:100%;height:300px;border-radius:8px;"></div>
+                <div class="d-flex justify-content-around text-center mt-2 small">
+                    <div ng-if="trackingInfo.donation_id">
+                        <i class="bi bi-clock me-1"></i>
+                        <span ng-if="donation.start_time && donation.status !== 'delivered' && donation.status !== 'completed'">
+                            Time: {{getElapsedTime(donation.start_time)}}
+                        </span>
+                        <span ng-if="donation.status === 'delivered' || donation.status === 'completed'">
+                            {{donation.total_duration || 0}} mins
+                        </span>
+                    </div>
+                    <div ng-if="trackingInfo.status">
+                        <i class="bi bi-signpost-split me-1"></i>
+                        {{getDeliveryStage(trackingInfo)}}
+                    </div>
+                </div>
+                <div class="mt-2 text-center">
+                    <button class="btn btn-sm btn-outline-secondary rounded-pill" ng-click="trackingInfo = null">
+                        <i class="bi bi-x-lg me-1"></i> Close Tracking
+                    </button>
+                </div>
+            </div>
+
+            <!-- Section: Impact -->
+            <div ng-if="activeSection==='impact'">
+                <div class="donor-form-card text-center">
+                    <i class="bi bi-heart-fill text-success" style="font-size:4rem;"></i>
+                    <h4 class="mt-3 mb-2">Thank You for Your Impact!</h4>
+                    <p class="text-muted">Your donations have helped many people in need.</p>
+                </div>
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="stat-card text-center">
+                            <div class="stat-icon bg-success mx-auto mb-3" style="width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                                <i class="bi bi-people-fill fs-3 text-white"></i>
+                            </div>
+                            <div class="stat-value">{{donationStats.mealsSaved || 0}}</div>
+                            <div class="stat-label">Meals Provided</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="stat-card text-center">
+                            <div class="stat-icon bg-warning mx-auto mb-3" style="width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                                <i class="bi bi-recycle fs-3 text-white"></i>
+                            </div>
+                            <div class="stat-value">{{donationStats.carbonSaved || 0}} kg</div>
+                            <div class="stat-label">CO2 Saved</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section: Achievements -->
+            <div ng-if="activeSection==='achievements'" ng-include="'app/components/achievements/achievements.html'"></div>
+
+            <!-- Section: Profile -->
+            <div ng-if="activeSection==='profile'">
+                <!-- Loading State -->
+                <div ng-if="profileLoading" class="text-center py-5">
+                    <div class="spinner-border text-success"></div>
+                    <p class="mt-2 text-muted">Loading profile...</p>
+                </div>
+
+                <!-- Profile Display - Using explicit email check -->
+                <div ng-if="!profileLoading && donorProfile && donorProfile.email">
+                    <!-- Profile Header -->
+                    <div class="profile-header">
+                        <div class="profile-avatar-large">
+                            <i class="bi bi-person-fill"></i>
+                        </div>
+                        <div class="profile-name">{{donorProfile.name || 'Donor'}}</div>
+                        <div class="profile-email">{{donorProfile.email}}</div>
+                        <span class="profile-badge">
+                            <i class="bi bi-patch-check-fill me-1"></i>
+                            {{donorProfile.is_verified ? 'Verified Donor' : 'Donor'}}
+                        </span>
+                    </div>
+
+                    <!-- Profile Info Cards -->
+                    <div class="profile-info-card">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="fw-bold mb-0"><i class="bi bi-person-badge me-2"></i>Personal Information</h6>
+                            <button class="btn btn-sm rounded-pill" 
+                                ng-class="{'btn-outline-secondary': !editingProfile, 'btn-warning': editingProfile}"
+                                ng-click="editingProfile = !editingProfile">
+                                <i class="bi" ng-class="editingProfile ? 'bi-x-lg' : 'bi-pencil-fill'"></i>
+                                {{editingProfile ? 'Cancel' : 'Edit'}}
+                            </button>
+                        </div>
+
+                        <!-- View Mode -->
+                        <div ng-if="!editingProfile">
+                            <div class="mb-3">
+                                <div class="profile-info-label">Full Name</div>
+                                <div class="profile-info-value">{{donorProfile.name || 'Not set'}}</div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="profile-info-label">Phone Number</div>
+                                <div class="profile-info-value">{{donorProfile.phone || 'Not set'}}</div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="profile-info-label">Address</div>
+                                <div class="profile-info-value">{{donorProfile.address || 'Not set'}}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="profile-info-label">Latitude</div>
+                                    <div class="profile-info-value">{{donorProfile.latitude | number:5 || 'Not set'}}</div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="profile-info-label">Longitude</div>
+                                    <div class="profile-info-value">{{donorProfile.longitude | number:5 || 'Not set'}}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Edit Mode -->
+                        <div ng-if="editingProfile">
+                            <div class="mb-3">
+                                <label class="donor-form-label">Full Name</label>
+                                <input type="text" ng-model="profileForm.name" class="form-control donor-form-control" placeholder="Enter your full name" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="donor-form-label">Phone Number</label>
+                                <input type="tel" ng-model="profileForm.phone" class="form-control donor-form-control" placeholder="Enter phone number" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="donor-form-label">Address</label>
+                                <textarea ng-model="profileForm.address" class="form-control donor-form-control" rows="2" placeholder="Enter your address"></textarea>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 mb-3">
+                                    <label class="donor-form-label">Latitude</label>
+                                    <input type="number" step="any" ng-model="profileForm.latitude" class="form-control donor-form-control" placeholder="Latitude" />
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <label class="donor-form-label">Longitude</label>
+                                    <input type="number" step="any" ng-model="profileForm.longitude" class="form-control donor-form-control" placeholder="Longitude" />
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-success rounded-pill flex-fill" ng-click="saveDonorProfile()" ng-disabled="profileLoading">
+                                    <span ng-if="profileLoading" class="spinner-border spinner-border-sm me-1"></span>
+                                    <i class="bi bi-check-lg me-1" ng-if="!profileLoading"></i>
+                                    Save Changes
+                                </button>
+                                <button class="btn btn-outline-secondary rounded-pill" ng-click="cancelProfileEdit()">
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Account Info -->
+                    <div class="profile-info-card">
+                        <h6 class="fw-bold mb-3"><i class="bi bi-info-circle me-2"></i>Account Information</h6>
+                        <div class="mb-2">
+                            <span class="text-muted">Email:</span>
+                            <span class="fw-medium ms-2">{{donorProfile.email}}</span>
+                        </div>
+                        <div class="mb-2">
+                            <span class="text-muted">Role:</span>
+                            <span class="fw-medium ms-2 text-capitalize">{{donorProfile.role}}</span>
+                        </div>
+                        <div class="mb-2">
+                            <span class="text-muted">Member Since:</span>
+                            <span class="fw-medium ms-2">{{donorProfile.created_at}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error State -->
+                <div ng-if="!profileLoading && !donorProfile" class="empty-state">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    <h5>Unable to load profile</h5>
+                    <button class="btn btn-success rounded-pill" ng-click="loadDonorProfile()">
+                        <i class="bi bi-arrow-clockwise me-1"></i> Try Again
+                    </button>
+                </div>
+            </div>
+
+            <!-- Section: Settings -->
+            <div ng-if="activeSection==='settings'">
+                <div class="donor-form-card">
+                    <h5 class="fw-bold mb-4"><i class="bi bi-gear text-secondary me-2"></i>Account Settings</h5>
+                    
+                    <div class="mb-3">
+                        <label class="donor-form-label">Email</label>
+                        <input type="email" class="form-control donor-form-control" value="{{currentUserEmail}}" disabled />
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="donor-form-label">Notifications</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="notifEmail" 
+                                   ng-model="notificationSettings.email" 
+                                   ng-change="saveNotificationSettings()" />
+                            <label class="form-check-label" for="notifEmail">Email notifications</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="notifSMS" 
+                                   ng-model="notificationSettings.sms" 
+                                   ng-change="saveNotificationSettings()" />
+                            <label class="form-check-label" for="notifSMS">SMS notifications</label>
+                        </div>
+                        <small class="text-success" ng-if="notificationSaved">Settings saved!</small>
+                    </div>
+
+                    <button class="btn btn-outline-danger rounded-pill" ng-click="logout()">
+                        <i class="bi bi-box-arrow-right me-1"></i> Sign Out
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<!-- Chat Panel Overlay -->
+<div class="chat-panel-overlay" ng-if="chatPanelOpen" ng-click="closeChat()"></div>
+<div class="chat-panel" ng-class="{'open': chatPanelOpen}">
+    <div class="chat-header">
+        <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-chat-dots-fill"></i>
+            <span>Chat<span ng-if="selectedReceiverName"> with {{selectedReceiverName}}</span></span>
+        </div>
+        <button class="btn btn-sm btn-close" ng-click="closeChat()"></button>
+    </div>
+    <div class="chat-messages" id="chatMessagesContainer">
+        <!-- Debug info -->
+        <div ng-if="false" class="alert alert-info small">
+            chatPanelOpen: {{chatPanelOpen}} | currentDonationId: {{currentDonationId}} | 
+            selectedReceiver: {{chatSelectedReceiver}} | participants: {{chatParticipants.length}}
+        </div>
+        <!-- Error display -->
+        <div ng-if="chatError" class="alert alert-danger m-2 small">
+            <i class="bi bi-exclamation-triangle me-1"></i>{{chatError}}
+        </div>
+        <div ng-if="chatLoading" class="text-center py-4">
+            <div class="spinner-border text-success"></div>
+            <div class="small text-muted mt-2">Loading chat...</div>
+        </div>
+        <div ng-if="!chatLoading && chatMessages.length === 0" class="text-center py-4 text-muted">
+            <i class="bi bi-chat-square-text fs-2 d-block mb-2"></i>
+            <small>No messages yet. Start the conversation!</small>
+        </div>
+        <div ng-repeat="msg in chatMessages" class="chat-message" ng-class="{'sent': msg.sender_id === currentUserId, 'received': msg.sender_id !== currentUserId}">
+            <div class="message-content">
+                <div class="message-text">{{msg.message}}</div>
+                <div class="message-meta">
+                    <span class="message-sender">{{msg.sender_name || 'User'}}</span>
+                    <span class="message-time">{{msg.timestamp | localTime}}</span>
+                    <span ng-if="msg.sender_id === currentUserId" class="message-status">
+                        <span ng-if="msg.status === 'sent'">&#10004;</span>
+                        <span ng-if="msg.status === 'delivered'">&#10004;&#10004;</span>
+                        <span ng-if="msg.status === 'seen'" class="text-primary">&#10004;&#10004;</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div ng-if="showTypingIndicator" class="typing-indicator">
+            <span>{{typingUserName}} is typing...</span>
+            <span class="typing-dots">
+                <span></span><span></span><span></span>
+            </span>
+        </div>
+    </div>
+    <div class="chat-input-area">
+        <div class="chat-participants" ng-if="chatParticipants.length > 0">
+            <small class="text-muted">Send to:</small>
+            <select ng-model="chatSelectedReceiver" class="form-select form-select-sm">
+                <option ng-repeat="p in chatParticipants" value="{{p.user_id}}">{{p.name}} ({{p.role}})</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <input type="text" ng-model="chatMessageText" class="form-control form-control-sm" placeholder="Type a message..." ng-keypress="chatSendOnEnter($event)" ng-change="onChatInputChange()" />
+            <button class="btn btn-success btn-sm" ng-click="sendChatMessage()" ng-disabled="!chatMessageText || chatSending">
+                <span ng-if="chatSending" class="spinner-border spinner-border-sm"></span>
+                <i class="bi bi-send" ng-if="!chatSending"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+/* â”€â”€ Map loading overlay â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.map-loading-overlay {
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(4px);
+    z-index: 500;
+}
+
+/* â”€â”€ Bouncing center-pin animation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.bounce-anim { animation: mapBounce 1.5s infinite; }
+@keyframes mapBounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40%  { transform: translateY(-8px); }
+    60%  { transform: translateY(-4px); }
+}
+
+/* â”€â”€ Success banner pop-in â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.success-banner-animated { animation: successPop 0.5s cubic-bezier(.2,.8,.2,1); }
+@keyframes successPop {
+    from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+    to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+
+/* â”€â”€ Instruction pill fade-in â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.map-instruction-pill { animation: fadeSlideDown 0.5s ease; }
+@keyframes fadeSlideDown {
+    from { opacity: 0; transform: translateX(-50%) translateY(-8px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* â”€â”€ Address suggestion hover â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.addr-suggestion { cursor: pointer; transition: background 0.15s; }
+.addr-suggestion:hover { background: #f0f4ff; }
+
+/* â”€â”€ Coordinate detail card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.location-detail-card {
+    background: linear-gradient(135deg, #f8faff 0%, #eef2ff 100%);
+}
+.coord-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #d0d7ff;
+    border-radius: 8px;
+    padding: 4px 10px;
+    min-width: 90px;
+}
+.coord-label {
+    font-size: 9px;
+    font-weight: 700;
+    color: #6c757d;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+.coord-value {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0d6efd;
+    font-family: monospace;
+}
+
+/* â”€â”€ AI Image Source Tabs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.ai-image-source-group {
+    display: flex;
+    gap: 6px;
+}
+.ai-source-tab {
+    flex: 1;
+    padding: 7px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    border: 2px solid #dee2e6;
+    border-radius: 10px;
+    background: #f8f9fa;
+    color: #6c757d;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+}
+.ai-source-tab.active {
+    border-color: #198754;
+    background: #d1e7dd;
+    color: #0f5132;
+}
+.ai-source-tab:hover:not(.active) {
+    background: #e9ecef;
+    border-color: #adb5bd;
+}
+
+/* â”€â”€ AI Scan Loading Card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.ai-scan-card {
+    background: linear-gradient(135deg, #f0fff4 0%, #e8f5e9 100%);
+    border: 1.5px dashed #198754;
+    border-radius: 12px;
+    padding: 14px;
+    animation: fadeIn 0.3s ease;
+}
+.ai-pulse-ring {
+    width: 38px; height: 38px;
+    background: #d1fae5;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    animation: pulse 1.2s infinite;
+    flex-shrink: 0;
+}
+@keyframes pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(25, 135, 84, 0.5); }
+    70%  { box-shadow: 0 0 0 12px rgba(25, 135, 84, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(25, 135, 84, 0); }
+}
+.ai-scan-bar-wrap {
+    background: #c3e6cb;
+    border-radius: 4px;
+    height: 5px;
+    overflow: hidden;
+}
+.ai-scan-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #198754, #20c997, #198754);
+    background-size: 200% 100%;
+    animation: scanMove 1.4s ease-in-out infinite;
+    border-radius: 4px;
+}
+@keyframes scanMove {
+    0%   { background-position: 200% 0; width: 30%; }
+    50%  { background-position: 0% 0;   width: 70%; }
+    100% { background-position: -200% 0; width: 30%; }
+}
+
+/* â”€â”€ AI Result Card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.ai-result-card {
+    background: #fff;
+    border: 1.5px solid #dee2e6;
+    border-radius: 12px;
+    padding: 12px;
+    animation: resultSlideIn 0.4s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes resultSlideIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* â”€â”€ Donation Progress Tracker â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.donation-progress {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+}
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+}
+.step-dot {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #e9ecef;
+    border: 2px solid #dee2e6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: #adb5bd;
+    transition: all 0.3s;
+    margin-bottom: 3px;
+}
+.step-dot.done {
+    background: #198754;
+    border-color: #198754;
+    color: #fff;
+}
+.step-label {
+    font-size: 8.5px;
+    color: #adb5bd;
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+}
+.progress-line {
+    flex: 1;
+    height: 2px;
+    background: #dee2e6;
+    margin: 0 2px;
+    margin-top: -12px;
+    transition: background 0.3s;
+}
+.progress-line.filled {
+    background: #198754;
+}
+
+/* â”€â”€ Mobile responsive map â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.bg-purple-subtle { background-color: #e8daef; }
+.text-purple { color: #8e44ad; }
+
+/* â”€â”€ Chat Panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.chat-panel-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1040;
+}
+.chat-panel {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 360px;
+    max-width: 100%;
+    height: 100vh;
+    background: #fff;
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+    z-index: 9999 !important;
+    display: flex;
+    flex-direction: column;
+    transition: right 0.3s ease;
+}
+.chat-panel.open {
+    right: 0;
+}
+.chat-header {
+    padding: 12px 16px;
+    background: #198754;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+}
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.chat-message {
+    display: flex;
+}
+.chat-message.sent {
+    justify-content: flex-end;
+}
+.chat-message.received {
+    justify-content: flex-start;
+}
+.message-content {
+    max-width: 75%;
+    padding: 10px 14px;
+    border-radius: 16px;
+    background: #f1f1f1;
+}
+.chat-message.sent .message-content {
+    background: #198754;
+    color: #fff;
+}
+.message-text {
+    font-size: 14px;
+    word-wrap: break-word;
+}
+.message-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 4px;
+    font-size: 10px;
+    opacity: 0.7;
+}
+.chat-input-area {
+    padding: 12px;
+    border-top: 1px solid #eee;
+}
+.chat-participants {
+    margin-bottom: 8px;
+}
+.chat-participants select {
+    margin-top: 4px;
+}
+.chat-input-area .input-group {
+    display: flex;
+    gap: 8px;
+}
+.chat-input-area input {
+    flex: 1;
+}
+.message-status {
+    margin-left: 4px;
+}
+.message-status .text-primary {
+    color: #198754 !important;
+}
+.typing-indicator {
+    padding: 8px 12px;
+    font-size: 12px;
+    color: #666;
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.typing-dots {
+    display: inline-flex;
+    gap: 2px;
+}
+.typing-dots span {
+    width: 4px;
+    height: 4px;
+    background: #666;
+    border-radius: 50%;
+    animation: typingBounce 1.4s infinite ease-in-out;
+}
+.typing-dots span:nth-child(1) { animation-delay: 0s; }
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingBounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-4px); }
+}
+@media (max-width: 480px) {
+    .chat-panel {
+        width: 100%;
+        right: -100%;
+    }
+}
+</style>
+

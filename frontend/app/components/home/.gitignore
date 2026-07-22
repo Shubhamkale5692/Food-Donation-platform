@@ -1,0 +1,45 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Environment
+.env
+
+# Node
+node_modules/
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# Build
+dist/
+build/
+
+# Database
+*.db
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Certificates
+backend/app/static/certificates/
+
+# Uploads
+backend/app/static/uploads/
+
+# Maps cache
+.cache/
+
+# Coverage
+coverage/
+
+# Temporary
+tmp/
+temp/
+
+frontend/setting.json

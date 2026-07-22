@@ -1,0 +1,484 @@
+================================================================================
+                    FOODBRIDGE - SMART FOOD DONATION PLATFORM
+                         COMPREHENSIVE PROJECT DOCUMENTATION
+================================================================================
+
+================================================================================
+1. PROJECT OVERVIEW
+================================================================================
+
+Project Name: FoodBridge - Smart Food Donation Platform
+Project Type: Full-Stack Web Application (Food Logistics & Donation System)
+
+Purpose:
+FoodBridge is a modern network connecting surplus food from businesses (donors) 
+to NGOs and volunteers for delivery to those who need it most. It uses AI-powered 
+logistics to match donations with nearby NGOs and coordinates volunteer deliveries 
+with real-time tracking.
+
+Key Features:
+- AI-powered food freshness detection
+- Smart NGO matching based on location and food type
+- Real-time volunteer tracking
+- OTP-based verification for food pickup/delivery
+- Multi-user dashboard (Donor, NGO, Volunteer, Admin)
+- Chat system for communication between users
+- Achievement and rewards system for volunteers
+
+================================================================================
+2. HOW THE PROJECT WORKS
+================================================================================
+
+USER ROLES & WORKFLOW:
+----------------------
+
+A. DONOR (Food Business/Hotel/Restaurant)
+   1. Register and login to donor dashboard
+   2. Create donation listing with:
+      - Food type, quantity, expiry time
+      - Pickup location (with GPS coordinates)
+      - Food image (optional)
+   3. Submit donation → Status becomes "pending"
+   4. Track donation status in "My Donations" tab
+   5. Chat with NGO/Volunteer if needed
+   6. Receive completion notification when delivered
+
+B. NGO (Non-Government Organization)
+   1. Register and wait for admin approval
+   2. Login to NGO dashboard
+   3. View available donations in "Available Donations" tab
+   4. Accept/donate donations they can handle
+   5. Assign donations to volunteers
+   6. Track deliveries in real-time
+   7. Mark donations as "received" using OTP verification
+
+C. VOLUNTEER (Delivery Partner)
+   1. Register and wait for NGO approval
+   2. Login to volunteer dashboard
+   3. View assigned deliveries
+   4. Start delivery → Pick up food from donor (verify OTP)
+   5. Deliver to NGO → Mark delivery complete
+   6. Earn points and achievements
+   7. Chat/call with donors and NGOs
+
+D. ADMIN
+   1. Manage all users (approve NGOs, volunteers)
+   2. View platform statistics
+   3. Manage certificates
+
+DATA FLOW:
+-----------
+1. Donor creates donation → Saved to donations table
+2. NGO claims donation → ngo_id added to donation
+3. Volunteer assigned → volunteer_id added, delivery created
+4. Volunteer picks up → OTP verification, status → in_progress
+5. Volunteer delivers → OTP verification, status → completed
+6. Points awarded → volunteer rewards updated
+
+================================================================================
+3. HOW TO RUN THE PROJECT
+================================================================================
+
+PREREQUISITES:
+--------------
+- Python 3.11+
+- Node.js 18+ (for frontend)
+- PostgreSQL 14+ (database)
+- Redis (for caching/celery - optional)
+
+BACKEND SETUP (Windows):
+------------------------
+1. Navigate to backend directory:
+   cd F:\Food Donation Platform\backend
+
+2. Create and activate virtual environment:
+   python -m venv venv
+   venv\Scripts\activate
+
+3. Install dependencies:
+   pip install -r requirements.txt
+
+4. Configure environment variables:
+   - Create .env file with:
+     DATABASE_URL=postgresql://postgres:password@localhost:5432/foodbridge
+     SECRET_KEY=your-secret-key
+     JWT_ALGORITHM=HS256
+     JWT_SECRET=your-jwt-secret
+
+5. Run database migrations:
+   - The app runs auto-migrations on startup
+   - Or manually: python -m alembic upgrade head
+
+6. Seed initial data (optional):
+   python seed_data.py
+
+7. Start backend server:
+   uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+
+FRONTEND SETUP:
+---------------
+1. Navigate to frontend directory:
+   cd F:\Food Donation Platform\frontend
+
+2. For development, you can use any static file server:
+   - Option A: Python simple server
+     python -m http.server 8080
+   
+   - Option B: Using VS Code Live Server extension
+
+3. Open in browser:
+   http://localhost:8080
+
+DOCKER SETUP (Alternative):
+---------------------------
+1. From root directory:
+   docker-compose up --build
+
+2. This will start:
+   - Frontend on port 8080
+   - Backend on port 8000
+   - PostgreSQL on port 5432
+
+TESTING:
+--------
+- Backend tests: cd backend && pytest
+- Check API: http://localhost:8000/docs (Swagger UI)
+
+================================================================================
+4. TECH STACK USED
+================================================================================
+
+BACKEND:
+--------
+- FastAPI (0.110+) - Modern Python web framework
+- SQLAlchemy (2.0+) - ORM for database operations
+- PostgreSQL - Primary database
+- Pydantic - Data validation
+- Uvicorn - ASGI server
+- Python-Jose - JWT authentication
+- Passlib + bcrypt - Password hashing
+- Alembic - Database migrations
+- Celery + Redis - Background task processing
+- SlowAPI - Rate limiting
+
+FRONTEND:
+---------
+- AngularJS (1.x) - Frontend framework
+- Bootstrap 5 - UI framework
+- Leaflet.js - Maps display
+- MapLibre GL - Live tracking maps
+- Chart.js - Statistics charts
+- Bootstrap Icons - Icon library
+
+EXTERNAL SERVICES:
+------------------
+- OpenStreetMap / Mapbox - Geocoding and maps
+- SMTP Server - Email notifications (configurable)
+
+================================================================================
+5. DATABASE MODELS & FIELD DESCRIPTIONS
+================================================================================
+
+A. USER MODEL
+-------------
+Fields:
+- id (UUID): Primary key, unique user identifier
+- name (String): User's display name
+- email (String): Unique login email
+- password_hash (String): Bcrypt hashed password
+- role (Enum): ADMIN, NGO, DONOR, VOLUNTEER
+- is_active (Boolean): Account active status
+- is_verified (Boolean): Email verification / NGO approval
+- trust_score (Integer): Fraud detection score (default 100)
+- created_at (DateTime): Account creation timestamp
+- ngo_id (UUID): For volunteers - associated NGO
+- volunteer_status (String): pending/approved/rejected
+- status (String): Alias for volunteer_status
+- availability (String): available/busy
+- location_lat/lng (Float): Current GPS location
+- rating (Float): Volunteer rating (default 5.0)
+- completed_deliveries (Integer): Total deliveries completed
+
+Purpose: All users (Donor, NGO, Volunteer, Admin) use this table
+
+B. PROFILE MODEL
+----------------
+Fields:
+- id (UUID): Primary key
+- user_id (UUID): Foreign key to User
+- name (String): Profile display name
+- phone (String): Contact number
+- address (String): Physical address
+- latitude/longitude (Float): Fixed location coordinates
+- current_lat/lng (Float): Live tracking coordinates
+- certificate_url (String): NGO verification certificate
+
+Purpose: Extended user information including location data
+
+C. DONATION MODEL
+-----------------
+Fields:
+- id (UUID): Primary key
+- donor_id (UUID): Foreign key to User (donor)
+- food_type (String): Type of food (Rice, Curry, etc.)
+- quantity (Integer): Number of plates/units
+- expiry_time (DateTime): Food expiration deadline
+- status (Enum): PENDING → ACCEPTED → ASSIGNED → CLAIMED → 
+                 IN_PROGRESS → PICKED_UP → COMPLETED → CANCELLED
+- freshness_status (Enum): UNKNOWN, FRESH, MEDIUM, SPOILED (AI result)
+- image_url (String): Food photo URL
+- latitude/longitude (Float): Pickup location (original)
+- pickup_lat/lng (Float): Explicit pickup location
+- pickup_address (String): Text address
+- created_at (DateTime): Donation creation time
+- ngo_id (UUID): NGO that claimed the donation
+- volunteer_id (UUID): Assigned volunteer
+- delivery_status (String): Current delivery stage
+- otp_code (String): 6-digit verification code
+- otp_verified (Boolean): OTP confirmed
+- volunteer_reached_donor (Boolean): Volunteer arrived at pickup
+- donation_received (Boolean): Food received by NGO
+- pickup_time (DateTime): Actual pickup timestamp
+- delivery_time (DateTime): Actual delivery timestamp
+- assignment_time (DateTime): When volunteer assigned
+- cancel_reason (String): Reason if cancelled
+
+Purpose: Core entity tracking food donations through lifecycle
+
+D. DELIVERY MODEL
+-----------------
+Fields:
+- id (UUID): Primary key
+- donation_id (UUID): Foreign key to Donation (unique)
+- ngo_id (UUID): Destination NGO
+- volunteer_id (UUID): Assigned volunteer
+- status (Enum): PENDING, ASSIGNED, IN_PROGRESS, PICKED_UP, 
+                 DELIVERED, FAILED
+- otp (String): Pickup verification code
+- assigned_at (DateTime): Assignment timestamp
+- completed_at (DateTime): Completion timestamp
+
+Purpose: Tracks delivery assignment and status
+
+E. VOLUNTEER_LOCATION MODEL
+---------------------------
+Fields:
+- id (UUID): Primary key
+- volunteer_id (UUID): Foreign key to User
+- latitude/longitude (Float): Location coordinates
+- timestamp (DateTime): Location update time
+
+Purpose: Historical tracking of volunteer movements
+
+F. NOTIFICATION MODEL
+---------------------
+Fields:
+- id (UUID): Primary key
+- user_id (UUID): Recipient user
+- message (String): Notification content
+- type (String): notification type
+- is_read (Boolean): Read status
+- created_at (DateTime): Creation time
+
+Purpose: User notifications
+
+G. MESSAGE MODEL (Chat)
+-----------------------
+Fields:
+- id (UUID): Primary key
+- donation_id (UUID): Related donation
+- sender_id (UUID): Message sender
+- receiver_id (UUID): Message receiver
+- message (String): Message content
+- timestamp (DateTime): Message time
+- status (String): sent, delivered, seen
+
+Purpose: Chat between donation participants
+
+H. CERTIFICATE MODEL
+--------------------
+Fields:
+- id (UUID): Primary key
+- volunteer_id (UUID): Awarded volunteer
+- certificate_type (String): Type of achievement
+- issued_at (DateTime): Issue date
+- certificate_url (String): Certificate file URL
+
+Purpose: Volunteer achievements and certificates
+
+================================================================================
+6. BENEFITS OF EACH COMPONENT
+================================================================================
+
+DONOR SIDE:
+-----------
+1. Easy Donation Creation - Simple form to list surplus food in 30 seconds
+2. Real-time Tracking - See donation status from pending to completion
+3. Chat/Call - Direct communication with NGO and volunteer
+4. Impact Dashboard - View total donations and meals contributed
+5. Certificate - Download donation certificates for tax benefits
+
+NGO SIDE:
+---------
+1. Smart Matching - AI recommends nearby donations matching food type
+2. Volunteer Management - Assign and track deliveries
+3. Live Tracking - Monitor volunteer location in real-time
+4. OTP Verification - Secure food pickup and delivery confirmation
+5. Statistics - Dashboard showing accepted donations, meals delivered
+
+VOLUNTEER SIDE:
+---------------
+1. Clear Dashboard - Assigned deliveries with pickup/delivery details
+2. GPS Navigation - Turn-by-turn directions to pickup and drop-off
+3. OTP System - Simple code verification for pickup/delivery
+4. Rewards System - Points, levels (Bronze/Silver/Gold), certificates
+5. Chat/Call - Communication with donors and NGOs
+
+ADMIN SIDE:
+----------
+1. User Management - Approve NGOs and volunteers
+2. Platform Statistics - Total donations, users, deliveries
+3. Certificate Management - Issue and manage achievements
+4. System Monitoring - Track platform health
+
+================================================================================
+7. LIMITATIONS & FEATURES
+================================================================================
+
+CURRENT FEATURES:
+-----------------
+✓ Multi-user authentication (JWT)
+✓ Donation creation and tracking
+✓ NGO donation claiming
+✓ Volunteer assignment
+✓ Real-time location tracking
+✓ OTP verification system
+✓ Chat between participants
+✓ Call functionality
+✓ Volunteer rewards/achievements
+✓ AI freshness detection
+✓ Statistics dashboards
+✓ Mobile responsive design
+✓ Rate limiting on APIs
+✓ Auto database migrations
+
+LIMITATIONS:
+------------
+1. No real payment integration (free platform)
+2. Limited to food donations only
+3. No multi-language support
+4. No push notifications (only in-app)
+5. WebSocket chat can be unstable
+6. No offline mode
+7. Limited analytics/reporting
+8. No mobile app (web only)
+9. Manual NGO/volunteer approval process
+10. No food safety certification integration
+
+================================================================================
+8. FUTURE UPDATES & IMPROVEMENTS
+================================================================================
+
+IMMEDIATE PRIORITIES:
+---------------------
+1. Fix WebSocket chat stability issues
+2. Add push notifications
+3. Improve real-time tracking reliability
+4. Add delivery time estimates
+5. Fix donor chat functionality bugs
+
+MEDIUM-TERM:
+------------
+1. Mobile app (iOS/Android)
+2. Food safety certification verification
+3. Multi-language support (Hindi, regional languages)
+4. SMS notifications
+5. Advanced analytics dashboard
+6. Auto-approve trusted donors
+7. Rating system for all users
+
+LONG-TERM:
+----------
+1. Payment integration for logistics costs
+2. AI demand prediction
+3. Restaurant partnerships API
+4. Government food safety integration
+5. Multi-city expansion
+6. Corporate CSR portal
+7. Volunteer scheduling system
+8. Food waste analytics
+9. Blockchain for transparency
+10. Carbon footprint tracking
+
+================================================================================
+9. API ENDPOINTS SUMMARY
+================================================================================
+
+Authentication:
+- POST /api/auth/register
+- POST /api/auth/login
+- GET /api/auth/profile
+
+Donations:
+- GET /api/donations (list donations based on role)
+- POST /api/donations (create donation)
+- GET /api/donations/pending (available donations)
+- POST /api/donations/{id}/claim (NGO claims donation)
+- POST /api/donations/{id}/assign-volunteer
+- POST /api/donations/{id}/generate-otp
+- POST /api/donations/{id}/verify-otp
+
+Volunteer:
+- GET /api/volunteer/dashboard-summary
+- GET /api/volunteer/rewards
+- GET /api/volunteer/active-delivery
+- GET /api/volunteer/my-deliveries
+- POST /api/volunteer/update-delivery-status
+
+Chat:
+- GET /api/chat/{donation_id}/participants
+- GET /api/chat/{donation_id}/messages
+- POST /api/chat/send
+
+Admin:
+- GET /api/admin/stats
+- PUT /api/admin/users/{id}/approve
+
+================================================================================
+10. PROJECT STRUCTURE
+================================================================================
+
+FoodBridge/
+├── backend/
+│   ├── app/
+│   │   ├── main.py              # FastAPI application
+│   │   ├── core/                # Configuration & security
+│   │   ├── domain/              # Models & schemas
+│   │   ├── infrastructure/      # Database setup
+│   │   ├── interfaces/         # API routers
+│   │   ├── services/           # Business logic
+│   │   └── workers/           # Celery tasks
+│   ├── requirements.txt
+│   └── .env
+│
+├── frontend/
+│   ├── index.html              # Main entry point
+│   ├── app/
+│   │   ├── app.js              # Angular controller
+│   │   ├── bootstrap.js         # Donor controller
+│   │   ├── services/           # API services
+│   │   └── components/         # UI components
+│   ├── assets/
+│   │   └── css/style.css       # Styling
+│   └── app/components/
+│       ├── home/               # Landing page
+│       ├── donor/              # Donor dashboard
+│       ├── ngo/                # NGO dashboard
+│       ├── volunteer/          # Volunteer dashboard
+│       └── admin/              # Admin dashboard
+│
+└── docker-compose.yml          # Docker setup
+
+================================================================================
+                              END OF DOCUMENTATION
+================================================================================

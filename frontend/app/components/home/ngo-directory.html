@@ -1,0 +1,200 @@
+<!-- NGO Directory Page -->
+<div class="ngo-directory-page" ng-controller="NgoDirectoryController">
+  <!-- Page Header -->
+  <section class="directory-header py-5 bg-success text-white">
+    <div class="container">
+      <h1 class="display-3 fw-bold mb-2 directory-fade-in">
+        <i class="bi bi-building me-3"></i>NGO Directory
+      </h1>
+      <p class="lead directory-fade-in delay-1">Find and support NGOs in your area</p>
+    </div>
+  </section>
+
+  <!-- Search & Filter Section -->
+  <section class="search-filter-section py-4 bg-light">
+    <div class="container">
+      <div class="row g-3 align-items-center">
+        <div class="col-md-6">
+          <div class="search-box position-relative">
+            <i class="bi bi-search position-absolute text-muted" style="top: 50%; left: 15px; transform: translateY(-50%);"></i>
+            <input type="text" class="form-control ps-5" placeholder="Search by NGO name or location..." ng-model="searchQuery" ng-change="filterNgos()">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <select class="form-select" ng-model="locationFilter" ng-change="filterNgos()">
+            <option value="">All Locations</option>
+            <option value="Delhi">Delhi</option>
+            <option value="Mumbai">Mumbai</option>
+            <option value="Bangalore">Bangalore</option>
+            <option value="Chennai">Chennai</option>
+            <option value="Hyderabad">Hyderabad</option>
+            <option value="Kolkata">Kolkata</option>
+            <option value="Pune">Pune</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-outline-secondary w-100" ng-click="clearFilters()">
+            <i class="bi bi-x-circle me-1"></i> Clear
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Loading State -->
+  <div class="loading-state text-center py-5" ng-if="loading">
+    <div class="spinner-border text-success" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-3 text-muted">Loading NGOs...</p>
+  </div>
+
+  <!-- NGO List -->
+  <section class="ngo-list-section py-5" ng-if="!loading">
+    <div class="container">
+      <!-- Results Count -->
+      <div class="results-info mb-4">
+        <p class="text-muted mb-0">
+          Showing <strong>{{filteredNgos.length}}</strong> of <strong>{{allNgos.length}}</strong> NGOs
+        </p>
+      </div>
+
+      <!-- Empty State -->
+      <div class="empty-state text-center py-5" ng-if="filteredNgos.length === 0">
+        <div class="empty-icon mb-4">
+          <i class="bi bi-building fs-1 text-muted"></i>
+        </div>
+        <h4 class="fw-bold text-muted mb-2">No NGOs Found</h4>
+        <p class="text-muted mb-4">Try adjusting your search or filters</p>
+        <button class="btn btn-outline-success rounded-pill" ng-click="clearFilters()">
+          <i class="bi bi-arrow-counterclockwise me-2"></i> Reset Filters
+        </button>
+      </div>
+
+      <!-- NGO Cards Grid -->
+      <div class="row g-4" ng-if="filteredNgos.length > 0">
+        <div class="col-md-6 col-lg-4 ngo-card-fade" ng-repeat="ngo in filteredNgos track by ngo.id" style="animation-delay: {{$index * 0.05}}s">
+          <div class="ngo-card card h-100 border-0 rounded-4 shadow-sm overflow-hidden">
+            <div class="card-header bg-white border-0 pt-4 px-4">
+              <div class="d-flex align-items-start justify-content-between">
+                <div>
+                  <h4 class="fw-bold mb-1">{{ngo.name || 'NGO ' + ngo.id}}</h4>
+                  <div class="ngo-location text-muted small">
+                    <i class="bi bi-geo-alt me-1"></i>
+                    {{ngo.location || 'Location not specified'}}
+                  </div>
+                </div>
+                <span class="badge rounded-pill" ng-class="ngo.is_verified ? 'bg-success' : 'bg-secondary'">
+                  {{ngo.is_verified ? 'Verified' : 'Active'}}
+                </span>
+              </div>
+            </div>
+            <div class="card-body px-4">
+              <p class="text-muted mb-3" ng-if="ngo.description">
+                {{ngo.description | limitTo:100}}{{ngo.description.length > 100 ? '...' : ''}}
+              </p>
+              <p class="text-muted mb-3" ng-if="!ngo.description">
+                This NGO is working towards eliminating food waste and helping those in need.
+              </p>
+              <div class="ngo-stats d-flex gap-3">
+                <div class="stat-item">
+                  <i class="bi bi-basket text-success me-1"></i>
+                  <span class="small text-muted">{{ngo.donationCount || 0}} donations</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer bg-white border-0 px-4 pb-4">
+              <div class="d-grid gap-2">
+                <button class="btn btn-outline-success rounded-pill" ng-click="viewNgoDetails(ngo)">
+                  <i class="bi bi-eye me-2"></i>View Details
+                </button>
+                <button class="btn btn-success rounded-pill" ng-click="donateToNgo(ngo)" data-bs-toggle="modal" data-bs-target="#authModal">
+                  <i class="bi bi-heart me-2"></i>Donate Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NGO Details Modal -->
+  <div class="modal fade" id="ngoDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 rounded-4">
+        <div class="modal-header bg-success text-white rounded-top-4">
+          <h5 class="modal-title">
+            <i class="bi bi-building me-2"></i>{{selectedNgo.name || 'NGO Details'}}
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="detail-item mb-4">
+                <h6 class="fw-bold text-muted mb-2">
+                  <i class="bi bi-geo-alt me-2 text-success"></i>Location
+                </h6>
+                <p class="mb-0 fw-medium">{{selectedNgo.location || 'Not specified'}}</p>
+              </div>
+              <div class="detail-item mb-4">
+                <h6 class="fw-bold text-muted mb-2">
+                  <i class="bi bi-envelope me-2 text-success"></i>Email
+                </h6>
+                <p class="mb-0 fw-medium">{{selectedNgo.email || 'Not available'}}</p>
+              </div>
+              <div class="detail-item">
+                <h6 class="fw-bold text-muted mb-2">
+                  <i class="bi bi-telephone me-2 text-success"></i>Contact
+                </h6>
+                <p class="mb-0 fw-medium">{{selectedNgo.phone || 'Not available'}}</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="detail-item mb-4">
+                <h6 class="fw-bold text-muted mb-2">
+                  <i class="bi bi-check-circle me-2 text-success"></i>Status
+                </h6>
+                <span class="badge rounded-pill" ng-class="selectedNgo.is_verified ? 'bg-success' : 'bg-secondary'">
+                  {{selectedNgo.is_verified ? 'Verified' : 'Active'}}
+                </span>
+              </div>
+              <div class="detail-item mb-4">
+                <h6 class="fw-bold text-muted mb-2">
+                  <i class="bi bi-basket me-2 text-success"></i>Total Donations Received
+                </h6>
+                <p class="mb-0 fw-bold display-6 text-success">{{selectedNgo.donationCount || 0}}</p>
+              </div>
+              <div class="detail-item">
+                <h6 class="fw-bold text-muted mb-2">
+                  <i class="bi bi-calendar me-2 text-success"></i>Member Since
+                </h6>
+                <p class="mb-0 fw-medium">{{selectedNgo.created_at | date:'mediumDate'}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4" ng-if="selectedNgo.description">
+            <h6 class="fw-bold text-muted mb-2">
+              <i class="bi bi-card-text me-2 text-success"></i>About
+            </h6>
+            <p class="text-muted mb-0">{{selectedNgo.description}}</p>
+          </div>
+        </div>
+        <div class="modal-footer bg-light rounded-bottom-4">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal" ng-click="donateToNgo(selectedNgo)" data-bs-toggle="modal" data-bs-target="#authModal">
+            <i class="bi bi-heart me-2"></i>Donate to this NGO
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Back Link -->
+  <div class="text-center py-4 mb-4">
+    <a href="#!/" class="btn btn-link text-success fw-medium">
+      <i class="bi bi-arrow-left me-2"></i> Back to Home
+    </a>
+  </div>
+</div>

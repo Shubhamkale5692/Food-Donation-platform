@@ -1,0 +1,387 @@
+<div class="d-flex flex-column py-5" style="min-height: calc(100vh - 80px); background-color: #f8f9fa; font-family: 'Inter', sans-serif;">
+  <div class="container" style="max-width: 900px;">
+    
+    <!-- Progress Indicator -->
+    <div class="d-flex justify-content-between position-relative mb-5 mx-auto" style="max-width: 500px;">
+      <div class="position-absolute" style="top: 10px; left: 10%; right: 10%; height: 3px; background: #e9ecef; z-index: 1;"></div>
+      <div class="position-absolute" style="top: 10px; left: 10%; width: 50%; height: 3px; background: #198754; z-index: 2;"></div>
+      
+      <div class="text-center position-relative" style="z-index: 3;">
+        <span class="d-block mb-1 text-uppercase fw-bold text-muted" style="font-size: 0.7rem; tracking-wide: 1px;">Account</span>
+        <div class="rounded-circle bg-light border mx-auto d-flex align-items-center justify-content-center" style="width: 24px; height: 24px;">
+          <i class="bi bi-person-fill text-muted" style="font-size:0.75rem;"></i>
+        </div>
+      </div>
+      
+      <div class="text-center position-relative" style="z-index: 3;">
+        <span class="d-block mb-1 text-uppercase fw-bold text-dark" style="font-size: 0.7rem; letter-spacing: 1px;">NGO Profile</span>
+        <div class="rounded-circle bg-success mx-auto d-flex align-items-center justify-content-center" style="width: 28px; height: 28px; box-shadow: 0 0 0 4px white;">
+          <i class="bi bi-building text-white" style="font-size:0.85rem;"></i>
+        </div>
+      </div>
+      
+      <div class="text-center position-relative" style="z-index: 3;">
+        <span class="d-block mb-1 text-uppercase fw-bold text-muted" style="font-size: 0.7rem; letter-spacing: 1px;">Publish</span>
+        <div class="rounded-circle bg-light border mx-auto d-flex align-items-center justify-content-center" style="width: 24px; height: 24px;">
+           <i class="bi bi-cursor-fill text-muted" style="font-size:0.75rem;"></i>
+        </div>
+      </div>
+    </div>
+    
+    <div class="text-center mb-5">
+      <h3 class="fw-bold fs-5">Build Your Impact Profile</h3>
+      <p class="text-muted small">Complete your organization's details to start coordinating food rescues efficiently.</p>
+    </div>
+
+    <!-- Cover Photo & Logo -->
+    <div class="position-relative mb-4 rounded-4" style="height: 180px; background-image: url('assets/hero.jpg'); background-color:#8ba9b9; background-size: cover; background-position: center; border-radius: 1rem;">
+      <div class="position-absolute bottom-0 start-0 m-4 d-flex align-items-end">
+        <div class="bg-white rounded-3 shadow-sm d-flex align-items-center justify-content-center text-center cursor-pointer overflow-hidden border border-2 border-white" style="width: 90px; height: 90px; z-index:2; position:relative;">
+          <!-- placeholder or actual img -->
+          <div class="text-muted w-100 h-100 d-flex flex-column justify-content-center align-items-center" ng-if="!profile.logo">
+             <i class="bi bi-camera fs-4"></i>
+             <span class="d-block text-uppercase fw-bold" style="font-size: 0.5rem; letter-spacing:0.5px">Logo</span>
+          </div>
+          <img ng-if="profile.logo" ng-src="{{profile.logo}}" class="img-fluid h-100 object-fit-cover" />
+          <!-- overlay button -->
+          <input type="file" id="logoUpload" class="d-none" accept="image/*" onchange="angular.element(this).scope().handleLogoUpload(this.files)" />
+          <label for="logoUpload" class="position-absolute w-100 h-100 start-0 top-0 cursor-pointer" style="opacity:0;"></label>
+        </div>
+      </div>
+      <div class="position-absolute bottom-0 start-0 w-100 p-4" style="background: linear-gradient(0deg, rgba(0,0,0,0.6) 0%, transparent 100%); border-radius: 0 0 1rem 1rem;">
+         <label for="coverUpload" class="btn btn-dark btn-sm rounded-pill ms-5 ps-5 px-3 py-1 opacity-75 border-0 hover-opacity-100" style="font-size:0.75rem; letter-spacing:0.5px">
+           <i class="bi bi-pencil-fill me-1"></i> Change Cover
+         </label>
+         <input type="file" id="coverUpload" class="d-none" accept="image/*" onchange="angular.element(this).scope().handleCoverUpload(this.files)" />
+      </div>
+    </div>
+
+    <form name="profileForm" ng-submit="publishProfile()" novalidate>
+      <div class="row g-4 mb-4">
+        <!-- Left Column -->
+        <div class="col-md-7 d-flex flex-column gap-4">
+          
+          <!-- Basic Info Card -->
+          <div class="card border-0 shadow-sm p-4 rounded-4">
+            <h6 class="fw-bold mb-4 d-flex align-items-center"><i class="bi bi-info-circle-fill text-success fs-5 me-2"></i> Basic NGO Information</h6>
+            
+            <div class="mb-3">
+              <label class="form-label text-uppercase fw-bold text-primary" style="font-size: 0.65rem; letter-spacing: 1px; color:#3b5998!important;">Organization Tagline</label>
+              <input type="text" ng-model="profile.tagline" class="form-control bg-light border-0 py-2 rounded-3" placeholder="e.g. Feeding Hope, One Meal at a Time">
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label text-uppercase fw-bold text-primary" style="font-size: 0.65rem; letter-spacing: 1px; color:#3b5998!important;">About the NGO</label>
+              <textarea ng-model="profile.about" class="form-control bg-light border-0 py-2 rounded-3" rows="4" placeholder="Describe your mission and the community you serve..."></textarea>
+            </div>
+            
+            <div class="row gx-3">
+              <div class="col-md-6 mb-3 mb-md-0">
+                <label class="form-label text-uppercase fw-bold text-primary" style="font-size: 0.65rem; letter-spacing: 1px; color:#3b5998!important;">Year Established</label>
+                <input type="text" ng-model="profile.yearEstablished" class="form-control bg-light border-0 py-2 rounded-3" placeholder="2015">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label text-uppercase fw-bold text-primary" style="font-size: 0.65rem; letter-spacing: 1px; color:#3b5998!important;">Reg. Number</label>
+                <input type="text" ng-model="profile.regNumber" class="form-control bg-light border-0 py-2 rounded-3" placeholder="NGO-8821-X">
+              </div>
+            </div>
+          </div>
+          
+          <!-- Food Acceptance -->
+          <div class="card border-0 shadow-sm p-4 rounded-4">
+            <h6 class="fw-bold mb-4 d-flex align-items-center"><i class="bi bi-basket-fill text-success fs-5 me-2" style="opacity:0.8; color:#789278!important;"></i> Food Acceptance & Rules</h6>
+            
+            <div class="row g-2 mb-4">
+              <div class="col-6">
+                <div class="p-2 px-3 border border-light rounded-3 bg-light d-flex align-items-center cursor-pointer" ng-click="profile.foodTypes.cooked = !profile.foodTypes.cooked" ng-class="{'bg-success-subtle border-success-subtle': profile.foodTypes.cooked}">
+                  <div class="form-check m-0 d-flex align-items-center w-100">
+                    <input class="form-check-input mt-0 me-2" type="checkbox" ng-model="profile.foodTypes.cooked" id="tCooked">
+                    <div class="ms-1" style="flex:1">
+                      <span class="d-block fw-bold text-dark lh-1" style="font-size: 0.8rem;">Cooked Food</span>
+                      <small class="text-muted d-block" style="font-size: 0.65rem;">Prepared meals</small>
+                    </div>
+                    <i class="bi bi-box-fill text-success opacity-50 ms-auto"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-2 px-3 border border-light rounded-3 bg-light d-flex align-items-center cursor-pointer" ng-click="profile.foodTypes.packed = !profile.foodTypes.packed" ng-class="{'bg-success-subtle border-success-subtle': profile.foodTypes.packed}">
+                  <div class="form-check m-0 d-flex align-items-center w-100">
+                    <input class="form-check-input mt-0 me-2" type="checkbox" ng-model="profile.foodTypes.packed" id="tPacked">
+                    <div class="ms-1" style="flex:1">
+                      <span class="d-block fw-bold text-dark lh-1" style="font-size: 0.8rem;">Packed Food</span>
+                      <small class="text-muted d-block" style="font-size: 0.65rem;">Canned / Sealed</small>
+                    </div>
+                    <i class="bi bi-archive-fill text-success opacity-50 ms-auto"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-2 px-3 border border-light rounded-3 bg-light d-flex align-items-center cursor-pointer" ng-click="profile.foodTypes.raw = !profile.foodTypes.raw" ng-class="{'bg-success-subtle border-success-subtle': profile.foodTypes.raw}">
+                  <div class="form-check m-0 d-flex align-items-center w-100">
+                    <input class="form-check-input mt-0 me-2" type="checkbox" ng-model="profile.foodTypes.raw" id="tRaw">
+                    <div class="ms-1" style="flex:1">
+                      <span class="d-block fw-bold text-dark lh-1" style="font-size: 0.8rem;">Raw Groceries</span>
+                      <small class="text-muted d-block" style="font-size: 0.65rem;">Veggies / Grains</small>
+                    </div>
+                    <i class="bi bi-apple text-success opacity-50 ms-auto"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-2 px-3 border border-light rounded-3 bg-light d-flex align-items-center cursor-pointer" ng-click="profile.foodTypes.bakery = !profile.foodTypes.bakery" ng-class="{'bg-success-subtle border-success-subtle': profile.foodTypes.bakery}">
+                  <div class="form-check m-0 d-flex align-items-center w-100">
+                    <input class="form-check-input mt-0 me-2" type="checkbox" ng-model="profile.foodTypes.bakery" id="tBakery">
+                    <div class="ms-1" style="flex:1">
+                      <span class="d-block fw-bold text-dark lh-1" style="font-size: 0.8rem;">Bakery Items</span>
+                      <small class="text-muted d-block" style="font-size: 0.65rem;">Bread / Pastries</small>
+                    </div>
+                    <i class="bi bi-bag-fill text-success opacity-50 ms-auto"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label text-uppercase fw-bold text-primary" style="font-size: 0.65rem; letter-spacing: 1px; color:#3b5998!important;">Condition Rules</label>
+              <input type="text" ng-model="profile.conditionRules" class="form-control bg-light border-0 py-2 rounded-3" placeholder="e.g. Must be within 4 hours of preparation">
+            </div>
+            
+            <div class="row gx-3">
+              <div class="col-md-6 mb-3 mb-md-0">
+                <label class="form-label text-uppercase fw-bold text-primary" style="font-size: 0.65rem; letter-spacing: 1px; color:#3b5998!important;">Min Capacity (Serves)</label>
+                <input type="number" ng-model="profile.minMeals" class="form-control bg-light border-0 py-2 rounded-3" placeholder="10" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label text-uppercase fw-bold text-primary" style="font-size: 0.65rem; letter-spacing: 1px; color:#3b5998!important;">Max Capacity (Serves)</label>
+                <input type="number" ng-model="profile.maxMeals" class="form-control bg-light border-0 py-2 rounded-3" placeholder="500" required>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        
+        <!-- Right Column -->
+        <div class="col-md-5 d-flex flex-column gap-4">
+          
+          <!-- Pickup -->
+          <div class="card border-0 shadow-sm p-4 rounded-4" style="border-left: 4px solid #3b5998 !important;">
+            <h6 class="fw-bold mb-4 d-flex align-items-center"><i class="bi bi-clock text-primary fs-5 me-2" style="color:#3b5998!important;"></i> Pickup Availability</h6>
+            
+            <div class="d-flex gap-2 mb-4">
+              <div class="rounded-circle d-flex align-items-center justify-content-center cursor-pointer fw-bold" 
+                   ng-click="profile.availableDays.m = !profile.availableDays.m"
+                   ng-class="profile.availableDays.m ? 'bg-primary text-white' : 'bg-light text-muted'"
+                   style="width: 32px; height: 32px; font-size: 0.75rem; transition: 0.2s;" ng-style="profile.availableDays.m && {'background-color':'#3b5998!important'}">M</div>
+              <div class="rounded-circle d-flex align-items-center justify-content-center cursor-pointer fw-bold" 
+                   ng-click="profile.availableDays.t = !profile.availableDays.t"
+                   ng-class="profile.availableDays.t ? 'bg-primary text-white' : 'bg-light text-muted'"
+                   style="width: 32px; height: 32px; font-size: 0.75rem; transition: 0.2s;" ng-style="profile.availableDays.t && {'background-color':'#3b5998!important'}">T</div>
+              <div class="rounded-circle d-flex align-items-center justify-content-center cursor-pointer fw-bold" 
+                   ng-click="profile.availableDays.w = !profile.availableDays.w"
+                   ng-class="profile.availableDays.w ? 'bg-primary text-white' : 'bg-light text-muted'"
+                   style="width: 32px; height: 32px; font-size: 0.75rem; transition: 0.2s;" ng-style="profile.availableDays.w && {'background-color':'#3b5998!important'}">W</div>
+              <div class="rounded-circle d-flex align-items-center justify-content-center cursor-pointer fw-bold" 
+                   ng-click="profile.availableDays.th = !profile.availableDays.th"
+                   ng-class="profile.availableDays.th ? 'bg-primary text-white' : 'bg-light text-muted'"
+                   style="width: 32px; height: 32px; font-size: 0.75rem; transition: 0.2s;" ng-style="profile.availableDays.th && {'background-color':'#3b5998!important'}">T</div>
+              <div class="rounded-circle d-flex align-items-center justify-content-center cursor-pointer fw-bold" 
+                   ng-click="profile.availableDays.f = !profile.availableDays.f"
+                   ng-class="profile.availableDays.f ? 'bg-primary text-white' : 'bg-light text-muted'"
+                   style="width: 32px; height: 32px; font-size: 0.75rem; transition: 0.2s;" ng-style="profile.availableDays.f && {'background-color':'#3b5998!important'}">F</div>
+              <div class="rounded-circle d-flex align-items-center justify-content-center cursor-pointer fw-bold" 
+                   ng-click="profile.availableDays.s = !profile.availableDays.s"
+                   ng-class="profile.availableDays.s ? 'bg-primary text-white' : 'bg-light text-muted'"
+                   style="width: 32px; height: 32px; font-size: 0.75rem; transition: 0.2s; margin-left:8px;" ng-style="profile.availableDays.s && {'background-color':'#3b5998!important'}">S</div>
+              <div class="rounded-circle d-flex align-items-center justify-content-center cursor-pointer fw-bold" 
+                   ng-click="profile.availableDays.su = !profile.availableDays.su"
+                   ng-class="profile.availableDays.su ? 'bg-primary text-white' : 'bg-light text-muted'"
+                   style="width: 32px; height: 32px; font-size: 0.75rem; transition: 0.2s;" ng-style="profile.availableDays.su && {'background-color':'#3b5998!important'}">S</div>
+            </div>
+            
+            <div class="row gx-3">
+              <div class="col-6">
+                <label class="form-label text-uppercase fw-bold text-dark" style="font-size: 0.6rem; letter-spacing: 1px;">Start Time</label>
+                <div class="position-relative">
+                   <input type="text" ng-model="profile.pickupStartTime" class="form-control bg-light border-0 py-2 rounded-3 fs-6" placeholder="09:00 AM">
+                   <i class="bi bi-clock-history position-absolute text-muted" style="right:10px; top:12px; font-size: 0.8rem;"></i>
+                </div>
+              </div>
+              <div class="col-6">
+                <label class="form-label text-uppercase fw-bold text-dark" style="font-size: 0.6rem; letter-spacing: 1px;">End Time</label>
+                <div class="position-relative">
+                   <input type="text" ng-model="profile.pickupEndTime" class="form-control bg-light border-0 py-2 rounded-3 fs-6" placeholder="09:00 PM">
+                   <i class="bi bi-clock-history position-absolute text-muted" style="right:10px; top:12px; font-size: 0.8rem;"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Storage -->
+          <div class="card border-0 shadow-sm p-4 rounded-4">
+            <h6 class="fw-bold mb-4 d-flex align-items-center"><i class="bi bi-box2-fill text-dark fs-5 me-2" style="color:#5f7a76!important; opacity:0.8;"></i> Storage Capabilities</h6>
+            <div class="form-check mb-3">
+              <input class="form-check-input bg-success border-success" type="checkbox" id="cFridge" ng-model="profile.storage.fridge">
+              <label class="form-check-label ms-1 text-dark fw-medium" style="font-size:0.85rem;" for="cFridge">Industrial Refrigerator</label>
+            </div>
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="checkbox" id="cFreezer" ng-model="profile.storage.freezer">
+              <label class="form-check-label ms-1 text-dark fw-medium" style="font-size:0.85rem;" for="cFreezer">Deep Freezer</label>
+            </div>
+            <div class="form-check mb-2">
+              <input class="form-check-input bg-success border-success" type="checkbox" id="cHeater" ng-model="profile.storage.heated">
+              <label class="form-check-label ms-1 text-dark fw-medium" style="font-size:0.85rem;" for="cHeater">Heated Holding Cabinets</label>
+            </div>
+          </div>
+          
+          <!-- Location Map -->
+          <div class="card border-0 shadow-sm p-4 rounded-4">
+            <h6 class="fw-bold mb-4 d-flex align-items-center"><i class="bi bi-geo-alt-fill text-success fs-5 me-2" style="opacity: 0.8;"></i> Base Location</h6>
+            <input type="text" class="form-control bg-light border-0 py-2 rounded-3 mb-2" placeholder="Street Address" ng-model="profile.address" required>
+            <div class="row gx-2 mb-3">
+               <div class="col-6"><input type="text" class="form-control bg-light border-0 py-2 rounded-3" placeholder="City" ng-model="profile.city" required></div>
+               <div class="col-6"><input type="text" class="form-control bg-light border-0 py-2 rounded-3" placeholder="ZIP Code" ng-model="profile.zipCode"></div>
+            </div>
+
+            <div class="input-group mb-2">
+              <input
+                type="text"
+                class="form-control border-0 bg-light rounded-start-3 py-2"
+                placeholder="Search area, landmark, or full address"
+                ng-model="locationSearchQuery"
+                ng-keyup="$event.keyCode === 13 && searchAddress()"
+              >
+              <button type="button" class="btn btn-outline-success px-3" ng-click="searchAddress()" ng-disabled="locationLookupBusy">
+                <span ng-if="!locationLookupBusy"><i class="bi bi-search"></i></span>
+                <span ng-if="locationLookupBusy" class="spinner-border spinner-border-sm"></span>
+              </button>
+              <button type="button" class="btn btn-outline-primary px-3 rounded-end-3" ng-click="useCurrentLocation()" ng-disabled="locationLookupBusy">
+                <i class="bi bi-crosshair"></i>
+              </button>
+            </div>
+
+            <div class="list-group small mb-2" ng-if="locationSuggestions.length">
+              <button
+                type="button"
+                class="list-group-item list-group-item-action"
+                ng-repeat="suggestion in locationSuggestions track by $index"
+                ng-click="selectLocationSuggestion(suggestion)"
+              >
+                <i class="bi bi-geo-alt me-2"></i>{{suggestion.display_name}}
+              </button>
+            </div>
+
+            <div id="ngo-profile-location-map" class="rounded-3 border border-2 border-light mb-2" style="height: 220px;"></div>
+            <div class="small text-muted mb-2">Tip: click on the map or drag the marker to pin your exact NGO destination for Delivery Partner routing.</div>
+
+            <div class="row gx-2">
+              <div class="col-6">
+                <label class="form-label text-uppercase fw-bold text-dark mb-1" style="font-size: 0.6rem; letter-spacing: 1px;">Latitude</label>
+                <input type="number" class="form-control bg-light border-0 py-2 rounded-3" ng-model="profile.lat" step="0.000001" ng-change="syncCoordinatesFromInput()" required>
+              </div>
+              <div class="col-6">
+                <label class="form-label text-uppercase fw-bold text-dark mb-1" style="font-size: 0.6rem; letter-spacing: 1px;">Longitude</label>
+                <input type="number" class="form-control bg-light border-0 py-2 rounded-3" ng-model="profile.lng" step="0.000001" ng-change="syncCoordinatesFromInput()" required>
+              </div>
+            </div>
+
+            <div class="alert alert-info py-2 px-3 mt-3 mb-0 small" ng-if="locationStatus">{{locationStatus}}</div>
+          </div>
+          
+        </div>
+      </div>
+      
+      <!-- Contacts -->
+      <div class="row g-4 mb-4">
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm p-3 px-4 rounded-4 bg-white h-100 position-relative">
+             <i class="bi bi-person-fill position-absolute text-muted" style="top:20px; left:20px;"></i>
+             <label class="form-label text-uppercase fw-bold text-primary ms-4 ps-1" style="font-size: 0.65rem; letter-spacing: 1px; color:#3b5998!important; margin-bottom:2px;">Primary Contact</label>
+             <input type="text" class="form-control bg-light border-0 py-2 rounded-3 mt-2" placeholder="Contact Person Name" ng-model="profile.contactPerson" required>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm p-3 px-4 rounded-4 bg-white h-100 position-relative">
+             <i class="bi bi-telephone-fill position-absolute text-muted" style="top:20px; left:20px;"></i>
+             <label class="form-label text-uppercase fw-bold text-primary ms-4 ps-1" style="font-size: 0.65rem; letter-spacing: 1px; color:#3b5998!important; margin-bottom:2px;">Phone & Whatsapp</label>
+             <div class="d-flex gap-2 mt-2">
+               <input type="text" class="form-control bg-light border-0 py-2 rounded-3 w-100" placeholder="+1 555-0123" ng-model="profile.phone" required>
+               <div class="bg-success-subtle text-success rounded-3 d-flex align-items-center justify-content-center cursor-pointer" style="min-width:44px;"><i class="bi bi-whatsapp"></i></div>
+             </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm p-3 px-4 rounded-4 bg-white h-100 position-relative">
+             <i class="bi bi-envelope-fill position-absolute text-muted" style="top:20px; left:20px;"></i>
+             <label class="form-label text-uppercase fw-bold text-primary ms-4 ps-1" style="font-size: 0.65rem; letter-spacing: 1px; color:#3b5998!important; margin-bottom:2px;">Official Email</label>
+             <input type="email" class="form-control bg-light border-0 py-2 rounded-3 mt-2" placeholder="contact@hopewellfoundation.org" ng-model="profile.email" required>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Logistics -->
+      <div class="card border-0 shadow-sm p-4 rounded-4 mb-5" style="background-color: #f1f5f4;">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+          <div>
+            <h6 class="fw-bold mb-1 text-dark">Delivery & Logistics Coordination</h6>
+            <p class="text-muted small mb-0 p-0 m-0" style="font-size:0.8rem;">Define how the food moves from donors to your facility.</p>
+          </div>
+          
+          <div class="d-flex gap-2">
+            
+            <div class="bg-white rounded-pill px-3 py-2 shadow-sm d-flex align-items-center gap-2 cursor-pointer border border-2 border-transparent transition-all" 
+                 ng-click="profile.deliveryMethod = 'self_pickup'"
+                 ng-class="profile.deliveryMethod === 'self_pickup' ? 'border-success' : 'opacity-75'">
+              <div class="form-check form-switch m-0 d-flex align-items-center p-0">
+                <input class="form-check-input mt-0 custom-switch" type="checkbox" ng-checked="profile.deliveryMethod === 'self_pickup'" style="width:36px; height:20px" role="switch">
+              </div>
+              <div class="ms-1 lh-1">
+                 <span class="d-block fw-bold text-dark" style="font-size: 0.75rem;">Self Pickup</span>
+                 <span class="d-block text-muted text-uppercase fw-bold" style="font-size: 0.5rem; letter-spacing:1px; margin-top:2px;">Our Delivery Partners</span>
+              </div>
+            </div>
+            
+            <div class="bg-white rounded-pill px-3 py-2 shadow-sm d-flex align-items-center gap-2 cursor-pointer border border-2 border-transparent transition-all" 
+                 ng-click="profile.deliveryMethod = 'donor_delivery'"
+                 ng-class="profile.deliveryMethod === 'donor_delivery' ? 'border-success' : 'opacity-75'">
+              <div class="form-check form-switch m-0 d-flex align-items-center p-0">
+                <input class="form-check-input mt-0 custom-switch" type="checkbox" ng-checked="profile.deliveryMethod === 'donor_delivery'" style="width:36px; height:20px" role="switch">
+              </div>
+              <div class="ms-1 lh-1">
+                 <span class="d-block fw-bold text-dark" style="font-size: 0.75rem;">Donor Delivery</span>
+                 <span class="d-block text-muted text-uppercase fw-bold" style="font-size: 0.5rem; letter-spacing:1px; margin-top:2px;">Donor Drops Off</span>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      
+      <!-- Footer Actions -->
+      <div class="d-flex justify-content-between align-items-center pt-3 border-top mb-4">
+         <button type="button" class="btn btn-link text-dark fw-bold text-decoration-none px-0" ng-click="goBack()">
+            <i class="bi bi-arrow-left me-1"></i> Back to Account
+         </button>
+         
+         <div class="d-flex gap-3">
+             <button type="button" class="btn btn-light fw-bold px-4 rounded-3 text-dark bg-opacity-75 border-0 shadow-sm" ng-click="saveDraft()">
+                Save Draft
+             </button>
+            <button type="submit" class="btn btn-success fw-bold px-4 rounded-3 d-flex align-items-center shadow-sm" ng-disabled="!isReadyToPublish() || loading">
+               <span ng-if="loading" class="spinner-border spinner-border-sm me-2"></span>
+               Publish Profile <i class="bi bi-rocket-takeoff-fill ms-2" ng-if="!loading"></i>
+            </button>
+         </div>
+      </div>
+      <div class="alert alert-success py-2" ng-if="draftMessage">{{draftMessage}}</div>
+      <div class="alert alert-danger" ng-if="error">{{error}}</div>
+
+    </form>
+  </div>
+</div>
+
+<style>
+.custom-switch:checked { background-color: #198754; border-color: #198754; }
+.transition-all { transition: all 0.2s ease-in-out; }
+.hover-opacity-100:hover { opacity: 1 !important; }
+</style>

@@ -1,0 +1,48 @@
+<!-- Partnership Modal -->
+<div class="modal fade" id="partnershipModal" tabindex="-1" aria-hidden="true" ng-controller="PartnershipController">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 rounded-4">
+            <div class="modal-header bg-success text-white rounded-top-4">
+                <h5 class="modal-title">
+                    <i class="bi bi-hand-thumbs-up me-2"></i>Partner With FoodBridge
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="alert alert-success d-flex align-items-center" ng-if="formSubmitted">
+                    <i class="bi bi-check-circle-fill fs-4 me-3"></i>
+                    <div>
+                        <strong>Thank you for your interest!</strong>
+                        <p class="mb-0 small">Our team will contact you within 24-48 hours.</p>
+                    </div>
+                </div>
+                <form ng-submit="submitPartnershipForm()" ng-if="!formSubmitted">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-medium">Your Name *</label>
+                            <input type="text" class="form-control" ng-model="formData.name" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-medium">Organization Name *</label>
+                            <input type="text" class="form-control" ng-model="formData.organization" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-medium">Email Address *</label>
+                            <input type="email" class="form-control" ng-model="formData.email" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-medium">Message *</label>
+                            <textarea class="form-control" rows="4" ng-model="formData.message" placeholder="Tell us about your organization and how you'd like to partner with us..." required></textarea>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-success btn-lg rounded-pill px-5 fw-bold" ng-disabled="submitting">
+                                <span ng-if="submitting" class="spinner-border spinner-border-sm me-2"></span>
+                                <span ng-if="!submitting"><i class="bi bi-send me-2"></i>Submit Request</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

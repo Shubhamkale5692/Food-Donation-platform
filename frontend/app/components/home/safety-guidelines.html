@@ -1,0 +1,169 @@
+<!-- Safety Guidelines Page -->
+<div class="safety-page" ng-controller="SafetyGuidelinesController">
+  <!-- Page Header -->
+  <section class="safety-header py-5 bg-light">
+    <div class="container text-center">
+      <h1 class="display-3 fw-bold mb-3 safety-fade-in">
+        <i class="bi bi-shield-check text-success me-3"></i>Safety Guidelines
+      </h1>
+      <p class="lead text-muted safety-fade-in delay-1">Follow these guidelines to ensure food safety and quality</p>
+    </div>
+  </section>
+
+  <!-- Tab Navigation -->
+  <section class="safety-tabs py-4 bg-white border-bottom sticky-top" style="top: 60px; z-index: 100;">
+    <div class="container">
+      <div class="tab-navigation text-center">
+        <div class="btn-group role-tabs" role="group">
+          <button class="btn" ng-class="activeTab === 'donor' ? 'btn-success' : 'btn-outline-success'" ng-click="setActiveTab('donor')">
+            <i class="bi bi-shop me-2"></i>Donor
+          </button>
+          <button class="btn" ng-class="activeTab === 'ngo' ? 'btn-success' : 'btn-outline-success'" ng-click="setActiveTab('ngo')">
+            <i class="bi bi-building me-2"></i>NGO
+          </button>
+          <button class="btn" ng-class="activeTab === 'volunteer' ? 'btn-success' : 'btn-outline-success'" ng-click="setActiveTab('volunteer')">
+            <i class="bi bi-person-walking me-2"></i>Delivery Partner
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tab Content -->
+  <section class="safety-content py-5">
+    <div class="container">
+      <!-- Donor Tab -->
+      <div class="tab-pane" ng-show="activeTab === 'donor'" ng-class="{'fade-in': activeTab === 'donor'}">
+        <div class="text-center mb-5">
+          <div class="role-icon mx-auto mb-4 rounded-circle d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; background: linear-gradient(135deg, #27ae60, #2ecc71);">
+            <i class="bi bi-shop text-white fs-2"></i>
+          </div>
+          <h2 class="fw-bold">Guidelines for Donors</h2>
+          <p class="text-muted">Follow these rules when donating food</p>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-md-6 col-lg-4 safety-card-fade" ng-repeat="rule in donorRules track by $index" style="animation-delay: {{$index * 0.1}}s">
+            <div class="rule-card card h-100 border-0 rounded-4 shadow-sm p-4">
+              <div class="rule-header d-flex align-items-center mb-3">
+                <div class="rule-number bg-success-subtle text-success rounded-circle d-flex align-items-center justify-content-center me-3">
+                  <span class="fw-bold">{{$index + 1}}</span>
+                </div>
+                <h5 class="fw-bold mb-0">{{rule.title}}</h5>
+              </div>
+              <p class="text-muted mb-0">{{rule.description}}</p>
+              <div class="rule-check mt-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="donorCheck{{$index}}">
+                  <label class="form-check-label text-muted small" for="donorCheck{{$index}}">I understand this rule</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NGO Tab -->
+      <div class="tab-pane" ng-show="activeTab === 'ngo'" ng-class="{'fade-in': activeTab === 'ngo'}">
+        <div class="text-center mb-5">
+          <div class="role-icon mx-auto mb-4 rounded-circle d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; background: linear-gradient(135deg, #3498db, #2980b9);">
+            <i class="bi bi-building text-white fs-2"></i>
+          </div>
+          <h2 class="fw-bold">Guidelines for NGOs</h2>
+          <p class="text-muted">Ensure proper handling and distribution</p>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-md-6 col-lg-4 safety-card-fade" ng-repeat="rule in ngoRules track by $index" style="animation-delay: {{$index * 0.1}}s">
+            <div class="rule-card card h-100 border-0 rounded-4 shadow-sm p-4">
+              <div class="rule-header d-flex align-items-center mb-3">
+                <div class="rule-number bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center me-3">
+                  <span class="fw-bold">{{$index + 1}}</span>
+                </div>
+                <h5 class="fw-bold mb-0">{{rule.title}}</h5>
+              </div>
+              <p class="text-muted mb-0">{{rule.description}}</p>
+              <div class="rule-check mt-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="ngoCheck{{$index}}">
+                  <label class="form-check-label text-muted small" for="ngoCheck{{$index}}">I understand this rule</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Volunteer Tab -->
+      <div class="tab-pane" ng-show="activeTab === 'volunteer'" ng-class="{'fade-in': activeTab === 'volunteer'}">
+        <div class="text-center mb-5">
+          <div class="role-icon mx-auto mb-4 rounded-circle d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; background: linear-gradient(135deg, #e67e22, #d35400);">
+            <i class="bi bi-person-walking text-white fs-2"></i>
+          </div>
+          <h2 class="fw-bold">Guidelines for Delivery Partners</h2>
+          <p class="text-muted">Follow best practices during delivery</p>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-md-6 col-lg-4 safety-card-fade" ng-repeat="rule in volunteerRules track by $index" style="animation-delay: {{$index * 0.1}}s">
+            <div class="rule-card card h-100 border-0 rounded-4 shadow-sm p-4">
+              <div class="rule-header d-flex align-items-center mb-3">
+                <div class="rule-number bg-warning-subtle text-warning rounded-circle d-flex align-items-center justify-content-center me-3">
+                  <span class="fw-bold">{{$index + 1}}</span>
+                </div>
+                <h5 class="fw-bold mb-0">{{rule.title}}</h5>
+              </div>
+              <p class="text-muted mb-0">{{rule.description}}</p>
+              <div class="rule-check mt-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="volCheck{{$index}}">
+                  <label class="form-check-label text-muted small" for="volCheck{{$index}}">I understand this rule</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Violation Warning Section -->
+      <div class="violation-section mt-5 pt-5">
+        <div class="card border-warning rounded-4 shadow-sm p-4 bg-warning-subtle">
+          <div class="d-flex align-items-start">
+            <div class="warning-icon bg-warning text-white rounded-circle d-flex align-items-center justify-content-center me-4" style="width: 50px; height: 50px; flex-shrink: 0;">
+              <i class="bi bi-exclamation-triangle fs-5"></i>
+            </div>
+            <div>
+              <h4 class="fw-bold text-warning-dark mb-2">What happens if guidelines are violated?</h4>
+              <p class="text-muted mb-3">Users who violate safety guidelines may face the following consequences:</p>
+              <ul class="violation-list text-muted">
+                <li class="mb-2"><strong>Warning:</strong> First-time violations result in a written warning</li>
+                <li class="mb-2"><strong>Suspension:</strong> Repeated violations may lead to temporary account suspension</li>
+                <li><strong>Termination:</strong> Severe or continuous violations may result in permanent account termination</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Agreement Section -->
+      <div class="agreement-section mt-5 text-center">
+        <div class="form-check d-inline-block">
+          <input class="form-check-input" type="checkbox" id="agreeAll" ng-model="agreedToAll" style="width: 20px; height: 20px;">
+          <label class="form-check-label ms-2 fw-medium" for="agreeAll">I agree to follow all safety guidelines</label>
+        </div>
+        <div class="mt-3">
+          <button class="btn btn-success btn-lg rounded-pill px-5 fw-bold" ng-disabled="!agreedToAll">
+            <i class="bi bi-check-circle me-2"></i>Confirm Agreement
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Back Link -->
+  <div class="text-center py-4 mb-4">
+    <a href="#!/" class="btn btn-link text-success fw-medium">
+      <i class="bi bi-arrow-left me-2"></i> Back to Home
+    </a>
+  </div>
+</div>

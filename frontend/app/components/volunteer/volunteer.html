@@ -1,0 +1,1823 @@
+<style>
+.vol-dashboard-new {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1050;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    overflow: hidden;
+    background: #f8f9fa;
+}
+.vol-sidebar {
+    width: 260px;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #1a1f2e 0%, #252b3d 100%);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    flex-shrink: 0;
+}
+.vol-sidebar-logo {
+    padding: 20px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.vol-logo-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #0d6efd, #6610f2);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: white;
+}
+.vol-logo-text {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: white;
+    margin-left: 10px;
+}
+.vol-sidebar-profile {
+    padding: 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.vol-profile-avatar {
+    width: 48px;
+    height: 48px;
+    background: rgba(13, 110, 253, 0.2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0d6efd;
+    font-size: 1.5rem;
+}
+.vol-profile-name {
+    font-weight: 600;
+    color: white;
+    font-size: 0.95rem;
+}
+.vol-verified-badge {
+    font-size: 0.75rem;
+    color: #20c997;
+    display: flex;
+    align-items: center;
+}
+.vol-nav {
+    padding: 12px 8px;
+}
+.vol-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    color: rgba(255,255,255,0.65);
+    text-decoration: none;
+    border-radius: 10px;
+    margin-bottom: 4px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    font-size: 0.9rem;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+}
+.vol-nav-item:hover {
+    color: white;
+    background: rgba(255,255,255,0.08);
+    transform: translateX(4px);
+}
+.vol-nav-item.active {
+    color: white;
+    background: rgba(13, 110, 253, 0.2);
+    transform: translateX(4px);
+    box-shadow: inset 3px 0 0 #0d6efd;
+}
+.vol-nav-item i {
+    font-size: 1.1rem;
+    width: 20px;
+    text-align: center;
+}
+.vol-nav-badge {
+    background: #0d6efd;
+    color: white;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-left: auto;
+}
+.vol-main {
+    flex: 1;
+    overflow-y: auto;
+    height: 100vh;
+    background: #f8f9fa;
+}
+.vol-topbar {
+    background: white;
+    padding: 12px 24px;
+    border-bottom: 1px solid #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.vol-topbar-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #212529;
+}
+.vol-topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.vol-content {
+    padding: 24px;
+}
+.vol-stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
+    border-left: 4px solid;
+}
+.vol-stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+.vol-stat-card.blue { border-left-color: #0d6efd; }
+.vol-stat-card.green { border-left-color: #198754; }
+.vol-stat-card.orange { border-left-color: #fd7e14; }
+.vol-stat-card.purple { border-left-color: #6f42c1; }
+.vol-stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+.vol-stat-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #212529;
+}
+.vol-stat-label {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+.vol-progress {
+    height: 8px;
+    border-radius: 4px;
+    background: #e9ecef;
+    overflow: hidden;
+}
+.vol-progress-bar {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+.vol-level-badge {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+.vol-level-bronze { background: linear-gradient(135deg, #cd7f32, #8b4513); color: white; }
+.vol-level-silver { background: linear-gradient(135deg, #c0c0c0, #708090); color: white; }
+.vol-level-gold { background: linear-gradient(135deg, #ffd700, #ff8c00); color: white; }
+.vol-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    overflow: hidden;
+}
+.vol-card-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid #e9ecef;
+    font-weight: 600;
+    color: #212529;
+}
+.vol-card-body {
+    padding: 20px;
+}
+.vol-timeline {
+    position: relative;
+    padding-left: 30px;
+}
+.vol-timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e9ecef;
+}
+.vol-timeline-item {
+    position: relative;
+    padding-bottom: 24px;
+}
+.vol-timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -26px;
+    top: 4px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #e9ecef;
+    border: 3px solid white;
+    box-shadow: 0 0 0 2px #e9ecef;
+}
+.vol-timeline-item.active::before {
+    background: #0d6efd;
+    box-shadow: 0 0 0 2px #0d6efd;
+}
+.vol-timeline-item.completed::before {
+    background: #198754;
+    box-shadow: 0 0 0 2px #198754;
+}
+.vol-timeline-item.pending::before {
+    background: #ffc107;
+    box-shadow: 0 0 0 2px #ffc107;
+}
+.vol-delivery-card {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border-left: 4px solid #0d6efd;
+}
+.vol-delivery-card.active {
+    border-left-color: #198754;
+    background: linear-gradient(135deg, #f0fff4, #fff);
+}
+.vol-delivery-card.completed {
+    border-left-color: #6c757d;
+    opacity: 0.8;
+}
+.vol-search-input {
+    border-radius: 20px;
+    padding: 8px 16px;
+    border: 1px solid #e9ecef;
+    background: #f8f9fa;
+}
+.vol-search-input:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+}
+.vol-filter-btn {
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 0.85rem;
+}
+.vol-filter-btn.active {
+    background: #0d6efd;
+    color: white;
+    border-color: #0d6efd;
+}
+.vol-badge-assigned { background: #0d6efd; color: white; }
+.vol-badge-picked { background: #fd7e14; color: white; }
+.vol-badge-transit { background: #ffc107; color: #212529; }
+.vol-badge-completed { background: #198754; color: white; }
+.pulse {
+    animation: pulse-animation 2s infinite;
+}
+@keyframes pulse-animation {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+@media (max-width: 768px) {
+    .vol-sidebar { position: fixed; left: 0; top: 0; height: 100%; }
+    .vol-sidebar.collapse:not(.show) { display: none !important; }
+}
+</style>
+
+<!-- NEW DASHBOARD LAYOUT -->
+<div class="vol-dashboard-new d-flex" ng-init="volActiveSection='overview'">
+    <!-- Sidebar -->
+    <div class="vol-sidebar p-3 collapse d-md-block" id="volSidebar">
+        <div class="vol-sidebar-logo d-flex align-items-center">
+            <div class="vol-logo-icon"><i class="bi bi-box-seam-fill"></i></div>
+            <span class="vol-logo-text">FoodBridge</span>
+        </div>
+        
+        <div class="vol-sidebar-profile mt-3">
+            <div class="vol-profile-avatar"><i class="bi bi-person-fill"></i></div>
+            <div>
+                <div class="vol-profile-name">{{volunteerName || 'Delivery Partner'}}</div>
+                <span class="vol-verified-badge"><i class="bi bi-patch-check-fill me-1"></i>{{volSummary.level || 'Bronze'}}</span>
+            </div>
+        </div>
+        
+        <nav class="vol-nav mt-3">
+            <button class="vol-nav-item" ng-class="{active: volActiveSection==='overview'}" ng-click="volActiveSection='overview'">
+                <i class="bi bi-grid-1x2-fill"></i><span>Overview</span>
+            </button>
+            <button class="vol-nav-item" ng-class="{active: volActiveSection==='active'}" ng-click="volActiveSection='active'">
+                <i class="bi bi-truck"></i><span>Active Delivery</span>
+                <span class="vol-nav-badge" ng-if="activeDelivery && activeDelivery.has_active">1</span>
+            </button>
+            <button class="vol-nav-item" ng-class="{active: volActiveSection==='history'}" ng-click="volActiveSection='history'">
+                <i class="bi bi-clock-history"></i><span>Delivery History</span>
+            </button>
+            <button class="vol-nav-item" ng-class="{active: volActiveSection==='achievements'}" ng-click="volActiveSection='achievements'">
+                <i class="bi bi-trophy-fill"></i><span>Achievements</span>
+            </button>
+            <button class="vol-nav-item" ng-class="{active: volActiveSection==='rewards'}" ng-click="volActiveSection='rewards'">
+                <i class="bi bi-gift-fill"></i><span>Rewards</span>
+            </button>
+            <button class="vol-nav-item" ng-class="{active: volActiveSection==='map'}" ng-click="volActiveSection='map'">
+                <i class="bi bi-map-fill"></i><span>Map View</span>
+            </button>
+            <button class="vol-nav-item" ng-class="{active: volActiveSection==='profile'}" ng-click="volActiveSection='profile'">
+                <i class="bi bi-person-fill"></i><span>My Profile</span>
+            </button>
+        </nav>
+        
+        <div class="mt-auto pt-3 border-top border-secondary">
+            <div class="d-flex gap-2 mb-2">
+                <button class="btn btn-sm rounded-pill fw-bold" 
+                        ng-class="{'btn-success': availability==='available', 'btn-secondary': availability==='busy'}" 
+                        ng-click="toggleAvailability()">
+                    <i class="bi bi-circle-fill me-1" style="font-size: 8px;"></i> 
+                    {{availability === 'available' ? 'Available' : 'Busy'}}
+                </button>
+            </div>
+            <button class="btn btn-sm btn-outline-danger w-100 rounded-pill fw-bold" ng-click="logout()" ng-disabled="logoutInProgress">
+                <i class="bi bi-box-arrow-right me-1"></i> Sign Out
+            </button>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="vol-main d-flex flex-column">
+        <!-- Top Header -->
+        <header class="vol-topbar">
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-outline-secondary rounded-pill fw-bold btn-sm" ng-click="goBack()">
+                    <i class="bi bi-arrow-left me-1"></i> Back
+                </button>
+                <span class="text-muted small ms-2 d-none d-md-inline">
+                    <i class="bi bi-chevron-right me-1"></i>
+                    <span class="fw-semibold text-dark">{{getVolSectionTitle()}}</span>
+                </span>
+            </div>
+            <div class="vol-topbar-actions">
+                <button class="btn btn-sm btn-outline-primary rounded-pill" ng-click="loadVolunteerDashboard()" ng-disabled="volLoading">
+                    <i class="bi bi-arrow-clockwise me-1" ng-class="{'spin': volLoading}"></i>Refresh
+                </button>
+                <button class="btn btn-outline-danger rounded-pill fw-bold btn-sm" ng-click="logout()" ng-disabled="logoutInProgress">
+                    <i class="bi bi-box-arrow-right me-1"></i> Sign Out
+                </button>
+            </div>
+        </header>
+        
+        <!-- Content Area -->
+        <div class="vol-content">
+            
+            <!-- ═══ OVERVIEW SECTION ═══ -->
+            <div ng-show="volActiveSection==='overview'" class="fade-in">
+                <div class="d-flex justify-content-between align-items-end mb-4">
+                    <div>
+                        <h2 class="fw-bold text-dark mb-1">Dashboard Overview</h2>
+                        <p class="text-muted mb-0">Your performance at a glance.</p>
+                    </div>
+                    <span class="vol-level-badge" ng-class="{'vol-level-bronze': volSummary.level==='Bronze', 'vol-level-silver': volSummary.level==='Silver', 'vol-level-gold': volSummary.level==='Gold'}">
+                        <i class="bi bi-star-fill me-1"></i>{{volSummary.level || 'Bronze'}}
+                    </span>
+                </div>
+                
+                <!-- Stats Cards -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-3">
+                        <div class="vol-stat-card vol-stat-card--blue">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <p class="text-muted small text-uppercase fw-bold mb-1">Total Deliveries</p>
+                                    <h2 class="vol-stat-value mb-0">{{volSummary.total_deliveries || 0}}</h2>
+                                </div>
+                                <div class="vol-stat-icon bg-primary bg-opacity-10 text-primary">
+                                    <i class="bi bi-box-seam fs-4"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="vol-stat-card vol-stat-card--green">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <p class="text-muted small text-uppercase fw-bold mb-1">Completed</p>
+                                    <h2 class="vol-stat-value mb-0 text-success">{{volSummary.completed || 0}}</h2>
+                                </div>
+                                <div class="vol-stat-icon bg-success bg-opacity-10 text-success">
+                                    <i class="bi bi-check-circle fs-4"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="vol-stat-card vol-stat-card--orange">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <p class="text-muted small text-uppercase fw-bold mb-1">Success Rate</p>
+                                    <h2 class="vol-stat-value mb-0">{{getSuccessRateDisplay()}}</h2>
+                                </div>
+                                <div class="vol-stat-icon bg-warning bg-opacity-10 text-warning">
+                                    <i class="bi bi-graph-up-arrow fs-4"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="vol-stat-card vol-stat-card--purple">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <p class="text-muted small text-uppercase fw-bold mb-1">Rating</p>
+                                    <h2 class="vol-stat-value mb-0">
+                                        <span class="text-warning"><i class="bi bi-star-fill"></i></span>
+                                        {{volSummary.rating || 5.0}}
+                                    </h2>
+                                </div>
+                                <div class="vol-stat-icon bg-purple bg-opacity-10 text-purple">
+                                    <i class="bi bi-star fs-4"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Level Progress -->
+                <div class="vol-card mb-4" ng-if="volSummary.next_level">
+                    <div class="vol-card-header">
+                        <i class="bi bi-trophy text-warning me-2"></i>Level Progress
+                    </div>
+                    <div class="vol-card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="fw-semibold">{{volSummary.level || 'Bronze'}}</span>
+                            <span class="text-muted small">Next: {{volSummary.next_level}} ({{volSummary.remaining || 0}} deliveries left)</span>
+                            <span class="fw-semibold">{{volSummary.next_level || 'Max'}}</span>
+                        </div>
+                        <div class="vol-progress">
+                            <div class="progress-bar bg-success" ng-style="{'width': getProgressPercent() + '%'}"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="vol-card text-center p-4 cursor-pointer" ng-click="volActiveSection='active'" ng-if="activeDelivery && activeDelivery.has_active">
+                            <i class="bi bi-truck fs-1 text-primary mb-3 d-block"></i>
+                            <h5 class="fw-bold">Active Delivery</h5>
+                            <p class="text-muted mb-0">You have a delivery in progress</p>
+                        </div>
+                        <div class="vol-card text-center p-4 cursor-pointer" ng-click="volActiveSection='map'" ng-if="!activeDelivery || !activeDelivery.has_active">
+                            <i class="bi bi-map fs-1 text-muted mb-3 d-block"></i>
+                            <h5 class="fw-bold">No Active Task</h5>
+                            <p class="text-muted mb-0">Check map for new assignments</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="vol-card text-center p-4 cursor-pointer" ng-click="volActiveSection='history'">
+                            <i class="bi bi-clock-history fs-1 text-info mb-3 d-block"></i>
+                            <h5 class="fw-bold">History</h5>
+                            <p class="text-muted mb-0">View past deliveries</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="vol-card text-center p-4 cursor-pointer" ng-click="volActiveSection='rewards'">
+                            <i class="bi bi-gift fs-1 text-danger mb-3 d-block"></i>
+                            <h5 class="fw-bold">Rewards</h5>
+                            <p class="text-muted mb-0">{{rewardsData.points || 0}} points earned</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ═══ ACTIVE DELIVERY SECTION ═══ -->
+            <div ng-show="volActiveSection==='active'" class="fade-in">
+                <div class="d-flex justify-content-between align-items-end mb-4">
+                    <div>
+                        <h2 class="fw-bold text-dark mb-1"><i class="bi bi-truck text-primary me-2"></i>Active Delivery</h2>
+                        <p class="text-muted mb-0">Current delivery in progress.</p>
+                    </div>
+                </div>
+                
+                <!-- No Active Delivery -->
+                <div class="vol-card text-center p-5" ng-if="!activeDelivery || !activeDelivery.has_active">
+                    <i class="bi bi-check-circle fs-1 text-success d-block mb-3"></i>
+                    <h4 class="fw-bold text-success">All Clear!</h4>
+                    <p class="text-muted">No active delivery at the moment. Check the map for new assignments.</p>
+                    <button class="btn btn-primary rounded-pill px-4 fw-bold" ng-click="volActiveSection='map'">
+                        <i class="bi bi-map me-2"></i>View Map
+                    </button>
+                </div>
+                
+                <!-- Active Delivery Card -->
+                <div class="vol-card" ng-if="activeDelivery && activeDelivery.has_active">
+                    <div class="vol-card-header bg-success bg-opacity-10">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="fw-bold text-success"><i class="bi bi-truck me-2"></i>Delivery in Progress</span>
+                            <span class="badge bg-success rounded-pill">{{getActiveStatusLabel(activeDelivery.delivery.status)}}</span>
+                        </div>
+                    </div>
+                    <div class="vol-card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center gap-2 mb-3">
+                                    <h5 class="fw-bold mb-0">{{activeDelivery.delivery.food_type}}</h5>
+                                    <span class="badge rounded-pill" ng-class="activeDelivery.delivery.task_type === 'distribution' ? 'bg-primary' : 'bg-secondary'">
+                                        {{activeDelivery.delivery.task_type === 'distribution' ? 'Distribution' : 'Pickup'}}
+                                    </span>
+                                </div>
+                                <p class="text-muted mb-1"><i class="bi bi-box-seam me-2"></i>{{activeDelivery.delivery.quantity}} units</p>
+                                
+                                <div class="mt-4">
+                                    <h6 class="fw-bold mb-2"><i class="bi bi-geo-alt text-danger me-1"></i>Pickup Location</h6>
+                                    <p class="text-muted small mb-0">{{activeDelivery.delivery.pickup_location}}</p>
+                                </div>
+                                
+                                <div class="mt-3">
+                                    <h6 class="fw-bold mb-2"><i class="bi bi-building-fill text-success me-1"></i>Drop-off Location</h6>
+                                    <p class="text-muted small mb-0">{{activeDelivery.delivery.dropoff_location}}</p>
+                                </div>
+
+                                <div class="mt-4 vol-tracking-info rounded p-2" style="background-color: rgba(13, 110, 253, 0.05); border-left: 3px solid #0d6efd;">
+                                    <h6 class="fw-bold mb-2"><i class="bi bi-clock-history text-primary me-1"></i>Live Tracking</h6>
+                                    <div class="mb-2 small">
+                                        <div ng-if="activeDelivery.delivery.status === 'assigned'">
+                                            📍 <span class="fw-bold text-primary">Heading to Donor</span>
+                                        </div>
+                                        <div ng-if="activeDelivery.delivery.status === 'picked_up' || activeDelivery.delivery.status === 'in_progress' || activeDelivery.delivery.status === 'in_transit'">
+                                            📍 <span class="fw-bold text-success">Delivering to NGO</span>
+                                        </div>
+                                        <div class="d-flex flex-wrap align-items-center mt-2" style="gap: 10px;">
+                                            <span class="badge bg-white text-dark border shadow-sm" style="font-size: 11px;" ng-if="activeDelivery.delivery.start_time && (activeDelivery.delivery.status !== 'delivered' && activeDelivery.delivery.status !== 'completed')">
+                                                ⏱ Time: {{ getElapsedTime(activeDelivery.delivery.start_time) }}
+                                            </span>
+                                            <span class="badge bg-success-subtle text-success border border-success shadow-sm" style="font-size: 11px;" ng-if="activeDelivery.delivery.status === 'delivered' || activeDelivery.delivery.status === 'completed'">
+                                                ✅ Completed in {{ activeDelivery.delivery.total_duration || 0 }} mins
+                                            </span>
+                                            <span class="badge bg-info-subtle text-info border border-info shadow-sm" style="font-size: 11px;" ng-if="eta && (activeDelivery.delivery.status !== 'delivered' && activeDelivery.delivery.status !== 'completed')">
+                                                🕒 ETA: {{ eta }} mins
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <!-- Professional Donation Lifecycle Timeline -->
+                                <div class="donation-timeline-container my-4 px-2">
+                                    <div class="donation-timeline">
+                                        <div class="timeline-progress-bar" ng-style="{
+                                            'width': (activeDelivery.delivery.lifecycle_status === 'RECEIVED' ? '100%' : 
+                                                     activeDelivery.delivery.lifecycle_status === 'DELIVERED' ? '75%' :
+                                                     activeDelivery.delivery.lifecycle_status === 'PICKED_UP' ? '50%' :
+                                                     activeDelivery.delivery.lifecycle_status === 'ACCEPTED' ? '25%' : '0%')
+                                        }"></div>
+                                        <div class="timeline-step" ng-repeat="step in getTimelineSteps(activeDelivery.delivery)" 
+                                             ng-class="{'active': step.isActive, 'completed': step.isCompleted}">
+                                            <div class="step-icon">
+                                                <i class="bi" ng-class="step.icon"></i>
+                                            </div>
+                                            <div class="step-label">{{step.label}}</div>
+                                            <div class="step-time" ng-if="step.time">{{step.time | utcToLocal:'h:mm a'}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="d-flex gap-2 mt-4 flex-wrap">
+                            <button class="btn btn-warning rounded-pill fw-bold" ng-click="volActiveSection='map'">
+                                <i class="bi bi-map me-1"></i>View on Map
+                            </button>
+                            <button class="btn btn-outline-primary rounded-pill fw-bold" ng-click="showRoute(activeDelivery.delivery)">
+                                <i class="bi bi-sign-turn-right me-1"></i>Navigate
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ═══ HISTORY SECTION ═══ -->
+            <div ng-show="volActiveSection==='history'" class="fade-in">
+                <div class="d-flex justify-content-between align-items-end mb-4">
+                    <div>
+                        <h2 class="fw-bold text-dark mb-1"><i class="bi bi-clock-history text-primary me-2"></i>Delivery History</h2>
+                        <p class="text-muted mb-0">All your past deliveries.</p>
+                    </div>
+                </div>
+                
+                <!-- Search and Filter -->
+                <div class="vol-card p-3 mb-4">
+                    <div class="row g-3 align-items-center">
+                        <div class="col-md-6">
+                            <input type="text" class="form-control vol-search-input" placeholder="Search by food type, NGO..." ng-model="historySearch" ng-change="updateHistoryFilter()">
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex gap-2 flex-wrap">
+                                <button class="btn vol-filter-btn" ng-class="{'active': historyFilter===''}" ng-click="setHistoryFilter('')">All</button>
+                                <button class="btn vol-filter-btn" ng-class="{'active': historyFilter==='completed'}" ng-click="setHistoryFilter('completed')">Completed</button>
+                                <button class="btn vol-filter-btn" ng-class="{'active': historyFilter==='picked_up'}" ng-click="setHistoryFilter('picked_up')">Picked Up</button>
+                                <button class="btn vol-filter-btn" ng-class="{'active': historyFilter==='in_progress'}" ng-click="setHistoryFilter('in_progress')">In Progress</button>
+                                <button class="btn vol-filter-btn" ng-class="{'active': historyFilter==='assigned'}" ng-click="setHistoryFilter('assigned')">Assigned</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Delivery List -->
+                <div class="vol-delivery-card" ng-repeat="del in cachedHistoryDeliveries track by del.id">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <h6 class="fw-bold mb-1">{{del.food_type}}</h6>
+                            <p class="text-muted small mb-0"><i class="bi bi-box-seam me-1"></i>{{del.quantity}} units</p>
+                        </div>
+                        <span class="badge rounded-pill" ng-class="{'vol-badge-completed': getDeliveryStatus(del) === 'completed', 'vol-badge-assigned': getDeliveryStatus(del) === 'assigned', 'vol-badge-picked': getDeliveryStatus(del) === 'picked_up', 'vol-badge-transit': getDeliveryStatus(del) === 'in_progress'}">
+                            {{getDeliveryStatus(del)}}
+                        </span>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-6">
+                            <small class="text-muted"><i class="bi bi-geo-alt me-1"></i>{{del.pickup_location || 'N/A'}}</small>
+                        </div>
+                        <div class="col-6">
+                            <small class="text-muted"><i class="bi bi-building me-1"></i>{{del.ngo_name || 'NGO'}}</small>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <small class="text-muted"><i class="bi bi-calendar me-1"></i>{{del.created_at | date:'medium'}}</small>
+                    </div>
+                </div>
+                
+                <!-- Empty State -->
+                <div class="text-center py-5" ng-if="cachedHistoryDeliveries.length === 0">
+                    <i class="bi bi-inbox fs-1 text-muted d-block mb-2"></i>
+                    <p class="text-muted">No deliveries found.</p>
+                </div>
+            </div>
+            
+            <!-- ═══ ACHIEVEMENTS SECTION ═══ -->
+            <div ng-show="volActiveSection==='achievements'" class="fade-in">
+                <div class="d-flex justify-content-between align-items-end mb-4">
+                    <div>
+                        <h2 class="fw-bold text-dark mb-1"><i class="bi bi-trophy text-warning me-2"></i>Achievements</h2>
+                        <p class="text-muted mb-0">Your badges and certificates.</p>
+                    </div>
+                </div>
+                
+                <!-- Level Badge -->
+                <div class="vol-card p-4 mb-4 text-center" ng-class="{'vol-level-bronze': volSummary.level==='Bronze', 'vol-level-silver': volSummary.level==='Silver', 'vol-level-gold': volSummary.level==='Gold'}">
+                    <div class="d-flex align-items-center justify-content-center gap-3">
+                        <i class="bi bi-trophy fs-1"></i>
+                        <div class="text-start">
+                            <h4 class="fw-bold mb-0">{{volSummary.level || 'Bronze'}} Delivery Partner</h4>
+                            <p class="mb-0 opacity-75">{{volSummary.completed || 0}} deliveries completed</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Certificates -->
+                <div class="vol-card mb-4" ng-if="certificates && certificates.length > 0">
+                    <div class="vol-card-header">
+                        <i class="bi bi-award text-warning me-2"></i>Your Certificates
+                    </div>
+                    <div class="vol-card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6" ng-repeat="cert in certificates">
+                                <div class="p-3 border rounded-3">
+                                    <h6 class="fw-bold"><i class="bi bi-award me-2 text-warning"></i>{{cert.level}} Delivery Partner</h6>
+                                    <p class="text-muted small mb-1">Certificate ID: {{cert.certificate_id}}</p>
+                                    <p class="text-muted small mb-2">Issued: {{cert.issued_at | date:'mediumDate'}}</p>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-sm btn-outline-primary rounded-pill" ng-click="previewCertificate(cert)">
+                                            <i class="bi bi-eye me-1"></i>Preview
+                                        </button>
+                                        <a ng-href="{{cert.certificate_url}}" download class="btn btn-sm btn-outline-success rounded-pill" ng-if="cert.certificate_url">
+                                            <i class="bi bi-download me-1"></i>Download
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- No Certificates -->
+                <div class="vol-card text-center p-5" ng-if="!certificates || certificates.length === 0">
+                    <i class="bi bi-award fs-1 text-muted d-block mb-3"></i>
+                    <h5 class="fw-bold">No Certificates Yet</h5>
+                    <p class="text-muted">Complete more deliveries to earn certificates!</p>
+                </div>
+            </div>
+            
+            <!-- ═══ REWARDS SECTION ═══ -->
+            <div ng-show="volActiveSection==='rewards'" class="fade-in">
+                <div class="d-flex justify-content-between align-items-end mb-4">
+                    <div>
+                        <h2 class="fw-bold text-dark mb-1"><i class="bi bi-gift text-danger me-2"></i>Rewards</h2>
+                        <p class="text-muted mb-0">Your points and level progress.</p>
+                    </div>
+                </div>
+                
+                <!-- Points Card -->
+                <div class="vol-card mb-4" style="background: linear-gradient(135deg, #0d6efd, #6610f2); color: white;">
+                    <div class="vol-card-body text-center p-5">
+                        <h6 class="text-uppercase opacity-75 mb-2">Total Points</h6>
+                        <h1 class="display-1 fw-bold mb-2">{{rewardsData.points || 0}}</h1>
+                        <div class="vol-level-badge vol-level-gold d-inline-block">
+                            <i class="bi bi-star-fill me-1"></i>{{rewardsData.level || 'Bronze'}}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Level Progress -->
+                <div class="vol-card mb-4">
+                    <div class="vol-card-header">
+                        <i class="bi bi-graph-up text-success me-2"></i>Level Progress
+                    </div>
+                    <div class="vol-card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-3 text-center">
+                                <span class="vol-level-badge vol-level-bronze" ng-if="rewardsData.level==='Bronze'">Bronze</span>
+                                <span class="vol-level-badge vol-level-silver" ng-if="rewardsData.level==='Silver'">Silver</span>
+                                <span class="vol-level-badge vol-level-gold" ng-if="rewardsData.level==='Gold'">Gold</span>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="vol-progress" style="height: 12px;">
+                                    <div class="progress-bar bg-warning" ng-style="{'width': getRewardProgress() + '%'}"></div>
+                                </div>
+                                <p class="text-center text-muted small mt-2">
+                                    {{rewardsData.remaining || 0}} deliveries to {{rewardsData.next_level || 'max'}}
+                                </p>
+                            </div>
+                            <div class="col-md-3 text-center">
+                                <h5 class="fw-bold mb-0">{{rewardsData.completed || 0}}</h5>
+                                <small class="text-muted">Completed</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Points Info -->
+                <div class="vol-card">
+                    <div class="vol-card-header">
+                        <i class="bi bi-info-circle text-info me-2"></i>How Points Work
+                    </div>
+                    <div class="vol-card-body">
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>10 points per delivery completed</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>10 deliveries = Bronze level</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>25 deliveries = Silver level</li>
+                            <li class="mb-0"><i class="bi bi-check-circle text-success me-2"></i>50 deliveries = Gold level</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ═══ MAP SECTION (Original View) ═══ -->
+            <div ng-show="volActiveSection==='map'" class="fade-in">
+                <!-- Original Map View - Keep as is -->
+                <div class="map-dashboard-container w-100 m-0 d-flex">
+                    <div class="map-sidebar-left d-flex flex-column pb-5" style="width: 350px;">
+                        <div class="d-flex gap-2 mb-3">
+                            <button class="btn btn-sm btn-outline-secondary rounded-pill fw-bold" ng-click="goBack()">
+                                <i class="bi bi-arrow-left me-1"></i> Back
+                            </button>
+                            <button class="btn btn-sm rounded-pill fw-bold" 
+                                    ng-class="{'btn-success': availability==='available', 'btn-secondary': availability==='busy'}" 
+                                    ng-click="toggleAvailability()">
+                                <i class="bi bi-circle-fill me-1" style="font-size: 8px;"></i> 
+                                {{availability === 'available' ? 'Available' : 'Busy'}}
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger rounded-pill fw-bold ms-auto" ng-click="logout()" ng-disabled="logoutInProgress">
+                                <span ng-if="logoutInProgress" class="spinner-border spinner-border-sm me-1"></span>
+                                <i class="bi bi-box-arrow-right me-1" ng-if="!logoutInProgress"></i> Sign Out
+                            </button>
+                        </div>
+                        <h4 class="fw-bold mb-3 text-dark"><i class="bi bi-truck text-primary me-2"></i>My Deliveries</h4>
+                        
+                        <div class="d-flex gap-2 mb-3">
+                            <button class="btn btn-sm fw-bold px-3" ng-class="activeTab === 'assigned' ? 'btn-primary' : 'btn-outline-secondary'" ng-click="activeTab='assigned'">
+                                <i class="bi bi-person-check me-1"></i>Assigned
+                                <span class="badge bg-dark ms-1" style="font-size:9px;" ng-if="assignedDeliveries.length">{{assignedDeliveries.length}}</span>
+                            </button>
+                            <button class="btn btn-sm fw-bold px-3" ng-class="activeTab === 'in_transit' ? 'btn-success' : 'btn-outline-secondary'" ng-click="activeTab='in_transit'">
+                                <i class="bi bi-truck me-1"></i>In Transit
+                                <span class="badge bg-success ms-1" style="font-size:9px;" ng-if="inTransitDeliveries.length">{{inTransitDeliveries.length}}</span>
+                            </button>
+                        </div>
+                        
+                        <div class="alert alert-danger p-2 small" ng-if="error">{{error}}</div>
+                        <div class="text-center my-3" ng-if="loading"><div class="spinner-border text-primary"></div></div>
+
+                        <div ng-if="!loading && activeTab === 'assigned' && assignedDeliveries.length === 0" class="text-center bg-light p-4 rounded-3 border">
+                             <i class="bi bi-truck-flatbed fs-2 text-muted d-block mb-2"></i>
+                             <p class="small text-muted mb-0 fw-medium">No delivery assigned yet.</p>
+                        </div>
+                        <div ng-if="!loading && activeTab === 'in_transit' && inTransitDeliveries.length === 0" class="text-center bg-light p-4 rounded-3 border">
+                             <i class="bi bi-truck fs-2 text-muted d-block mb-2"></i>
+                             <p class="small text-muted mb-0 fw-medium">No deliveries in transit.</p>
+                        </div>
+
+                        <div class="ride-card border-primary" ng-repeat="del in assignedDeliveries track by del.id" ng-if="activeTab === 'assigned'">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="badge bg-info text-dark shadow-sm">🟣 Assigned</span>
+                                <span class="badge bg-light text-dark border">{{del.is_distribution ? 'Pickup from NGO Hub' : 'Pickup Needed'}}</span>
+                            </div>
+                            <h6 class="fw-bold text-primary mb-1">{{del.food_type}}</h6>
+                            <p class="small text-muted mb-2"><i class="bi bi-box-seam me-1"></i>{{del.quantity}} units</p>
+                            
+                            <!-- Donor/NGO Details -->
+                            <div class="alert alert-light py-2 px-3 mb-3 rounded-3 border">
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <i class="bi" ng-class="del.is_distribution ? 'bi-building-fill text-success' : 'bi-person-fill text-primary'"></i>
+                                    <span class="fw-semibold small">{{del.is_distribution ? 'NGO Hub (Pickup)' : 'Donor Info'}}</span>
+                                </div>
+                                <p class="small text-muted mb-1">
+                                    <i class="bi bi-geo-alt me-1 text-danger"></i>
+                                    {{del.is_distribution ? (del.ngo_address || 'NGO Hub') : (del.pickup_location || 'Location not set')}}
+                                </p>
+                                <div class="d-flex gap-2">
+                                    <span class="badge bg-light text-dark border" style="font-size:9px;">
+                                        <i class="bi bi-crosshair me-1"></i>
+                                        {{(del.is_distribution ? del.ngo_latitude : (del.pickup_latitude || del.latitude)) | number:4}}, 
+                                        {{(del.is_distribution ? del.ngo_longitude : (del.pickup_longitude || del.longitude)) | number:4}}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Pickup Flow: Standard Pickup (OTP required) -->
+                            <div ng-if="!del.is_distribution">
+                                <div ng-if="!del.otp_generated" class="mb-2">
+                                    <button class="btn btn-sm btn-primary w-100 rounded-pill fw-bold" ng-click="generateOtp(del)">
+                                        <i class="bi bi-hand-index-thumb-fill me-1"></i> Claim Delivery
+                                    </button>
+                                </div>
+                                <div ng-if="del.otp_generated && !del.otp_verified" class="input-group input-group-sm mb-2">
+                                    <input type="text" ng-model="del.otp_input" class="form-control bg-light" placeholder="6-digit pickup OTP" maxlength="6">
+                                    <button class="btn btn-warning fw-bold text-dark" ng-click="verifyOtp(del, del.otp_input)">Verify</button>
+                                </div>
+                            </div>
+
+                            <!-- Pickup Flow: Distribution (No OTP required from NGO) -->
+                            <div ng-if="del.is_distribution" class="d-grid mb-2">
+                                <button class="btn btn-sm btn-success w-100 rounded-pill fw-bold" ng-click="volunteerReceiveDonation(del)">
+                                    <i class="bi bi-box-seam-fill me-1"></i> Pick up from NGO
+                                </button>
+                            </div>
+                            <div ng-if="del.otp_verified && !del.volunteer_reached_donor" class="d-grid mb-2">
+                                <button class="btn btn-sm btn-success w-100 rounded-pill fw-bold" ng-click="volunteerReachedLocation(del)">
+                                    <i class="bi bi-geo-alt-fill me-1"></i> Reached Location
+                                </button>
+                            </div>
+                            <div ng-if="del.volunteer_reached_donor && !del.donation_received" class="d-grid mb-2">
+                                <button class="btn btn-sm btn-warning w-100 rounded-pill fw-bold" ng-click="volunteerReceiveDonation(del)">
+                                    <i class="bi bi-box-seam-fill me-1"></i> Received Donation
+                                </button>
+                            </div>
+                            <button ng-if="!del.donation_received" class="btn btn-sm btn-outline-primary w-100 rounded-pill mt-1" ng-click="showRoute(del)">
+                                <i class="bi bi-sign-turn-right-fill me-1"></i>Navigate to Pickup
+                            </button>
+                        </div>
+
+                        <div class="ride-card border-success" ng-repeat="del in inTransitDeliveries track by del.id" ng-if="activeTab === 'in_transit'">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="badge bg-danger text-white border px-2 py-1" ng-if="!del.donation_received">🟠 Picked Up</span>
+                                <span class="badge bg-success text-white border px-2 py-1" ng-if="del.donation_received">
+                                    🟢 {{del.is_distribution ? 'In Transit to Beneficiary' : 'In Transit to NGO'}}
+                                </span>
+                            </div>
+                            <h6 class="fw-bold text-success mb-1">Delivering: {{del.food_type}}</h6>
+                            
+                            <!-- Donor Info - Show when not yet received -->
+                            <div class="alert alert-light py-2 px-3 mb-3 rounded-3 border" ng-if="!del.donation_received">
+                                <div class="d-flex align-items-center gap-2 mb-1">
+                                    <i class="bi" ng-class="del.is_distribution ? 'bi-building-fill text-success' : 'bi-person-fill text-primary'"></i>
+                                    <span class="fw-semibold small">{{del.is_distribution ? 'NGO Hub (Pickup Point)' : 'Donor Info'}}</span>
+                                </div>
+                                <p class="small text-muted mb-1"><i class="bi bi-geo-alt me-1 text-danger"></i>{{del.pickup_location || 'Pickup location'}}</p>
+                            </div>
+                            
+                            <!-- Destination Info - NGO or Beneficiary -->
+                            <div class="alert alert-light py-2 px-3 mb-3 rounded-3 border" ng-if="del.donation_received">
+                                <div class="d-flex align-items-center gap-2 mb-1">
+                                    <i class="bi" ng-class="del.is_distribution ? 'bi-heart-fill text-danger' : 'bi-building-fill text-success'"></i>
+                                    <span class="fw-semibold small">{{del.is_distribution ? 'Beneficiary Destination' : 'NGO Hub Destination'}}</span>
+                                </div>
+                                <p class="small text-muted mb-1"><i class="bi bi-geo-alt me-1 text-danger"></i>{{del.dropoff_location || (del.is_distribution ? 'Beneficiary address' : 'NGO address')}}</p>
+                                <div ng-if="del.is_distribution && del.beneficiary_name" class="small fw-bold text-dark mt-1">
+                                    Target: {{del.beneficiary_name}}
+                                </div>
+                                <div class="d-flex gap-2 mt-1" ng-if="del.is_distribution ? del.dropoff_latitude : del.ngo_latitude">
+                                    <span class="badge bg-light text-dark border" style="font-size:9px;">
+                                        <i class="bi bi-crosshair me-1"></i>
+                                        {{(del.is_distribution ? del.dropoff_latitude : del.ngo_latitude) | number:4}}, 
+                                        {{(del.is_distribution ? del.dropoff_longitude : del.ngo_longitude) | number:4}}
+                                    </span>
+                                </div>
+                                <div class="small text-danger fw-bold mt-1" ng-if="del.is_distribution && !del.dropoff_latitude">
+                                    <i class="bi bi-exclamation-triangle-fill me-1"></i> Beneficiary coordinates missing!
+                                </div>
+                                <div class="small text-danger fw-bold mt-1" ng-if="!del.is_distribution && !del.ngo_latitude">
+                                    <i class="bi bi-exclamation-triangle-fill me-1"></i> NGO Hub coordinates missing!
+                                </div>
+                            </div>
+                            
+                            <!-- BUTTONS: Before donation received (Picked Up state) -->
+                            <div class="d-grid gap-2" ng-if="!del.donation_received">
+                                <!-- Navigate to Pickup (Donor or NGO Hub) -->
+                                <button class="btn btn-sm btn-outline-primary rounded-pill fw-bold" ng-click="showRoute(del)">
+                                    <i class="bi bi-sign-turn-right-fill me-1"></i>
+                                    {{del.is_distribution ? 'Navigate to NGO Hub' : 'Navigate to Donor Location'}}
+                                </button>
+                                
+                                <!-- Chat/Call Dropdown - Before donation received -->
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-outline-info rounded-pill fw-bold dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-chat-dots-fill me-1"></i>Chat / Call
+                                    </button>
+                                    <ul class="dropdown-menu w-100">
+                                        <li>
+                                            <a class="dropdown-item" href="javascript:void(0)" ng-click="openChatToDonor(del); $event.stopPropagation();">
+                                                <i class="bi bi-person-fill me-2 text-primary"></i>Chat with Donor
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="javascript:void(0)" ng-click="openChatToNgo(del); $event.stopPropagation();">
+                                                <i class="bi bi-building-fill me-2 text-success"></i>Chat with NGO
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <a class="dropdown-item" href="javascript:void(0)" ng-click="callDonor(del); $event.stopPropagation();">
+                                                <i class="bi bi-telephone-fill me-2 text-warning"></i>Call Donor
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="javascript:void(0)" ng-click="callNgo(del); $event.stopPropagation();">
+                                                <i class="bi bi-telephone-fill me-2 text-success"></i>Call NGO
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                
+                                <!-- Collection Button -->
+                                <button class="btn btn-sm btn-warning w-100 rounded-pill fw-bold" ng-click="volunteerReceiveDonation(del)">
+                                    <i class="bi bi-box-seam-fill me-1"></i>
+                                    {{del.is_distribution ? 'Picked up from NGO' : 'Donation Collected'}}
+                                </button>
+                            </div>
+                            
+                            <!-- BUTTONS: After donation received (In Transit state) -->
+                            <div class="d-grid gap-2" ng-if="del.donation_received">
+                                <!-- Navigate to Dropoff (NGO or Beneficiary) -->
+                                <button class="btn btn-sm btn-outline-success rounded-pill fw-bold" ng-click="showRouteToNGO(del)">
+                                    <i class="bi bi-sign-turn-right-fill me-1"></i>
+                                    {{del.is_distribution ? 'Navigate to Beneficiary' : 'Navigate to NGO Hub'}}
+                                </button>
+                                
+                                <!-- Chat/Call Dropdown - After donation received -->
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-outline-info rounded-pill fw-bold dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-chat-dots-fill me-1"></i>Chat / Call
+                                    </button>
+                                    <ul class="dropdown-menu w-100">
+                                        <li>
+                                            <a class="dropdown-item" href="javascript:void(0)" ng-click="openChatToNgo(del); $event.stopPropagation();">
+                                                <i class="bi bi-building-fill me-2 text-success"></i>Chat with NGO
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="javascript:void(0)" ng-click="openChatToDonor(del); $event.stopPropagation();">
+                                                <i class="bi bi-person-fill me-2 text-primary"></i>Chat with Donor
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <a class="dropdown-item" href="javascript:void(0)" ng-click="callNgo(del); $event.stopPropagation();">
+                                                <i class="bi bi-telephone-fill me-2 text-success"></i>Call NGO
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="javascript:void(0)" ng-click="callDonor(del); $event.stopPropagation();">
+                                                <i class="bi bi-telephone-fill me-2 text-warning"></i>Call Donor
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                
+                                <!-- Mark as Delivered (Direct completion for distribution, OTP for others if needed) -->
+                                <button class="btn btn-sm btn-success w-100 rounded-pill fw-bold shadow-sm" ng-click="markDelivered(del)">
+                                    <i class="bi bi-check2-circle me-1"></i>
+                                    {{del.is_distribution ? 'Confirm Delivery to Beneficiary' : 'Confirm Delivery to NGO'}}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="map-main-area position-relative h-100">
+                        <div id="volunteer-interactive-map" class="map-wrapper" style="position: absolute; top:0; left:0; width:100%; height:100%;"></div>
+                        
+                        <div class="d-flex flex-column align-items-center justify-content-center h-100 bg-light border-start" ng-if="assignedDeliveries.length === 0 && inTransitDeliveries.length === 0" style="position: absolute; top:0; left:0; width:100%; height:100%; z-index:10; background:rgba(248,249,250,0.95);">
+                            <div class="text-center p-5 shadow-sm bg-white rounded-4 border" style="max-width: 400px;">
+                                <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                                    <i class="bi bi-geo-alt-fill fs-1"></i>
+                                </div>
+                                <h3 class="fw-bold text-dark mb-2">No delivery assigned yet</h3>
+                                <p class="text-muted mb-4">New tasks from your NGO will appear here.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="position-absolute top-0 start-50 translate-middle-x mt-3 shadow bg-white rounded-pill px-4 py-2 d-flex align-items-center" style="z-index: 100;" ng-if="activeRoute">
+                            <div class="text-center me-3 border-end pe-3">
+                                <div class="small text-muted fw-bold" style="font-size: 10px;">EST. TIME</div>
+                                <div class="fw-bold text-primary fs-5">{{activeRoute.duration}}</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="small text-muted fw-bold" style="font-size: 10px;">DISTANCE</div>
+                                <div class="fw-bold text-dark fs-5">{{activeRoute.distance}}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="floating-action-btn fab-bottom-right text-primary shadow" title="Center Map" ng-click="centerToDevice()" ng-if="assignedDeliveries.length > 0 || inTransitDeliveries.length > 0">
+                            <i class="bi bi-crosshair fs-5"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ═══ PROFILE SECTION ═══ -->
+            <div ng-show="volActiveSection==='profile'" class="fade-in">
+                <div class="d-flex justify-content-between align-items-end mb-4">
+                    <div>
+                        <h2 class="fw-bold text-dark mb-1"><i class="bi bi-person-fill text-primary me-2"></i>My Profile</h2>
+                        <p class="text-muted mb-0">View and edit your profile information.</p>
+                    </div>
+                </div>
+                
+                <!-- Loading State -->
+                <div ng-if="profileLoading" class="text-center py-5">
+                    <div class="spinner-border text-primary"></div>
+                    <p class="mt-2 text-muted">Loading profile...</p>
+                </div>
+                
+                <!-- Profile Content -->
+                <div ng-if="!profileLoading">
+                    <!-- Profile Header Card -->
+                    <div class="vol-card mb-4">
+                        <div class="vol-card-body text-center p-4">
+                            <div class="vol-profile-avatar mx-auto mb-3" style="width:80px;height:80px;font-size:2.5rem;">
+                                <i class="bi bi-person-fill"></i>
+                            </div>
+                            <h4 class="fw-bold mb-1">{{volProfile.name || volunteerName || 'Delivery Partner'}}</h4>
+                            <p class="text-muted mb-2">{{volProfile.email || currentUserEmail}}</p>
+                            <span class="badge bg-success rounded-pill">
+                                <i class="bi bi-patch-check-fill me-1"></i>
+                                {{volSummary.level || 'Bronze'}} Delivery Partner
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- Profile Info Card -->
+                    <div class="vol-card mb-4">
+                        <div class="vol-card-header d-flex justify-content-between align-items-center">
+                            <span class="fw-bold"><i class="bi bi-person-badge me-2"></i>Personal Information</span>
+                            <button class="btn btn-sm rounded-pill" 
+                                ng-class="{'btn-outline-secondary': !editingVolProfile, 'btn-warning': editingVolProfile}"
+                                ng-click="toggleEditVolProfile()">
+                                <i class="bi" ng-class="editingVolProfile ? 'bi-x-lg' : 'bi-pencil-fill'"></i>
+                                {{editingVolProfile ? 'Cancel' : 'Edit'}}
+                            </button>
+                        </div>
+                        <div class="vol-card-body">
+                            <!-- View Mode -->
+                            <div ng-if="!editingVolProfile">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <div class="text-muted small mb-1">Full Name</div>
+                                        <div class="fw-semibold">{{volProfile.name || 'Not set'}}</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="text-muted small mb-1">Phone Number</div>
+                                        <div class="fw-semibold">{{volProfile.phone || 'Not set'}}</div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="text-muted small mb-1">Address</div>
+                                    <div class="fw-semibold">{{volProfile.address || 'Not set'}}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="text-muted small mb-1">Latitude</div>
+                                        <div class="fw-semibold">{{volProfile.latitude | number:5 || 'Not set'}}</div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="text-muted small mb-1">Longitude</div>
+                                        <div class="fw-semibold">{{volProfile.longitude | number:5 || 'Not set'}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Edit Mode -->
+                            <div ng-if="editingVolProfile">
+                                <div class="mb-3">
+                                    <label class="form-label">Full Name</label>
+                                    <input type="text" ng-model="volProfileForm.name" class="form-control" placeholder="Enter your full name" />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Phone Number</label>
+                                    <input type="tel" ng-model="volProfileForm.phone" class="form-control" placeholder="Enter phone number" />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Address</label>
+                                    <textarea ng-model="volProfileForm.address" class="form-control" rows="2" placeholder="Enter your address"></textarea>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 mb-3">
+                                        <label class="form-label">Latitude</label>
+                                        <input type="number" step="any" ng-model="volProfileForm.latitude" class="form-control" placeholder="Latitude" />
+                                    </div>
+                                    <div class="col-6 mb-3">
+                                        <label class="form-label">Longitude</label>
+                                        <input type="number" step="any" ng-model="volProfileForm.longitude" class="form-control" placeholder="Longitude" />
+                                    </div>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-success rounded-pill fw-bold" ng-click="saveVolProfile()" ng-disabled="savingVolProfile">
+                                        <span ng-if="savingVolProfile" class="spinner-border spinner-border-sm me-1"></span>
+                                        <i class="bi bi-check-lg me-1" ng-if="!savingVolProfile"></i>
+                                        {{savingVolProfile ? 'Saving...' : 'Save Changes'}}
+                                    </button>
+                                </div>
+                                <small class="text-success d-block mt-2" ng-if="getProfileSaveMessage()">{{getProfileSaveMessage()}}</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Account Stats -->
+                    <div class="vol-card">
+                        <div class="vol-card-header">
+                            <i class="bi bi-graph-up me-2"></i>Account Statistics
+                        </div>
+                        <div class="vol-card-body">
+                            <div class="row text-center">
+                                <div class="col-4">
+                                    <h4 class="fw-bold text-primary mb-0">{{volSummary.total_deliveries || 0}}</h4>
+                                    <small class="text-muted">Total</small>
+                                </div>
+                                <div class="col-4">
+                                    <h4 class="fw-bold text-success mb-0">{{volSummary.completed || 0}}</h4>
+                                    <small class="text-muted">Completed</small>
+                                </div>
+                                <div class="col-4">
+                                    <h4 class="fw-bold text-warning mb-0">{{volSummary.success_rate || 0}}%</h4>
+                                    <small class="text-muted">Success</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chat Panel (from original) -->
+<div class="chat-panel-overlay" ng-if="chatPanelOpen" ng-click="closeChat()"></div>
+<div class="chat-panel" ng-class="{'open': chatPanelOpen}">
+    <div class="chat-header">
+        <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-chat-dots-fill"></i>
+            <span>Chat<span ng-if="selectedReceiverName"> with {{selectedReceiverName}}</span></span>
+        </div>
+        <button class="btn btn-sm btn-close" ng-click="closeChat()"></button>
+    </div>
+    <div class="chat-messages" id="chatMessagesContainer">
+        <div ng-if="chatLoading" class="text-center py-4">
+            <div class="spinner-border text-success"></div>
+        </div>
+        <div ng-if="!chatLoading && chatMessages.length === 0" class="text-center py-4 text-muted">
+            <i class="bi bi-chat-square-text fs-2 d-block mb-2"></i>
+            <small>No messages yet.</small>
+        </div>
+        <div ng-repeat="msg in chatMessages" class="chat-message" ng-class="{'sent': msg.sender_id === currentUserId, 'received': msg.sender_id !== currentUserId}">
+            <div class="message-content">
+                <div class="message-text">{{msg.message}}</div>
+                <div class="message-meta">
+                    <span class="message-sender">{{msg.sender_name || 'User'}}</span>
+                    <span class="message-time">{{msg.timestamp | localTime}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="chat-input-area">
+        <div class="input-group">
+            <input type="text" ng-model="chatMessageText" class="form-control form-control-sm" placeholder="Type a message..." ng-keypress="chatSendOnEnter($event)" />
+            <button class="btn btn-success btn-sm" ng-click="sendChatMessage()" ng-disabled="!chatMessageText || chatSending">
+                <span ng-if="chatSending" class="spinner-border spinner-border-sm"></span>
+                <i class="bi bi-send" ng-if="!chatSending"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+.chat-panel-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1040;
+}
+.chat-panel {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 360px;
+    max-width: 100%;
+    height: 100vh;
+    background: #fff;
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+    z-index: 9999 !important;
+    display: flex;
+    flex-direction: column;
+    transition: right 0.3s ease;
+}
+.chat-panel.open {
+    right: 0;
+}
+.chat-header {
+    padding: 12px 16px;
+    background: #198754;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+}
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.chat-message {
+    display: flex;
+}
+.chat-message.sent {
+    justify-content: flex-end;
+}
+.message-content {
+    max-width: 75%;
+    padding: 10px 14px;
+    border-radius: 16px;
+    background: #f1f1f1;
+}
+.chat-message.sent .message-content {
+    background: #198754;
+    color: #fff;
+}
+.message-text {
+    font-size: 14px;
+    word-wrap: break-word;
+}
+.message-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 4px;
+    font-size: 10px;
+    opacity: 0.7;
+}
+.chat-input-area {
+    padding: 12px;
+    border-top: 1px solid #eee;
+}
+.chat-input-area .input-group {
+    display: flex;
+    gap: 8px;
+}
+.chat-input-area input {
+    flex: 1;
+}
+.fade-in {
+    animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.cursor-pointer {
+    cursor: pointer;
+}
+.cursor-pointer:hover {
+    transform: translateY(-2px);
+}
+.spin {
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+</style>
+    <!-- Left Panel: Assignments with Tabs -->
+    <div class="map-sidebar-left d-flex flex-column pb-5" style="width: 350px;">
+        <div class="d-flex gap-2 mb-3">
+            <button class="btn btn-sm btn-outline-secondary rounded-pill fw-bold" ng-click="goBack()">
+                <i class="bi bi-arrow-left me-1"></i> Back
+            </button>
+            <button class="btn btn-sm rounded-pill fw-bold" 
+                    ng-class="{'btn-success': availability==='available', 'btn-secondary': availability==='busy'}" 
+                    ng-click="toggleAvailability()">
+                <i class="bi bi-circle-fill me-1" style="font-size: 8px;"></i> 
+                {{availability === 'available' ? 'Available' : 'Busy'}}
+            </button>
+            <button class="btn btn-sm btn-outline-danger rounded-pill fw-bold ms-auto" ng-click="logout()" ng-disabled="logoutInProgress">
+                <span ng-if="logoutInProgress" class="spinner-border spinner-border-sm me-1"></span>
+                <i class="bi bi-box-arrow-right me-1" ng-if="!logoutInProgress"></i> Sign Out
+            </button>
+        </div>
+        <h4 class="fw-bold mb-3 text-dark"><i class="bi bi-truck text-primary me-2"></i>My Deliveries</h4>
+        
+        <!-- Tab Navigation -->
+        <div class="d-flex gap-2 mb-3">
+            <button class="btn btn-sm fw-bold px-3" ng-class="activeTab === 'assigned' ? 'btn-primary' : 'btn-outline-secondary'" ng-click="activeTab='assigned'">
+                <i class="bi bi-person-check me-1"></i>Assigned
+                <span class="badge bg-dark ms-1" style="font-size:9px;" ng-if="assignedDeliveries.length">{{assignedDeliveries.length}}</span>
+            </button>
+            <button class="btn btn-sm fw-bold px-3" ng-class="activeTab === 'in_transit' ? 'btn-success' : 'btn-outline-secondary'" ng-click="activeTab='in_transit'">
+                <i class="bi bi-truck me-1"></i>In Transit
+                <span class="badge bg-success ms-1" style="font-size:9px;" ng-if="inTransitDeliveries.length">{{inTransitDeliveries.length}}</span>
+            </button>
+        </div>
+        
+        <div class="alert alert-danger p-2 small" ng-if="error">{{error}}</div>
+        <div class="text-center my-3" ng-if="loading"><div class="spinner-border text-primary"></div></div>
+
+        <!-- Empty State -->
+        <div ng-if="!loading && activeTab === 'assigned' && assignedDeliveries.length === 0" class="text-center bg-light p-4 rounded-3 border">
+             <i class="bi bi-truck-flatbed fs-2 text-muted d-block mb-2"></i>
+             <p class="small text-muted mb-0 fw-medium">No delivery assigned yet.</p>
+        </div>
+        <div ng-if="!loading && activeTab === 'in_transit' && inTransitDeliveries.length === 0" class="text-center bg-light p-4 rounded-3 border">
+             <i class="bi bi-truck fs-2 text-muted d-block mb-2"></i>
+             <p class="small text-muted mb-0 fw-medium">No deliveries in transit.</p>
+        </div>
+
+        <!-- Assigned Deliveries -->
+        <div class="ride-card border-primary" ng-repeat="del in assignedDeliveries track by del.id" ng-if="activeTab === 'assigned'">
+            <div class="d-flex justify-content-between mb-2">
+                <span class="badge bg-info text-dark shadow-sm">🟣 Assigned</span>
+                <span class="badge bg-light text-dark border">Pickup Needed</span>
+            </div>
+            <h6 class="fw-bold text-primary mb-1">{{del.food_type}}</h6>
+            <p class="small text-muted mb-2"><i class="bi bi-box-seam me-1"></i>{{del.quantity}} units</p>
+            
+            <!-- Donor/NGO Details -->
+            <div class="alert alert-light py-2 px-3 mb-3 rounded-3 border">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <i class="bi" ng-class="del.is_distribution ? 'bi-building-fill text-success' : 'bi-person-fill text-primary'"></i>
+                    <span class="fw-semibold small">{{del.is_distribution ? 'NGO Pickup Location' : 'Donor Info'}}</span>
+                </div>
+                <p class="small text-muted mb-1">
+                    <i class="bi bi-geo-alt me-1 text-danger"></i>
+                    {{del.is_distribution ? (del.ngo_address || 'NGO Location') : (del.pickup_location || 'Location not set')}}
+                </p>
+                <div class="d-flex gap-2">
+                    <span class="badge bg-light text-dark border" style="font-size:9px;">
+                        <i class="bi bi-crosshair me-1"></i>
+                        {{(del.is_distribution ? del.ngo_latitude : (del.pickup_latitude || del.latitude)) | number:4}}, 
+                        {{(del.is_distribution ? del.ngo_longitude : (del.pickup_longitude || del.longitude)) | number:4}}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Pickup Flow: Standard Pickup (OTP required) -->
+            <div ng-if="!del.is_distribution">
+                <div ng-if="!del.otp_generated" class="mb-2">
+                    <button class="btn btn-sm btn-primary w-100 rounded-pill fw-bold" ng-click="generateOtp(del)">
+                        <i class="bi bi-hand-index-thumb-fill me-1"></i> Claim Delivery
+                    </button>
+                </div>
+                <div ng-if="del.otp_generated && !del.otp_verified" class="input-group input-group-sm mb-2">
+                    <input type="text" ng-model="del.otp_input" class="form-control bg-light" placeholder="6-digit pickup OTP" maxlength="6">
+                    <button class="btn btn-warning fw-bold text-dark" ng-click="verifyOtp(del, del.otp_input)">Verify</button>
+                </div>
+                <div ng-if="del.otp_generated && !del.otp_verified" class="small mb-2" ng-class="{'text-danger fw-semibold': del.otp_is_expiring, 'text-muted': !del.otp_is_expiring}">
+                    <i class="bi bi-clock me-1"></i>Expires in {{del.otp_countdown_text || '--:--'}}
+                </div>
+                <div ng-if="del.otp_generated" class="d-grid mb-2">
+                    <button class="btn btn-sm btn-outline-secondary rounded-pill fw-bold" ng-click="generateOtp(del)" ng-disabled="del.otp_resend_available_in_seconds > 0">
+                        <i class="bi bi-arrow-repeat me-1"></i>
+                        <span ng-if="del.otp_resend_available_in_seconds > 0">Resend in {{del.otp_cooldown_text || '00:00'}}</span>
+                        <span ng-if="!(del.otp_resend_available_in_seconds > 0)">Regenerate OTP</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Pickup Flow: Distribution (No OTP required from NGO) -->
+            <div ng-if="del.is_distribution" class="d-grid mb-2">
+                <button class="btn btn-sm btn-success w-100 rounded-pill fw-bold" ng-click="volunteerReceiveDonation(del)">
+                    <i class="bi bi-box-seam-fill me-1"></i> Pick up from NGO
+                </button>
+            </div>
+            
+            <div ng-if="del.otp_error" class="small text-danger fw-semibold mb-2">{{del.otp_error}}</div>
+            
+            <!-- OTP Verified - Show Reached Location button -->
+            <div ng-if="del.otp_verified && !del.volunteer_reached_donor" class="d-grid mb-2">
+                <button class="btn btn-sm btn-success w-100 rounded-pill fw-bold" ng-click="volunteerReachedLocation(del)">
+                    <i class="bi bi-geo-alt-fill me-1"></i> Reached Location
+                </button>
+            </div>
+
+            <!-- Chat + Call + Emergency Buttons - dropdown style -->
+            <div class="d-flex gap-2 mt-1 flex-wrap" ng-if="del.status">
+                <!-- Chat Dropdown -->
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-success rounded-pill fw-medium dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                        <i class="bi bi-chat-dots-fill me-1"></i> Chat
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="javascript:void(0)" ng-click="openChat({id: del.donation_id}, 'Donor'); $event.stopPropagation();">
+                            <i class="bi bi-person-fill me-1"></i> Chat Donor
+                        </a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0)" ng-click="openChat({id: del.donation_id}, 'NGO'); $event.stopPropagation();" ng-if="del.ngo_id || del.ngo_name">
+                            <i class="bi bi-building-fill me-1"></i> Chat NGO
+                        </a></li>
+                    </ul>
+                </div>
+                <!-- Call Dropdown -->
+                <div class="dropdown" ng-if="del.donor_phone || del.ngo_phone">
+                    <button class="btn btn-sm btn-outline-primary rounded-pill fw-medium dropdown-toggle" data-bs-toggle="dropdown">
+                        <i class="bi bi-telephone-fill me-1"></i> Call
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li ng-if="del.donor_phone"><a class="dropdown-item" href="tel:{{del.donor_phone}}">
+                            <i class="bi bi-person-fill me-1"></i> Call Donor
+                        </a></li>
+                        <li ng-if="del.ngo_phone"><a class="dropdown-item" href="tel:{{del.ngo_phone}}">
+                            <i class="bi bi-building-fill me-1"></i> Call NGO
+                        </a></li>
+                    </ul>
+                </div>
+                <button ng-if="!del.donor_phone && !del.ngo_phone" class="btn btn-sm btn-outline-secondary rounded-pill fw-medium" ng-click="fetchVolunteerParticipantPhones(del)">
+                    <span ng-if="del.fetchingPhone" class="spinner-border spinner-border-sm"></span>
+                    <i class="bi bi-telephone-fill me-1" ng-if="!del.fetchingPhone"></i> Get Phone
+                </button>
+                <!-- Emergency Button -->
+                <button class="btn btn-sm btn-danger rounded-pill fw-medium" ng-click="sendEmergencyAlert(del)" ng-disabled="emergencySending">
+                    <span ng-if="emergencySending" class="spinner-border spinner-border-sm"></span>
+                    <i class="bi bi-exclamation-triangle-fill me-1" ng-if="!emergencySending"></i> Emergency
+                </button>
+            </div>
+
+            
+            <!-- Reached Location - Show Receive Donation button -->
+            <div ng-if="del.volunteer_reached_donor && !del.donation_received" class="d-grid mb-2">
+                <button class="btn btn-sm btn-warning w-100 rounded-pill fw-bold" ng-click="volunteerReceiveDonation(del)">
+                    <i class="bi bi-box-seam-fill me-1"></i> Received Donation
+                </button>
+            </div>
+            
+            <!-- After receiving - can navigate to pickup -->
+            <button ng-if="!del.donation_received" class="btn btn-sm btn-outline-primary w-100 rounded-pill mt-1" ng-click="showRoute(del)">
+                <i class="bi bi-sign-turn-right-fill me-1"></i>Navigate to Pickup
+            </button>
+            <!-- Live Navigation Button - shows after OTP is verified -->
+            <button ng-if="del.otp_verified && navigationActive !== del.id" class="btn btn-sm btn-success w-100 rounded-pill mt-2 fw-bold" ng-click="startNavigation(del)">
+                <i class="bi bi-navigation me-1"></i>Start Navigation
+            </button>
+            <!-- Stop Navigation Button -->
+            <button ng-if="navigationActive === del.id" class="btn btn-sm btn-danger w-100 rounded-pill mt-2 fw-bold" ng-click="stopNavigation()">
+                <i class="bi bi-stop-fill me-1"></i>Stop Navigation
+            </button>
+        </div>
+
+        <!-- In-Transit Deliveries -->
+        <div class="ride-card border-success" ng-repeat="del in inTransitDeliveries track by del.id" ng-if="activeTab === 'in_transit'">
+            <div class="d-flex justify-content-between mb-2">
+                <span class="badge bg-danger text-white border px-2 py-1" ng-if="!del.donation_received">🟠 Picked Up</span>
+                <span class="badge bg-success text-white border px-2 py-1" ng-if="del.donation_received">🟢 In Transit to NGO</span>
+                <span class="badge bg-light text-dark border">{{del.quantity}} units</span>
+            </div>
+            <h6 class="fw-bold text-success mb-1">Delivering: {{del.food_type}}</h6>
+            
+            <!-- Show NGO details only after donation is received -->
+            <div class="alert alert-light py-2 px-3 mb-3 rounded-3 border" ng-if="del.donation_received">
+                <div class="d-flex align-items-center gap-2 mb-1">
+                    <i class="bi bi-building-fill text-success"></i>
+                    <span class="fw-semibold small">NGO Destination</span>
+                </div>
+                <p class="small text-muted mb-1">
+                    <i class="bi bi-geo-alt me-1 text-danger"></i>{{del.ngo_address || 'NGO address not set yet'}}
+                </p>
+                <div class="d-flex gap-2" ng-if="del.ngo_latitude != null && del.ngo_longitude != null">
+                    <span class="badge bg-light text-dark border" style="font-size:9px;">
+                        <i class="bi bi-crosshair me-1"></i>{{del.ngo_latitude | number:4}}, {{del.ngo_longitude | number:4}}
+                    </span>
+                </div>
+            </div>
+            
+            <!-- Message before receiving donation -->
+            <div ng-if="!del.donation_received" class="alert alert-warning py-2 px-3 mb-3 rounded-3">
+                <i class="bi bi-info-circle me-1"></i>
+                <span class="small">Please collect donation from donor and click "Received Donation" to see NGO location.</span>
+            </div>
+            <div class="d-grid gap-2 mb-2" ng-if="!del.donation_received">
+                <button class="btn btn-sm btn-outline-primary rounded-pill fw-bold" ng-click="showRoute(del)">
+                    <i class="bi bi-sign-turn-right-fill me-1"></i>Navigate to Pickup
+                </button>
+                <button class="btn btn-sm btn-warning rounded-pill fw-bold" ng-click="volunteerReceiveDonation(del)">
+                    <i class="bi bi-box-seam-fill me-1"></i> Received Donation
+                </button>
+            </div>
+            
+            <!-- Chat for In-Transit -->
+            <div class="d-flex gap-2 mt-2 flex-wrap" ng-if="del.donation_received">
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-success rounded-pill fw-medium dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                        <i class="bi bi-chat-dots-fill me-1"></i> Chat
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="javascript:void(0)" ng-click="openChat({id: del.donation_id}, 'Donor'); $event.stopPropagation();">
+                            <i class="bi bi-person-fill me-1"></i> Chat Donor
+                        </a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0)" ng-click="openChat({id: del.donation_id}, 'NGO'); $event.stopPropagation();" ng-if="del.ngo_id || del.ngo_name">
+                            <i class="bi bi-building-fill me-1"></i> Chat NGO
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <p class="small text-muted mb-3" ng-if="del.donation_received"><i class="bi bi-broadcast me-1 pulse text-danger"></i> Live tracking to NGO activated.</p>
+            <div class="d-grid gap-2" ng-if="del.donation_received">
+                <button class="btn btn-sm btn-outline-info rounded-pill fw-bold" ng-click="showAllLocations(del)"><i class="bi bi-geo-alt-fill me-1"></i>View All Locations</button>
+                <button class="btn btn-sm btn-outline-success rounded-pill fw-bold" ng-click="showRouteToNGO(del)"><i class="bi bi-sign-turn-right-fill me-1"></i>Navigate to NGO</button>
+                <button class="btn btn-success btn-sm rounded-pill fw-bold shadow-sm" ng-click="markDelivered(del)"><i class="bi bi-check2-circle me-1"></i> Mark as Delivered</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Center: Interactive Map or Empty State -->
+    <div class="map-main-area position-relative">
+        <div id="volunteer-interactive-map" class="map-wrapper" ng-if="assignedDeliveries.length > 0 || inTransitDeliveries.length > 0"></div>
+        
+        <!-- Empty State for Map Area -->
+        <div class="d-flex flex-column align-items-center justify-content-center h-100 bg-light border-start" ng-if="assignedDeliveries.length === 0 && inTransitDeliveries.length === 0">
+            <div class="text-center p-5 shadow-sm bg-white rounded-4 border" style="max-width: 400px;">
+                <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                    <i class="bi bi-geo-alt-fill fs-1"></i>
+                </div>
+                <h3 class="fw-bold text-dark mb-2">No delivery assigned yet</h3>
+                <p class="text-muted mb-4">New tasks from your NGO will appear here as soon as they are assigned to you.</p>
+                <button class="btn btn-primary rounded-pill px-4 fw-bold" ng-click="manualRefresh()">
+                    <i class="bi bi-arrow-clockwise me-2"></i>Check for updates
+                </button>
+            </div>
+        </div>
+        
+        <!-- Live status overlay -->
+        <div class="position-absolute top-0 start-50 translate-middle-x mt-3 shadow bg-white rounded-pill px-4 py-2 d-flex align-items-center" style="z-index: 100;" ng-if="activeRoute && (assignedDeliveries.length > 0 || inTransitDeliveries.length > 0)">
+            <div class="text-center me-3 border-end pe-3">
+                <div class="small text-muted fw-bold" style="font-size: 10px;">EST. TIME</div>
+                <div class="fw-bold text-primary fs-5">{{activeRoute.duration}}</div>
+            </div>
+            <div class="text-center">
+                <div class="small text-muted fw-bold" style="font-size: 10px;">DISTANCE</div>
+                <div class="fw-bold text-dark fs-5">{{activeRoute.distance}}</div>
+            </div>
+        </div>
+        
+        <div class="floating-action-btn fab-bottom-right text-primary shadow" title="Center Map" ng-click="centerToDevice()" ng-if="assignedDeliveries.length > 0 || inTransitDeliveries.length > 0">
+            <i class="bi bi-crosshair fs-5"></i>
+        </div>
+    </div>
+</div>
+
+<!-- Chat Panel Overlay -->
+<div class="chat-panel-overlay" ng-if="chatPanelOpen" ng-click="closeChat()"></div>
+<div class="chat-panel" ng-class="{'open': chatPanelOpen}">
+    <div class="chat-header">
+        <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-chat-dots-fill"></i>
+            <span>Chat<span ng-if="selectedReceiverName"> with {{selectedReceiverName}}</span></span>
+        </div>
+        <button class="btn btn-sm btn-close" ng-click="closeChat()"></button>
+    </div>
+    <div class="chat-messages" id="chatMessagesContainer">
+        <div ng-if="chatLoading" class="text-center py-4">
+            <div class="spinner-border text-success"></div>
+        </div>
+        <div ng-if="chatError" class="text-center py-4 text-danger">
+            <i class="bi bi-exclamation-triangle fs-2 d-block mb-2"></i>
+            <small>{{chatError}}</small>
+        </div>
+        <div ng-if="!chatLoading && !chatError && chatMessages.length === 0" class="text-center py-4 text-muted">
+            <i class="bi bi-chat-square-text fs-2 d-block mb-2"></i>
+            <small>No messages yet. Start the conversation!</small>
+        </div>
+        <div ng-repeat="msg in chatMessages" class="chat-message" ng-class="{'sent': msg.sender_id === currentUserId, 'received': msg.sender_id !== currentUserId}">
+            <div class="message-content">
+                <div class="message-text">{{msg.message}}</div>
+                <div class="message-meta">
+                    <span class="message-sender">{{msg.sender_name || 'User'}}</span>
+                    <span class="message-time">{{msg.timestamp | localTime}}</span>
+                    <span ng-if="msg.sender_id === currentUserId" class="message-status">
+                        <span ng-if="msg.status === 'sent'">&#10004;</span>
+                        <span ng-if="msg.status === 'delivered'">&#10004;&#10004;</span>
+                        <span ng-if="msg.status === 'seen'" class="text-primary">&#10004;&#10004;</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div ng-if="showTypingIndicator" class="typing-indicator">
+            <span>{{typingUserName}} is typing...</span>
+            <span class="typing-dots">
+                <span></span><span></span><span></span>
+            </span>
+        </div>
+    </div>
+    <div class="chat-input-area">
+        <div class="chat-participants" ng-if="chatParticipants.length > 0">
+            <small class="text-muted">Send to:</small>
+            <select ng-model="chatSelectedReceiver" class="form-select form-select-sm">
+                <option ng-repeat="p in chatParticipants" value="{{p.user_id}}">{{p.name}} ({{p.role}})</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <input type="text" ng-model="chatMessageText" class="form-control form-control-sm" placeholder="Type a message..." ng-keypress="chatSendOnEnter($event)" ng-change="onChatInputChange()" />
+            <button class="btn btn-success btn-sm" ng-click="sendChatMessage()" ng-disabled="!chatMessageText || chatSending">
+                <span ng-if="chatSending" class="spinner-border spinner-border-sm"></span>
+                <i class="bi bi-send" ng-if="!chatSending"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+.pulse {
+    animation: pulse-animation 2s infinite;
+}
+@keyframes pulse-animation {
+    0% { opacity: 1; text-shadow: 0 0 2px red; }
+    50% { opacity: 0.3; text-shadow: 0 0 8px red; }
+    100% { opacity: 1; text-shadow: 0 0 2px red; }
+}
+
+/* ── Chat Panel ───────────────────────────────────────────── */
+.chat-panel-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1040;
+}
+.chat-panel {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 360px;
+    max-width: 100%;
+    height: 100vh;
+    background: #fff;
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+    z-index: 9999 !important;
+    display: flex;
+    flex-direction: column;
+    transition: right 0.3s ease;
+}
+.chat-panel.open {
+    right: 0;
+}
+.chat-header {
+    padding: 12px 16px;
+    background: #198754;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+}
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.chat-message {
+    display: flex;
+}
+.chat-message.sent {
+    justify-content: flex-end;
+}
+.chat-message.received {
+    justify-content: flex-start;
+}
+.message-content {
+    max-width: 75%;
+    padding: 10px 14px;
+    border-radius: 16px;
+    background: #f1f1f1;
+}
+.chat-message.sent .message-content {
+    background: #198754;
+    color: #fff;
+}
+.message-text {
+    font-size: 14px;
+    word-wrap: break-word;
+}
+.message-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 4px;
+    font-size: 10px;
+    opacity: 0.7;
+}
+.chat-input-area {
+    padding: 12px;
+    border-top: 1px solid #eee;
+}
+.chat-participants {
+    margin-bottom: 8px;
+}
+.chat-participants select {
+    margin-top: 4px;
+}
+.chat-input-area .input-group {
+    display: flex;
+    gap: 8px;
+}
+.chat-input-area input {
+    flex: 1;
+}
+.message-status {
+    margin-left: 4px;
+}
+.message-status .text-primary {
+    color: #198754 !important;
+}
+.typing-indicator {
+    padding: 8px 12px;
+    font-size: 12px;
+    color: #666;
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.typing-dots {
+    display: inline-flex;
+    gap: 2px;
+}
+.typing-dots span {
+    width: 4px;
+    height: 4px;
+    background: #666;
+    border-radius: 50%;
+    animation: typingBounce 1.4s infinite ease-in-out;
+}
+.typing-dots span:nth-child(1) { animation-delay: 0s; }
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingBounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-4px); }
+}
+@media (max-width: 480px) {
+    .chat-panel {
+        width: 100%;
+        right: -100%;
+    }
+}
+</style>

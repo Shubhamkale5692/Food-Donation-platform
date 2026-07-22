@@ -1,0 +1,1675 @@
+<!-- ══════════════════════════════════════════════════════════════════
+     FoodBridge – NGO Dashboard (Premium Redesign v2)
+     ══════════════════════════════════════════════════════════════════ -->
+<div class="ngo-dashboard-root" ng-init="activeSection='overview'">
+
+  <!-- ══════ SIDEBAR ══════ -->
+  <aside class="ngo-sidebar">
+    <div class="ngo-sidebar-logo">
+      <div class="ngo-logo-icon"><i class="bi bi-box-seam-fill"></i></div>
+      <span class="ngo-logo-text">FoodBridge</span>
+    </div>
+
+    <div class="ngo-sidebar-profile">
+      <div class="ngo-profile-avatar"><i class="bi bi-buildings-fill"></i></div>
+      <div>
+        <div class="ngo-profile-name">{{ngoProfile.name || 'NGO Partner'}}</div>
+        <span class="ngo-verified-badge"><i class="bi bi-patch-check-fill me-1"></i>Verified</span>
+      </div>
+    </div>
+
+    <nav class="ngo-nav mt-2">
+      <a class="ngo-nav-item" ng-class="{active: activeSection==='overview'}"      ng-click="setSection('overview')">
+        <i class="bi bi-grid-1x2-fill"></i><span>Overview</span>
+      </a>
+      <a class="ngo-nav-item" ng-class="{active: activeSection==='donations'}"     ng-click="setSection('donations')">
+        <i class="bi bi-box-seam"></i><span>Incoming Donations</span>
+        <span class="ngo-nav-badge" ng-if="availableDonations.length > 0">{{availableDonations.length}}</span>
+      </a>
+      <a class="ngo-nav-item" ng-class="{active: activeSection==='volunteers'}"    ng-click="setSection('volunteers')">
+        <i class="bi bi-people-fill"></i><span>Delivery Partner Mgmt</span>
+        <span class="ngo-nav-badge ngo-nav-badge--orange" ng-if="pendingVolunteers.length > 0">{{pendingVolunteers.length}}</span>
+      </a>
+      <a class="ngo-nav-item" ng-class="{active: activeSection==='tracking'}"      ng-click="setSection('tracking')">
+        <i class="bi bi-broadcast"></i><span>Delivery Tracking</span>
+      </a>
+      <a class="ngo-nav-item" ng-class="{active: activeSection==='inventory'}"     ng-click="setSection('inventory')">
+        <i class="bi bi-archive-fill"></i><span>Inventory</span>
+      </a>
+      <a class="ngo-nav-item" ng-class="{active: activeSection==='food-testing'}" ng-click="setSection('food-testing')">
+        <i class="bi bi-eyedropper"></i><span>Food Testing</span>
+        <span class="ngo-nav-badge ngo-nav-badge--teal" ng-if="receivedDonations.length > 0">{{receivedDonations.length}}</span>
+      </a>
+      <a class="ngo-nav-item" ng-class="{active: activeSection==='dist-management'}" ng-click="setSection('dist-management')">
+        <i class="bi bi-box-arrow-up-right"></i><span>Distribution Mgmt</span>
+        <span class="ngo-nav-badge ngo-nav-badge--orange" ng-if="(distributionQueue | filter:{decision:'urgent'}).length > 0">{{(distributionQueue | filter:{decision:'urgent'}).length}}</span>
+      </a>
+      <a class="ngo-nav-item" ng-class="{active: activeSection==='waste-management'}" ng-click="setSection('waste-management')">
+        <i class="bi bi-trash3-fill"></i><span>Waste Management</span>
+      </a>
+      <a class="ngo-nav-item" ng-class="{active: activeSection==='beneficiaries'}" ng-click="setSection('beneficiaries')">
+        <i class="bi bi-people-fill"></i><span>Beneficiaries</span>
+      </a>
+      <a class="ngo-nav-item" ng-class="{active: activeSection==='distribution'}"  ng-click="setSection('distribution')">
+        <i class="bi bi-send-check-fill"></i><span>Distribution</span>
+      </a>
+      <a class="ngo-nav-item" ng-class="{active: activeSection==='certificates'}"  ng-click="setSection('certificates')">
+        <i class="bi bi-award-fill"></i><span>Certificates</span>
+      </a>
+      <a class="ngo-nav-item" ng-class="{active: activeSection==='reports'}"       ng-click="setSection('reports')">
+        <i class="bi bi-bar-chart-line-fill"></i><span>Reports</span>
+      </a>
+      <a class="ngo-nav-item" ng-class="{active: activeSection==='profile'}"       ng-click="setSection('profile')">
+        <i class="bi bi-building-fill-gear"></i><span>NGO Profile</span>
+      </a>
+      <a class="ngo-nav-item" ng-class="{active: activeSection==='settings'}"      ng-click="setSection('settings')">
+        <i class="bi bi-gear-fill"></i><span>Settings</span>
+      </a>
+    </nav>
+
+    <div class="ngo-sidebar-footer">
+      <small class="text-white opacity-50">FoodBridge v2.0</small>
+    </div>
+  </aside>
+
+  <!-- ══════ MAIN CONTENT ══════ -->
+  <main class="ngo-content-area">
+
+    <!-- Global Topbar -->
+    <div class="ngo-topbar">
+      <div class="ngo-topbar-title">
+        <button class="btn btn-sm btn-outline-secondary rounded-pill fw-bold me-3" ng-click="goBack()">
+          <i class="bi bi-arrow-left me-1"></i> Back
+        </button>
+        <span ng-show="activeSection==='overview'">Hello NGO Partner! 👋</span>
+        <span ng-show="activeSection==='donations'">Incoming Donations</span>
+        <span ng-show="activeSection==='volunteers'">Delivery Partner Management</span>
+        <span ng-show="activeSection==='tracking'">Delivery Tracking</span>
+        <span ng-show="activeSection==='inventory'">Food Inventory</span>
+        <span ng-show="activeSection==='food-testing'">🧪 Food Testing &amp; Decision</span>
+        <span ng-show="activeSection==='dist-management'">🚚 Distribution Management</span>
+        <span ng-show="activeSection==='waste-management'">🗑️ Waste Management</span>
+        <span ng-show="activeSection==='beneficiaries'">🎯 Beneficiaries</span>
+        <span ng-show="activeSection==='distribution'">Distribution Records</span>
+        <span ng-show="activeSection==='certificates'">Certificates & Recognition</span>
+        <span ng-show="activeSection==='reports'">Reports & Analytics</span>
+        <span ng-show="activeSection==='profile'">NGO Profile</span>
+        <span ng-show="activeSection==='settings'">Settings</span>
+      </div>
+      <div class="ngo-topbar-actions">
+        <button class="btn btn-sm btn-outline-danger border-2 fw-bold me-2 rounded-pill" ng-click="logout()" ng-disabled="logoutInProgress">
+          <span ng-if="logoutInProgress" class="spinner-border spinner-border-sm me-1"></span>
+          <i class="bi bi-box-arrow-right me-1" ng-if="!logoutInProgress"></i> Sign Out
+        </button>
+        <button class="btn btn-sm btn-outline-success border-2 fw-bold me-3 rounded-pill" ng-click="manualRefresh()" ng-disabled="loading">
+          <i class="bi bi-arrow-clockwise me-1" ng-class="{'fa-spin': loading}"></i> Sync Data
+        </button>
+        <div class="ngo-topbar-notif" ng-click="setSection('donations')">
+          <i class="bi bi-bell-fill"></i>
+          <span class="ngo-notif-dot" ng-if="notificationCount > 0">{{notificationCount}}</span>
+        </div>
+        <div class="ngo-topbar-avatar">
+          <i class="bi bi-buildings-fill"></i>
+          <span>NGO Admin</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Global alerts -->
+    <div class="ngo-alert-bar" ng-if="error">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>{{error}}
+      <button ng-click="error=null" class="btn-close btn-close-white btn-sm ms-auto"></button>
+    </div>
+    <div class="ngo-alert-bar ngo-alert-bar--success" ng-if="successMsg">
+      <i class="bi bi-check-circle-fill me-2"></i>{{successMsg}}
+    </div>
+
+    <!-- ════ OVERVIEW ════ -->
+    <div ng-show="activeSection==='overview'" class="ngo-section fade-in">
+
+      <!-- Stat Cards -->
+      <div class="ngo-stats-grid mb-4">
+        <div class="ngo-stat-card ngo-stat-card--orange">
+          <div class="ngo-stat-icon"><i class="bi bi-box-arrow-in-right"></i></div>
+          <div class="ngo-stat-body">
+            <div class="ngo-stat-label">Incoming Requests</div>
+            <div class="ngo-stat-value text-orange">
+              <span ng-if="statsLoading" class="spinner-border spinner-border-sm"></span>
+              <span ng-if="!statsLoading">{{ngoStats.active_donations || 0}}</span>
+            </div>
+            <div class="ngo-stat-sub">New pending requests</div>
+          </div>
+        </div>
+        <div class="ngo-stat-card ngo-stat-card--green">
+          <div class="ngo-stat-icon"><i class="bi bi-box-seam-fill"></i></div>
+          <div class="ngo-stat-body">
+            <div class="ngo-stat-label">Accepted Tasks</div>
+            <div class="ngo-stat-value text-success">
+              <span ng-if="statsLoading" class="spinner-border spinner-border-sm"></span>
+              <span ng-if="!statsLoading">{{ngoStats.accepted_donations || 0}}</span>
+            </div>
+            <div class="ngo-stat-sub">Waiting for assignment</div>
+          </div>
+        </div>
+        <div class="ngo-stat-card ngo-stat-card--blue">
+          <div class="ngo-stat-icon"><i class="bi bi-people-fill"></i></div>
+          <div class="ngo-stat-body">
+            <div class="ngo-stat-label">Delivery Partners Active</div>
+            <div class="ngo-stat-value">
+              <span ng-if="statsLoading" class="spinner-border spinner-border-sm"></span>
+              <span ng-if="!statsLoading">{{ngoStats.active_volunteers || 0}}</span>
+            </div>
+            <div class="ngo-stat-sub"><i class="bi bi-person-check"></i>Approved &amp; active</div>
+          </div>
+        </div>
+        <div class="ngo-stat-card ngo-stat-card--purple">
+          <div class="ngo-stat-icon"><i class="bi bi-check2-all"></i></div>
+          <div class="ngo-stat-body">
+            <div class="ngo-stat-label">Items Distributed</div>
+            <div class="ngo-stat-value">
+              <span ng-if="statsLoading" class="spinner-border spinner-border-sm"></span>
+              <span ng-if="!statsLoading">{{ngoStats.items_distributed || 0}}</span>
+            </div>
+            <div class="ngo-stat-sub"><i class="bi bi-arrow-up-short"></i>Total completed</div>
+          </div>
+        </div>
+        <div class="ngo-stat-card ngo-stat-card--orange">
+          <div class="ngo-stat-icon"><i class="bi bi-globe-americas"></i></div>
+          <div class="ngo-stat-body">
+            <div class="ngo-stat-label">Food Waste Diverted</div>
+            <div class="ngo-stat-value">
+              <span ng-if="statsLoading" class="spinner-border spinner-border-sm"></span>
+              <span ng-if="!statsLoading">{{ngoStats.food_waste_diverted || 0}}</span>
+            </div>
+            <div class="ngo-stat-sub"><i class="bi bi-arrow-up-short"></i>Units rescued</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 1: Incoming Donations + Mini Inventory -->
+      <div class="ngo-row-panels mb-4">
+        <div class="ngo-panel" style="flex:1.6;">
+          <div class="ngo-panel-header">
+            <span><i class="bi bi-box-seam me-2 text-success"></i>Incoming Donation Requests</span>
+            <a ng-click="setSection('donations')" class="ngo-panel-link">View All Requests</a>
+          </div>
+          <div class="ngo-donation-cards-row">
+            <div class="ngo-donation-mini-card" ng-repeat="d in availableDonations | limitTo:3">
+              <div class="d-flex justify-content-between align-items-start mb-1">
+                <div>
+                  <div class="fw-bold text-dark small">{{d.food_type}}</div>
+                  <div class="text-muted" style="font-size:11px;"><i class="bi bi-box-seam me-1"></i>{{d.quantity}} units</div>
+                  <div class="text-muted" style="font-size:11px;"><i class="bi bi-geo-alt text-danger me-1"></i>{{d.pickup_address || 'Location N/A'}}</div>
+                </div>
+                <span class="ngo-urgency-badge"
+                  ng-class="{'ngo-badge-urgent': d.freshness_status==='Risky', 'ngo-badge-nearby': d.freshness_status==='Fresh', 'ngo-badge-fresh': !d.freshness_status}">
+                  {{d.freshness_status || 'New'}}
+                </span>
+              </div>
+              <div class="d-flex gap-2 mt-2">
+                <button class="btn btn-sm btn-success rounded-pill flex-grow-1 fw-bold" ng-click="claimDonation(d); $event.stopPropagation()" style="font-size:11px;">
+                  <i class="bi bi-check-lg me-1"></i>Accept
+                </button>
+                <button class="btn btn-sm btn-outline-secondary rounded-pill flex-grow-1" ng-click="viewDonationDetails(d); $event.stopPropagation()" style="font-size:11px;">
+                  <i class="bi bi-eye me-1"></i>Details
+                </button>
+              </div>
+            </div>
+            <div ng-if="availableDonations.length === 0" class="text-center text-muted py-4 w-100 small">
+              <i class="bi bi-inbox fs-3 d-block mb-2 opacity-50"></i>No new requests, check again soon!
+            </div>
+          </div>
+        </div>
+
+        <!-- Mini Inventory Panel -->
+        <div class="ngo-panel" style="flex:1;">
+          <div class="ngo-panel-header">
+            <span><i class="bi bi-archive me-2 text-warning"></i>Food Inventory Management</span>
+            <a ng-click="setSection('inventory')" class="ngo-panel-link">View Detailed Inventory</a>
+          </div>
+          <table class="table ngo-mini-table mb-0" style="font-size:12px;">
+            <thead><tr><th>Item</th><th>Qty</th><th>Expiry</th></tr></thead>
+            <tbody>
+              <tr ng-repeat="item in inventory | limitTo:5"
+                ng-class="{'ngo-row-danger': item.expiry_label==='Expired', 'ngo-row-warning': item.expiry_label==='Risky'}">
+                <td class="fw-medium">{{item.food_type}}</td>
+                <td>{{item.quantity}}</td>
+                <td>
+                  <span class="ngo-expiry-badge"
+                    ng-class="{'ngo-expiry-fresh': item.expiry_label==='Fresh', 'ngo-expiry-risky': item.expiry_label==='Risky', 'ngo-expiry-expired': item.expiry_label==='Expired'}">
+                    {{item.expiry_label}}
+                  </span>
+                </td>
+              </tr>
+              <tr ng-if="inventory.length===0">
+                <td colspan="3" class="text-center text-muted py-3 small">No inventory yet</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Row 2: Volunteers + Distribution + AI Insights -->
+      <div class="ngo-row-panels mb-4">
+        <div class="ngo-panel" style="flex:1;">
+          <div class="ngo-panel-header">
+            <span><i class="bi bi-people me-2 text-primary"></i>Delivery Partner Management</span>
+            <a ng-click="setSection('volunteers')" class="ngo-panel-link">Manage</a>
+          </div>
+          <div ng-repeat="v in allVolunteers | limitTo:3" class="ngo-vol-mini-row">
+            <img src="https://ui-avatars.com/api/?name={{v.name || 'V'}}&background=random&size=32" class="rounded-circle border" style="width:32px;height:32px;" />
+            <div class="ms-2 flex-grow-1">
+              <div class="fw-semibold small text-dark">{{v.name || 'Delivery Partner'}}</div>
+              <div style="font-size:10px;" class="text-muted">{{v.completed_deliveries}} deliveries</div>
+            </div>
+            <span class="badge" ng-class="{'bg-success': v.volunteer_status==='approved', 'bg-warning text-dark': v.volunteer_status==='pending', 'bg-danger': v.volunteer_status==='rejected'}" style="font-size:9px;">{{v.volunteer_status}}</span>
+          </div>
+          <div ng-if="allVolunteers.length===0" class="text-center text-muted py-4 small">
+            <i class="bi bi-person-x fs-3 d-block mb-2 opacity-50"></i>No Delivery Partners yet
+          </div>
+        </div>
+
+        <div class="ngo-panel" style="flex:1.4;">
+          <div class="ngo-panel-header">
+            <span><i class="bi bi-send-check me-2 text-success"></i>Recent Distributions</span>
+            <a ng-click="setSection('distribution')" class="ngo-panel-link">View All</a>
+          </div>
+          <table class="table ngo-mini-table mb-0">
+            <thead><tr><th>Food Item</th><th>Qty</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr ng-repeat="d in distributionRecords | limitTo:4" class="ngo-table-row">
+                <td class="fw-medium small">{{d.food_type}}</td>
+                <td class="small text-muted">{{d.quantity}}</td>
+                <td><span class="badge bg-success-subtle text-success border border-success" style="font-size:9px;">Completed</span></td>
+              </tr>
+              <tr ng-if="distributionRecords.length===0">
+                <td colspan="3" class="text-center text-muted small py-3">No completed distributions yet</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- AI Insights -->
+        <div class="ngo-panel ngo-insights-panel" style="flex:1;">
+          <div class="ngo-panel-header">
+            <span><i class="bi bi-robot me-2 text-warning"></i>AI Insights</span>
+          </div>
+          <div class="ngo-insight-item">
+            <div class="ngo-insight-icon bg-success-subtle"><i class="bi bi-graph-up text-success"></i></div>
+            <div>
+              <div class="small fw-semibold">Avg Donation Volume</div>
+              <div class="text-muted" style="font-size:11px;">{{ngoStats.items_distributed ? (ngoStats.food_waste_diverted / (ngoStats.items_distributed || 1) | number:0) : '–'}} units/donation</div>
+            </div>
+          </div>
+          <div class="ngo-insight-item">
+            <div class="ngo-insight-icon bg-primary-subtle"><i class="bi bi-people text-primary"></i></div>
+            <div>
+              <div class="small fw-semibold">People Helped (est.)</div>
+              <div class="text-muted" style="font-size:11px;">~{{(ngoStats.food_waste_diverted / 3) | number:0}} people</div>
+            </div>
+          </div>
+          <div class="ngo-insight-item">
+            <div class="ngo-insight-icon bg-warning-subtle"><i class="bi bi-truck text-warning"></i></div>
+            <div>
+              <div class="small fw-semibold">Total Deliveries</div>
+              <div class="text-muted" style="font-size:11px;">{{ngoStats.items_distributed || 0}} completed</div>
+            </div>
+          </div>
+          <div class="ngo-insight-item">
+            <div class="ngo-insight-icon bg-danger-subtle"><i class="bi bi-exclamation-triangle text-danger"></i></div>
+            <div>
+              <div class="small fw-semibold">Expiry Alerts</div>
+              <div class="text-muted" style="font-size:11px;">{{(inventory | filter:{expiry_label:'Risky'}).length + (inventory | filter:{expiry_label:'Expired'}).length}} items need attention</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ INCOMING DONATIONS ════ -->
+    <div ng-show="activeSection==='donations'" class="ngo-section fade-in">
+      <div class="ngo-section-header">
+        <h2 class="ngo-section-title"><i class="bi bi-box-seam me-2 text-success"></i>Incoming Donation Requests</h2>
+        <span class="badge bg-success rounded-pill px-3">{{availableDonations.length}} pending</span>
+      </div>
+      <div class="ngo-loading-bar" ng-if="loading"><div class="spinner-border text-success"></div><span class="ms-3 text-muted">Loading donations…</span></div>
+      <div class="ngo-donation-grid">
+        <div class="ngo-donation-card" ng-repeat="d in availableDonations" ng-if="d.freshness_status !== 'Expired'">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <img ng-if="d.image_url" ng-src="{{d.image_url}}" class="ngo-food-img rounded-3 border" alt="Food" />
+            <div class="ngo-food-img ngo-food-placeholder rounded-3 border d-flex align-items-center justify-content-center" ng-if="!d.image_url">
+              <i class="bi bi-box-seam text-muted fs-4"></i>
+            </div>
+            <span class="ngo-urgency-badge ms-2"
+              ng-class="{'ngo-badge-urgent': d.freshness_status==='Risky', 'ngo-badge-nearby': d.freshness_status==='Fresh', 'ngo-badge-fresh': !d.freshness_status}">
+              {{d.freshness_status || 'New'}}
+            </span>
+          </div>
+          <h6 class="fw-bold text-dark mb-1">{{d.food_type}}</h6>
+          <div class="d-flex align-items-center gap-3 mb-2" style="font-size:12px; color:#666;">
+            <span><i class="bi bi-box-seam me-1"></i>{{d.quantity}} units</span>
+            <span><i class="bi bi-geo-alt text-danger me-1"></i>{{d.pickup_address || 'Location pending'}}</span>
+          </div>
+          <div class="mb-3 p-2 rounded-2 small"
+            ng-class="{'bg-success-subtle': d.freshness_status==='Fresh', 'bg-warning-subtle': d.freshness_status==='Risky', 'bg-light': !d.freshness_status}">
+            <i class="bi bi-robot me-1"
+              ng-class="{'text-success': d.freshness_status==='Fresh','text-warning': d.freshness_status==='Risky','text-muted': !d.freshness_status}"></i>
+            <strong>AI:</strong>
+            <span ng-if="d.freshness_status" class="badge ms-1"
+              ng-class="{'bg-success': d.freshness_status==='Fresh','bg-warning text-dark': d.freshness_status==='Risky'}">{{d.freshness_status}}</span>
+            <span ng-if="!d.freshness_status" class="badge bg-secondary ms-1">Not Scanned</span>
+            <span ng-if="d.ai_confidence_score" class="text-muted ms-2">{{(d.ai_confidence_score*100)|number:0}}% conf</span>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-success btn-sm rounded-pill flex-grow-1 fw-bold" ng-click="claimDonation(d); $event.stopPropagation()">
+              <i class="bi bi-check-lg me-1"></i>Accept
+            </button>
+            <button class="btn btn-outline-secondary btn-sm rounded-pill flex-grow-1" ng-click="viewDonationDetails(d); $event.stopPropagation()">
+              <i class="bi bi-eye me-1"></i>View Details
+            </button>
+          </div>
+        </div>
+        <div ng-if="!loading && availableDonations.length === 0" class="ngo-empty-state w-100">
+          <i class="bi bi-inbox fs-1 d-block mb-3 opacity-40"></i>
+          <h5 class="fw-semibold text-muted">No new donation requests</h5>
+          <p class="text-muted small">Check back soon — nearby donors will appear here.</p>
+        </div>
+      </div>
+
+        <!-- Donation Detail Modal -->
+      <div class="ngo-modal-overlay" ng-if="selectedDonation" ng-click="closeDonationDetails()">
+        <div class="ngo-modal-card" ng-click="$event.stopPropagation()">
+          <div class="ngo-modal-header">
+            <h5 class="fw-bold mb-0"><i class="bi bi-box-seam me-2 text-success"></i>Donation Details</h5>
+            <button class="btn-close" ng-click="closeDonationDetails()"></button>
+          </div>
+          <div class="ngo-modal-body">
+            <div class="row g-3">
+              <div class="col-6"><label class="text-muted small">Food Type</label><div class="fw-semibold">{{selectedDonation.food_type}}</div></div>
+              <div class="col-6"><label class="text-muted small">Quantity</label><div class="fw-semibold">{{selectedDonation.quantity}} units</div></div>
+              <div class="col-6"><label class="text-muted small">Expiry</label><div class="fw-semibold">{{selectedDonation.expiry_time | date:'medium'}}</div></div>
+              <div class="col-6"><label class="text-muted small">AI Freshness</label><div class="fw-semibold">{{selectedDonation.freshness_status || 'Unknown'}}</div></div>
+              <div class="col-12"><label class="text-muted small">Pickup Address</label><div class="fw-semibold">{{selectedDonation.pickup_address || 'N/A'}}</div></div>
+            </div>
+          </div>
+          <div class="ngo-modal-footer">
+            <button class="btn btn-success rounded-pill px-4 fw-bold" ng-click="claimDonation(selectedDonation); closeDonationDetails(); $event.stopPropagation()">
+              <i class="bi bi-check-lg me-1"></i>Accept Donation
+            </button>
+            <button class="btn btn-outline-secondary rounded-pill px-3" ng-click="closeDonationDetails()">Close</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Accepted Donations – Ready to Assign ─────────────────────────── -->
+      <div class="mt-4" ng-if="deliveries.length > 0 || true">
+        <h6 class="fw-bold text-dark mb-3">
+          <i class="bi bi-truck me-2 text-primary"></i>Accepted Donations — Assign a Delivery Partner
+          <span class="badge bg-primary-subtle text-primary border border-primary ms-2">
+            {{(deliveries | filter:{status:'pending'}).length + (deliveries | filter:{status:'accepted'}).length}} ready
+          </span>
+        </h6>
+
+        <!-- Approved volunteer availability notice -->
+        <div class="alert alert-warning py-2 small mb-3" ng-if="availableVolunteers.length === 0">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          <strong>No available Delivery Partners at the moment.</strong>
+          Go to <a ng-click="setSection('volunteers')" class="alert-link">Delivery Partner Management</a> to approve Delivery Partners first.
+        </div>
+
+        <div class="ngo-donation-grid">
+          <div class="ngo-donation-card border-primary border-2" ng-repeat="d in deliveries" ng-if="d.status === 'pending' || d.status === 'accepted' || d.status === 'assigned'">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <div>
+                <h6 class="fw-bold text-dark mb-1">{{d.food_type}}</h6>
+                <div class="small text-muted">
+                  <i class="bi bi-box-seam me-1"></i>{{d.quantity}} units
+                  &nbsp;|&nbsp;
+                  <i class="bi bi-geo-alt text-danger me-1"></i>{{d.pickup_location || d.pickup_address || 'Pickup TBD'}}
+                </div>
+              </div>
+              <span class="badge"
+                ng-class="{
+                  'bg-warning text-dark': d.status === 'pending',
+                  'bg-primary': d.status === 'accepted',
+                  'bg-info text-dark': d.status === 'assigned',
+                  'bg-danger text-white': d.status === 'picked_up',
+                  'bg-success': d.status === 'completed'
+                }"
+                style="font-size:10px;">
+                {{ d.status === 'pending' ? '🟡 Pending' : (d.status === 'accepted' ? '🔵 Accepted' : (d.status === 'assigned' ? '🟣 Assigned' : (d.status === 'picked_up' ? '🟠 Picked Up' : (d.status === 'completed' ? '🟢 Completed' : d.status)))) }}
+              </span>
+            </div>
+
+            <!-- AI Smart Assign Button -->
+            <div ng-if="d.reason" class="alert alert-info py-1 px-2 mb-2 mt-2" style="font-size: 11px; margin-bottom: 8px;">
+              🤖 AI Decision: {{ d.reason }}
+            </div>
+
+            <button class="btn btn-sm btn-warning rounded-pill w-100 fw-bold mb-2"
+              ng-click="aiAssignVolunteer(d, $event)"
+              ng-disabled="availableVolunteers.length === 0 || d.status === 'assigned'">
+              <i class="bi bi-robot me-1"></i>AI Smart Assign
+              <span ng-if="d.status === 'assigned'" class="ms-1">(Already assigned)</span>
+              <span ng-if="availableVolunteers.length === 0 && d.status !== 'assigned'" class="ms-1">(No Delivery Partners)</span>
+            </button>
+
+            <!-- Manual Assign Dropdown -->
+            <div class="d-flex gap-2 align-items-center" ng-if="availableVolunteers.length > 0">
+              <select class="form-select form-select-sm rounded-pill flex-grow-1"
+                id="vol-select-{{d.id}}"
+                ng-model="d.selectedVolunteerId"
+                style="font-size:12px;">
+                <option value="">— Select Delivery Partner —</option>
+                <option ng-repeat="v in availableVolunteers" value="{{v.id}}">
+                  {{v.name}} ({{v.is_online ? '🟢' : '⚪'}}{{v.distance != null ? ', ' + v.distance + ' km' : ''}})
+                </option>
+              </select>
+              <button class="btn btn-sm btn-primary rounded-pill fw-bold"
+                ng-click="manualAssignVolunteer(d, d.selectedVolunteerId)"
+                ng-disabled="!d.selectedVolunteerId || d.status === 'assigned'">
+                <i class="bi bi-person-check me-1"></i>Assign
+              </button>
+            </div>
+          </div>
+
+          <div ng-if="(deliveries | filter:{status:'pending'}).length === 0 && (deliveries | filter:{status:'accepted'}).length === 0" class="w-100 text-center text-muted py-3 small">
+            <i class="bi bi-check2-all fs-3 d-block mb-2 opacity-40 text-success"></i>No accepted donations awaiting assignment.
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- ════ VOLUNTEER MANAGEMENT ════ -->
+    <div ng-show="activeSection==='volunteers'" class="ngo-section fade-in">
+      <div class="ngo-section-header">
+        <h2 class="ngo-section-title"><i class="bi bi-people-fill me-2 text-primary"></i>Delivery Partner Management</h2>
+        <span class="badge bg-warning-subtle text-warning border border-warning rounded-pill px-3" ng-if="pendingVolunteers.length > 0">
+          {{pendingVolunteers.length}} pending approval
+        </span>
+      </div>
+
+      <!-- Pending Approvals -->
+      <div ng-if="pendingVolunteers.length > 0" class="mb-4">
+        <h6 class="fw-bold text-warning mb-3"><i class="bi bi-hourglass-split me-2"></i>Pending Approvals</h6>
+        <div class="ngo-vol-cards">
+          <div class="ngo-vol-card ngo-vol-card--pending" ng-repeat="vol in pendingVolunteers">
+            <div class="ngo-vol-avatar">{{(vol.user ? vol.user.name : vol.email) | limitTo:1}}</div>
+            <div class="ngo-vol-info">
+              <div class="fw-semibold text-dark">{{vol.user ? vol.user.name : vol.email.split('@')[0]}}</div>
+              <div class="small text-muted"><i class="bi bi-envelope me-1"></i>{{vol.email}}</div>
+            </div>
+            <div class="d-flex flex-column gap-2 ms-auto">
+              <button class="btn btn-sm btn-success rounded-pill fw-bold" ng-click="approveVolunteer(vol.id)"><i class="bi bi-check-lg me-1"></i>Approve</button>
+              <button class="btn btn-sm btn-outline-danger rounded-pill fw-bold" ng-click="rejectVolunteer(vol.id)"><i class="bi bi-x-lg me-1"></i>Reject</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- All Volunteers Table -->
+      <h6 class="fw-bold text-dark mb-3"><i class="bi bi-person-badge me-2"></i>All Delivery Partners ({{allVolunteers.length}})</h6>
+      <div class="ngo-table-wrapper">
+        <table class="table ngo-full-table mb-0">
+          <thead>
+            <tr><th>Delivery Partner</th><th>Status</th><th>Assigned</th><th>Completed</th><th>Rating</th><th>Actions</th></tr>
+          </thead>
+          <tbody>
+            <tr class="ngo-table-row" ng-repeat="v in allVolunteers">
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <img src="https://ui-avatars.com/api/?name={{v.name || 'V'}}&background=random&size=36" class="rounded-circle border" style="width:36px;height:36px;" />
+                  <div>
+                    <div class="fw-semibold small text-dark">{{v.name || 'Delivery Partner'}}</div>
+                    <div class="text-muted" style="font-size:10px;">{{v.email}}</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="badge rounded-pill"
+                  ng-class="{'bg-success': v.volunteer_status==='approved', 'bg-warning text-dark': v.volunteer_status==='pending', 'bg-danger': v.volunteer_status==='rejected'}">
+                  {{v.volunteer_status || 'pending'}}
+                </span>
+              </td>
+              <td class="text-center fw-semibold">{{v.assigned_deliveries}}</td>
+              <td class="text-center fw-semibold text-success">{{v.completed_deliveries}}</td>
+              <td>
+                <div class="d-flex align-items-center gap-1">
+                  <i class="bi bi-star-fill text-warning" style="font-size:11px;"></i>
+                  <span class="small fw-semibold">{{v.rating}}</span>
+                </div>
+              </td>
+              <td>
+                <div class="d-flex gap-1" ng-if="v.volunteer_status==='approved'">
+                  <select class="form-select form-select-xs" style="font-size:11px;padding:2px 5px;width:auto;" ng-model="v.selectedDonationId">
+                    <option value="">Select</option>
+                    <option ng-repeat="d in deliveries" ng-if="d.status === 'pending' || d.status === 'accepted'" value="{{d.id}}">#{{d.id}}</option>
+                  </select>
+                  <button class="btn btn-xs btn-primary rounded-pill" style="font-size:11px;padding:3px 10px;"
+                    ng-click="assignVolunteer({id: v.selectedDonationId, selectedVolunteerId: v.id})" 
+                    ng-disabled="!v.selectedDonationId">
+                    <i class="bi bi-truck me-1"></i>Assign
+                  </button>
+                </div>
+                <div ng-if="v.volunteer_status==='pending'">
+                  <button class="btn btn-xs btn-success rounded-pill me-1" style="font-size:11px;padding:3px 10px;" ng-click="approveVolunteer(v.id)">Approve</button>
+                  <button class="btn btn-xs btn-outline-danger rounded-pill" style="font-size:11px;padding:3px 10px;" ng-click="rejectVolunteer(v.id)">Reject</button>
+                </div>
+              </td>
+            </tr>
+            <tr ng-if="allVolunteers.length===0">
+              <td colspan="6" class="text-center text-muted py-4 small"><i class="bi bi-person-x me-2"></i>No Delivery Partners found for this NGO</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Leaderboard -->
+      <div class="ngo-panel mt-4" ng-if="allVolunteers.length > 0">
+        <div class="ngo-panel-header"><span><i class="bi bi-trophy-fill text-warning me-2"></i>Delivery Partner Leaderboard</span></div>
+        <div class="ngo-leaderboard">
+          <div class="ngo-leaderboard-row" ng-repeat="v in (allVolunteers | orderBy:'-completed_deliveries') | limitTo:5">
+            <div class="ngo-leaderboard-rank">{{$index + 1}}</div>
+            <img src="https://ui-avatars.com/api/?name={{v.name || 'V'}}&background=random&size=32" class="rounded-circle" style="width:32px;height:32px;" />
+            <div class="ms-2 flex-grow-1">
+              <div class="fw-semibold small">{{v.name}}</div>
+              <div class="text-muted" style="font-size:10px;">{{v.completed_deliveries}} deliveries</div>
+            </div>
+            <div class="ngo-leaderboard-bar-wrap">
+              <div class="ngo-leaderboard-bar" ng-style="{'width': (v.completed_deliveries / ((allVolunteers | orderBy:'-completed_deliveries')[0].completed_deliveries || 1) * 100) + '%'}"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ DELIVERY TRACKING ════ -->
+    <div ng-show="activeSection==='tracking'" class="ngo-section fade-in ngo-tracking-section">
+      <div class="ngo-section-header">
+        <h2 class="ngo-section-title"><i class="bi bi-broadcast me-2 text-danger"></i>Live Delivery Tracking</h2>
+        <span class="badge bg-danger-subtle text-danger border border-danger rounded-pill px-3" ng-if="activeTracking">
+          <i class="bi bi-broadcast pulse me-1"></i>Live
+        </span>
+      </div>
+      <div class="ngo-tracking-layout">
+        <div class="ngo-tracking-list">
+          <h6 class="fw-bold text-muted mb-3 small text-uppercase">Active Deliveries</h6>
+          <div class="ride-card mb-2" ng-repeat="del in deliveries" ng-if="['pending', 'accepted', 'assigned', 'picked_up', 'in_progress', 'in_transit'].indexOf(del.status) > -1"
+            ng-class="{'border-warning border-2': del.status==='pending' || del.status==='accepted' || del.status==='assigned', 'border-primary border-2': del.status==='picked_up'}">
+            <div class="d-flex justify-content-between mb-2">
+              <span class="badge" ng-class="{'bg-warning text-dark': del.status==='pending', 'bg-primary': del.status==='accepted', 'bg-info text-dark': del.status==='assigned', 'bg-danger': del.status==='picked_up', 'bg-success': del.status==='in_progress' || del.status==='in_transit' || del.status==='completed'}">
+                {{ del.status === 'pending' ? '🟡 Pending' : (del.status === 'accepted' ? '🔵 Accepted' : (del.status === 'assigned' ? '🟣 Assigned' : (del.status === 'picked_up' ? '🟠 Picked Up' : (del.status === 'in_progress' || del.status === 'in_transit' ? '🟢 In Transit' : (del.status === 'completed' ? '🟢 Completed' : del.status))))) }}
+              </span>
+              <small class="text-muted" style="font-size:10px;">{{del.created_at | localTime}}</small>
+            </div>
+            <h6 class="fw-bold mb-2 small text-dark">{{del.food_type}}</h6>
+            
+            <div class="mb-2 small rounded p-2" ng-if="['assigned', 'picked_up', 'in_progress', 'in_transit'].indexOf(del.status) > -1" style="background-color: rgba(13, 110, 253, 0.05); border-left: 3px solid #0d6efd;">
+                <div ng-if="del.status === 'assigned'">
+                    📍 <span class="fw-bold text-primary">Heading to Donor</span>
+                </div>
+                <div ng-if="del.status === 'picked_up' || del.status === 'in_progress' || del.status === 'in_transit'">
+                    📍 <span class="fw-bold text-success">Delivering to NGO</span>
+                </div>
+                <div class="d-flex flex-wrap align-items-center mt-2" style="gap: 10px;">
+                    <span class="badge bg-white text-dark border shadow-sm" style="font-size: 10px;" ng-if="del.start_time && (del.status !== 'delivered' && del.status !== 'completed')">
+                        ⏱ Time: {{ getElapsedTime(del.start_time) }}
+                    </span>
+                    <span class="badge bg-success-subtle text-success border border-success shadow-sm" style="font-size: 10px;" ng-if="del.status === 'delivered' || del.status === 'completed'">
+                        ✅ Delivered in {{ del.total_duration || 0 }} mins
+                    </span>
+                    <span class="badge bg-info-subtle text-info border border-info shadow-sm" style="font-size: 10px;" ng-if="eta && (del.status !== 'delivered' && del.status !== 'completed') && activeTracking.id === del.id">
+                        🕒 ETA: {{ eta }} mins
+                    </span>
+                </div>
+            </div>
+
+            <!-- Assigment Controls for Accepted Donations without Volunteer -->
+            <div ng-if="(del.status === 'pending' || del.status === 'accepted') && !del.volunteer_id" class="mb-2">
+               <button class="btn btn-sm btn-outline-info rounded-pill fw-bold w-100 mb-2" ng-click="aiAssignVolunteer(del)">
+                 <i class="bi bi-robot me-1"></i> AI Smart Assign
+               </button>
+               <div class="input-group input-group-sm">
+                 <select ng-model="del.manualVolunteerId" class="form-select border-success" ng-options="v.id as v.name for v in availableVolunteers" ng-if="availableVolunteers.length > 0">
+                    <option value="">-- Manual Assign --</option>
+                  </select>
+                  <select class="form-select border-danger text-danger" disabled ng-if="availableVolunteers.length === 0">
+                    <option value="">No Delivery Partners available</option>
+                  </select>
+                  <button class="btn btn-success fw-bold" ng-click="manualAssignVolunteer(del, del.manualVolunteerId)" ng-disabled="!del.manualVolunteerId || del.status === 'assigned' || availableVolunteers.length === 0">Assign</button>
+                </div>
+            </div>
+
+            <button class="btn btn-sm btn-outline-info rounded-pill w-100 fw-bold mb-2" ng-click="showAllLocations(del)" ng-if="((del.status !== 'accepted' && del.status !== 'pending') || del.volunteer_id)">
+              <i class="bi bi-geo-alt-fill me-1"></i>View All Locations
+            </button>
+            <button class="btn btn-sm btn-outline-primary rounded-pill w-100 fw-bold" ng-click="trackVolunteer(del)" ng-if="((del.status !== 'accepted' && del.status !== 'pending') || del.volunteer_id)">
+              <i class="bi bi-geo-alt me-1"></i>Track on Map
+            </button>
+            <!-- Chat Dropdown - show when volunteer or donor assigned -->
+            <div class="dropdown mt-2 w-100" ng-if="del.volunteer_id || del.donor_id">
+                <button class="btn btn-sm btn-outline-success rounded-pill fw-bold w-100 dropdown-toggle" data-bs-toggle="dropdown">
+                    <i class="bi bi-chat-dots-fill me-1"></i> Chat
+                </button>
+                <ul class="dropdown-menu w-100">
+                    <li ng-if="del.volunteer_id"><a class="dropdown-item" href="javascript:void(0)" ng-click="openChat(del, 'Volunteer'); $event.preventDefault(); $event.stopPropagation();">
+                        <i class="bi bi-person-fill me-1"></i> Chat with Delivery Partner
+                    </a></li>
+                    <li ng-if="del.donor_id"><a class="dropdown-item" href="javascript:void(0)" ng-click="openChat(del, 'Donor'); $event.preventDefault(); $event.stopPropagation();">
+                        <i class="bi bi-building-fill me-1"></i> Chat with Donor
+                    </a></li>
+                </ul>
+            </div>
+          </div>
+          <div ng-if="(deliveries | filter:{status:'pending'}).length === 0 && (deliveries | filter:{status:'accepted'}).length === 0 && (deliveries | filter:{status:'assigned'}).length === 0 && (deliveries | filter:{status:'picked_up'}).length === 0 && (deliveries | filter:{status:'in_progress'}).length === 0 && (deliveries | filter:{status:'in_transit'}).length === 0" class="text-center text-muted small py-4">
+            <i class="bi bi-truck fs-2 d-block mb-2 opacity-40"></i>No active deliveries.
+          </div>
+        </div>
+
+        <div class="ngo-tracking-map-area">
+          <div id="ngo-interactive-map" class="ngo-map-container"></div>
+          <div class="d-flex align-items-center justify-content-center h-100 text-muted opacity-50" ng-if="!activeTracking" style="position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;">
+            <div class="text-center"><i class="bi bi-map fs-1 d-block mb-2"></i><span class="fw-semibold">Select a delivery to track</span></div>
+          </div>
+
+          <!-- Professional Donation Lifecycle Timeline -->
+          <div class="ngo-status-tracker" ng-if="activeTracking">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h6 class="fw-bold mb-0 small"><i class="bi bi-truck text-primary me-2"></i>{{activeTracking.food_type}}</h6>
+              <span class="badge bg-primary-subtle text-primary border border-primary" style="font-size:10px;">
+                <i class="bi bi-broadcast pulse text-danger me-1"></i>Live Tracking
+              </span>
+            </div>
+
+            <div class="donation-timeline-container my-4 px-2">
+                <div class="donation-timeline">
+                    <div class="timeline-progress-bar" ng-style="{
+                        'width': (activeTracking.lifecycle_status === 'RECEIVED' ? '100%' : 
+                                 activeTracking.lifecycle_status === 'DELIVERED' ? '75%' :
+                                 activeTracking.lifecycle_status === 'PICKED_UP' ? '50%' :
+                                 activeTracking.lifecycle_status === 'ACCEPTED' ? '25%' : '0%')
+                    }"></div>
+                    <div class="timeline-step" ng-repeat="step in getTimelineSteps(activeTracking)" 
+                         ng-class="{'active': step.isActive, 'completed': step.isCompleted}">
+                        <div class="step-icon">
+                            <i class="bi" ng-class="step.icon"></i>
+                        </div>
+                        <div class="step-label">{{step.label}}</div>
+                        <div class="step-time" ng-if="step.time">{{step.time | utcToLocal:'h:mm a'}}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex align-items-center bg-light rounded px-3 py-2 mt-3 border">
+              <img src="https://ui-avatars.com/api/?name=Volunteer&background=random" class="rounded-circle me-3 border" style="width:38px;height:38px;">
+              <div>
+                <div class="fw-bold small text-dark">Delivery Partner En Route</div>
+                <div class="small text-muted" style="font-size:10px;" ng-if="activeTracking.pickup_location">
+                  Pickup: {{activeTracking.pickup_location}}
+                </div>
+                <!-- NGO Confirmation Action -->
+                <div class="mt-2" ng-if="activeTracking.status === 'delivered' || activeTracking.status === 'completed'">
+                    <button class="btn btn-sm btn-success rounded-pill fw-bold" ng-click="confirmReceived(activeTracking)" ng-disabled="activeTracking.confirming">
+                        <i class="bi bi-check-all me-1"></i> Mark as Received
+                    </button>
+                </div>
+              </div>
+              <div class="ms-auto text-end">
+                <div class="fw-bold text-primary small">{{activeTracking.distance_remaining}}</div>
+                <small class="text-muted" style="font-size:10px;">{{activeTracking.time_remaining}}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ INVENTORY ════ -->
+    <div ng-show="activeSection==='inventory'" class="ngo-section fade-in">
+      <div class="ngo-section-header">
+        <h2 class="ngo-section-title"><i class="bi bi-archive-fill me-2 text-warning"></i>Food Inventory</h2>
+        <button class="btn btn-sm btn-outline-warning rounded-pill" ng-click="setSection('inventory')">
+          <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+        </button>
+      </div>
+      <div class="alert alert-warning d-flex align-items-center rounded-3 mb-3" ng-if="(inventory | filter:{expiry_label:'Expired'}).length > 0 || (inventory | filter:{expiry_label:'Risky'}).length > 0">
+        <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+        <strong>Food Expiry Alert:&nbsp;</strong>
+        <span ng-if="(inventory | filter:{expiry_label:'Expired'}).length > 0">{{(inventory | filter:{expiry_label:'Expired'}).length}} items expired. </span>
+        <span ng-if="(inventory | filter:{expiry_label:'Risky'}).length > 0">{{(inventory | filter:{expiry_label:'Risky'}).length}} items near expiry.</span>
+      </div>
+      <div class="ngo-table-wrapper">
+        <table class="table ngo-full-table mb-0">
+          <thead>
+            <tr><th>Food Item</th><th>Category</th><th>Quantity</th><th>Expiry Time</th><th>Expiry Status</th><th>Item Status</th></tr>
+          </thead>
+          <tbody>
+            <tr class="ngo-table-row" ng-repeat="item in inventory" ng-class="{'ngo-row-danger': item.expiry_label==='Expired', 'ngo-row-warning': item.expiry_label==='Risky'}">
+              <td class="fw-semibold small text-dark">{{item.food_type}}</td>
+              <td class="small text-muted">{{item.category}}</td>
+              <td class="fw-semibold text-center">{{item.quantity}}</td>
+              <td class="small text-muted">{{item.expiry_time}}</td>
+              <td>
+                <span class="ngo-expiry-badge"
+                  ng-class="{'ngo-expiry-fresh': item.expiry_label==='Fresh', 'ngo-expiry-risky': item.expiry_label==='Risky', 'ngo-expiry-expired': item.expiry_label==='Expired'}">
+                  <i class="bi" ng-class="{'bi-check-circle-fill': item.expiry_label==='Fresh', 'bi-exclamation-triangle-fill': item.expiry_label==='Risky', 'bi-x-circle-fill': item.expiry_label==='Expired'}"></i>
+                  {{item.expiry_label}}
+                </span>
+              </td>
+              <td><span class="badge bg-primary-subtle text-primary border border-primary" style="font-size:10px;">{{item.status}}</span></td>
+            </tr>
+            <tr ng-if="inventory.length===0">
+              <td colspan="6" class="text-center text-muted py-4"><i class="bi bi-archive me-2"></i>No inventory items found</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ════ DISTRIBUTION ════ -->
+    <div ng-cloak ng-show="activeSection==='distribution'" class="ngo-section fade-in">
+      <div class="ngo-section-header">
+        <h2 class="ngo-section-title"><i class="bi bi-send-check-fill me-2 text-success"></i>Distribution Records</h2>
+        <span class="badge bg-success-subtle text-success border border-success rounded-pill px-3">{{distributionRecords.length}} Completed</span>
+      </div>
+      <div class="ngo-table-wrapper" ng-cloak>
+        <table class="table ngo-full-table mb-0" ng-show="distributionRecords.length > 0">
+          <thead>
+            <tr><th>Food Item</th><th>Category</th><th>Quantity</th><th>Distribution Date</th><th>Delivery Time</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr class="ngo-table-row" ng-repeat="d in distributionRecords | orderBy:'-created_at'">
+              <td><div class="fw-semibold small text-dark">{{d.food_type}}</div></td>
+              <td class="small text-muted">{{d.category || 'General'}}</td>
+              <td class="small fw-semibold text-center">{{d.quantity}} units</td>
+              <td class="small text-muted">{{d.created_at | date:'mediumDate'}}</td>
+              <td class="small text-muted" ng-if="d.total_duration">{{d.total_duration}} mins</td>
+              <td class="small text-muted" ng-if="!d.total_duration">--</td>
+              <td><span class="badge bg-success-subtle text-success border border-success" style="font-size:10px;"><i class="bi bi-check-circle me-1"></i>completed</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div ng-show="distributionRecords.length === 0" class="text-center text-muted py-4">
+          <i class="bi bi-send-check me-2"></i>No completed distributions yet
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ CERTIFICATES ════ -->
+    <div ng-show="activeSection==='certificates'" class="ngo-section fade-in">
+      <div class="ngo-section-header">
+        <h2 class="ngo-section-title"><i class="bi bi-award-fill me-2 text-warning"></i>Certificates &amp; Recognition</h2>
+      </div>
+      <div ng-include="'app/components/achievements/achievements.html'"></div>
+    </div>
+
+    <!-- ════ REPORTS ════ -->
+    <div ng-show="activeSection==='reports'" class="ngo-section fade-in">
+      <div class="ngo-section-header">
+        <h2 class="ngo-section-title"><i class="bi bi-bar-chart-line-fill me-2 text-primary"></i>Reports &amp; Analytics</h2>
+        <span class="text-muted small">Year-to-date performance</span>
+      </div>
+      <div class="ngo-charts-grid">
+        <div class="ngo-chart-card">
+          <h6 class="fw-bold mb-3 text-dark"><i class="bi bi-graph-up-arrow me-2 text-success"></i>Donation Trends</h6>
+          <div style="height:220px;"><canvas id="donationTrendChart"></canvas></div>
+        </div>
+        <div class="ngo-chart-card">
+          <h6 class="fw-bold mb-3 text-dark"><i class="bi bi-people me-2 text-primary"></i>Meals vs People Helped</h6>
+          <div style="height:220px;"><canvas id="mealsChart"></canvas></div>
+        </div>
+        <div class="ngo-chart-card">
+          <h6 class="fw-bold mb-3 text-dark"><i class="bi bi-trophy me-2 text-warning"></i>Delivery Partner Performance</h6>
+          <div style="height:220px;"><canvas id="volPerfChart"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ NGO PROFILE ════ -->
+    <div ng-show="activeSection==='profile'" class="ngo-section fade-in">
+      <div class="ngo-section-header">
+        <h2 class="ngo-section-title"><i class="bi bi-building-fill-gear me-2 text-success"></i>NGO Profile</h2>
+        <button class="btn btn-sm btn-outline-success rounded-pill" ng-click="startEditProfile()" ng-if="!editProfile">
+          <i class="bi bi-pencil-fill me-1"></i>Edit Profile
+        </button>
+      </div>
+
+      <div ng-if="!editProfile">
+        <div class="ngo-profile-card">
+          <div class="ngo-profile-hero">
+            <div class="ngo-profile-avatar-lg"><i class="bi bi-buildings-fill"></i></div>
+            <div>
+              <h3 class="fw-bold text-dark mb-1">{{ngoProfile.name || 'Your NGO'}}</h3>
+              <div class="text-muted small"><i class="bi bi-envelope me-1"></i>{{ngoProfile.email}}</div>
+              <div class="mt-2">
+                <span class="badge" ng-class="{'bg-success': ngoProfile.is_verified, 'bg-warning text-dark': !ngoProfile.is_verified}">
+                  <i class="bi bi-patch-check-fill me-1"></i>{{ngoProfile.is_verified ? 'Verified NGO' : 'Pending Verification'}}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="row g-4 mt-2">
+            <div class="col-md-4"><label class="ngo-field-label">Phone</label><div class="ngo-field-value">{{ngoProfile.phone || 'Not set'}}</div></div>
+            <div class="col-md-8"><label class="ngo-field-label">Address</label><div class="ngo-field-value">{{ngoProfile.address || 'Not set'}}</div></div>
+            <div class="col-md-4"><label class="ngo-field-label">Latitude</label><div class="ngo-field-value">{{ngoProfile.latitude !== null && ngoProfile.latitude !== undefined ? (ngoProfile.latitude | number:20) : 'Not set'}}</div></div>
+            <div class="col-md-4"><label class="ngo-field-label">Longitude</label><div class="ngo-field-value">{{ngoProfile.longitude !== null && ngoProfile.longitude !== undefined ? (ngoProfile.longitude | number:20) : 'Not set'}}</div></div>
+            <div class="col-md-4"><label class="ngo-field-label">Member Since</label><div class="ngo-field-value">{{ngoProfile.created_at || '–'}}</div></div>
+            <div class="col-md-4"><label class="ngo-field-label">Total Donations Handled</label><div class="ngo-field-value fw-bold text-success">{{ngoStats.total_donations || 0}}</div></div>
+            <div class="col-md-4"><label class="ngo-field-label">Total Delivery Partners</label><div class="ngo-field-value fw-bold text-primary">{{ngoStats.total_volunteers || 0}}</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div ng-if="editProfile">
+        <div class="ngo-profile-card">
+          <h5 class="fw-bold mb-4"><i class="bi bi-pencil-fill text-success me-2"></i>Edit Profile</h5>
+          <div class="row g-3">
+            <div class="col-md-6"><label class="form-label fw-semibold">Organization Name</label><input type="text" class="form-control" ng-model="profileForm.name" placeholder="Organization name" /></div>
+            <div class="col-md-6"><label class="form-label fw-semibold">Phone Number</label><input type="text" class="form-control" ng-model="profileForm.phone" placeholder="+91 XXXXX XXXXX" /></div>
+            <div class="col-12"><label class="form-label fw-semibold">Address</label><textarea class="form-control" ng-model="profileForm.address" rows="2" placeholder="Full address"></textarea></div>
+            <div class="col-md-6"><label class="form-label fw-semibold">Latitude</label><input type="text" class="form-control" ng-model="profileForm.latitude" step="any" placeholder="28.613900" /></div>
+            <div class="col-md-6"><label class="form-label fw-semibold">Longitude</label><input type="text" class="form-control" ng-model="profileForm.longitude" step="any" placeholder="77.209000" /></div>
+          </div>
+          <div class="d-flex gap-3 mt-4">
+            <button class="btn btn-success rounded-pill px-4 fw-bold" ng-click="saveProfile()"><i class="bi bi-check-lg me-1"></i>Save Changes</button>
+            <button class="btn btn-outline-secondary rounded-pill px-4" ng-click="cancelEditProfile()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ SETTINGS ════ -->
+    <div ng-show="activeSection==='settings'" class="ngo-section fade-in">
+      <div class="ngo-section-header">
+        <h2 class="ngo-section-title"><i class="bi bi-gear-fill me-2 text-secondary"></i>Settings</h2>
+      </div>
+      <div class="ngo-profile-card">
+        <h6 class="fw-bold mb-3 text-dark">Notification Preferences</h6>
+        <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+          <div><div class="fw-semibold small">Incoming Donation Alerts</div><div class="text-muted" style="font-size:11px;">Get notified when new donations are posted nearby</div></div>
+          <div class="form-check form-switch mb-0"><input class="form-check-input" type="checkbox" checked style="width:2.5rem;height:1.25rem;cursor:pointer;" /></div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+          <div><div class="fw-semibold small">Delivery Partner Approval Requests</div><div class="text-muted" style="font-size:11px;">Notify when Delivery Partners apply to join</div></div>
+          <div class="form-check form-switch mb-0"><input class="form-check-input" type="checkbox" checked style="width:2.5rem;height:1.25rem;cursor:pointer;" /></div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+          <div><div class="fw-semibold small">Delivery Status Updates</div><div class="text-muted" style="font-size:11px;">Get updates when deliveries change status</div></div>
+          <div class="form-check form-switch mb-0"><input class="form-check-input" type="checkbox" checked style="width:2.5rem;height:1.25rem;cursor:pointer;" /></div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center py-3">
+          <div><div class="fw-semibold small">Food Expiry Alerts</div><div class="text-muted" style="font-size:11px;">Alert when food in inventory is near expiry</div></div>
+          <div class="form-check form-switch mb-0"><input class="form-check-input" type="checkbox" checked style="width:2.5rem;height:1.25rem;cursor:pointer;" /></div>
+        </div>
+        <div class="mt-4 pt-3 border-top">
+          <button class="btn btn-success rounded-pill px-4 fw-bold" ng-click="saveSettings()">
+            <i class="bi bi-check-lg me-1"></i>Save Settings
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ FOOD TESTING ════ -->
+    <div ng-show="activeSection==='food-testing'" class="ngo-section fade-in">
+      <div class="ngo-section-header">
+        <h2 class="ngo-section-title"><i class="bi bi-eyedropper me-2" style="color:#0d9488;"></i>Food Testing &amp; Quality Decision</h2>
+        <div class="d-flex align-items-center gap-2">
+          <span class="badge rounded-pill px-3" style="background:#0d9488;">{{receivedDonations.length}} Pending</span>
+          <button class="btn btn-sm btn-outline-secondary rounded-pill" ng-click="loadReceivedDonations ? setSection('food-testing') : null" onclick="angular.element(this).scope().setSection('food-testing')">
+            <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+          </button>
+        </div>
+      </div>
+
+      <!-- Info banner -->
+      <div class="alert border-0 rounded-3 mb-4 d-flex align-items-start gap-3" style="background: linear-gradient(135deg,#f0fdfa,#ccfbf1); border-left:4px solid #0d9488 !important;">
+        <i class="bi bi-info-circle-fill fs-5 mt-1" style="color:#0d9488;"></i>
+        <div>
+          <div class="fw-semibold" style="color:#134e4a;">Food Safety Decision System</div>
+          <div class="small text-muted">Test each received donation and select a quality rating. The system automatically routes food to <strong>Distribution</strong>, <strong>Urgent Delivery</strong>, or <strong>Waste</strong>.</div>
+          <div class="d-flex gap-3 mt-2" style="font-size:12px;">
+            <span class="badge" style="background:#16a34a;">🌿 Fresh → Distribute</span>
+            <span class="badge" style="background:#d97706;">⚠️ Moderate → Urgent</span>
+            <span class="badge bg-danger">❌ Spoiled → Waste</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty state -->
+      <div ng-if="receivedDonations.length === 0" class="ngo-empty-state">
+        <i class="bi bi-check2-circle fs-1 d-block mb-3 opacity-40" style="color:#0d9488;"></i>
+        <h5 class="fw-semibold text-muted">All donations tested!</h5>
+        <p class="text-muted small">Received donations will appear here once deliveries are completed.</p>
+      </div>
+
+      <!-- Testing cards grid -->
+      <div class="ngo-donation-grid" ng-if="receivedDonations.length > 0">
+        <div class="ngo-donation-card" ng-repeat="d in receivedDonations"
+             ng-class="{'border-success border-2': d._tested && d.decision==='distribute', 'border-warning border-2': d._tested && d.decision==='urgent', 'border-danger border-2': d._tested && d.decision==='rejected'}">
+
+          <!-- Food image -->
+          <div class="mb-2 text-center">
+            <img ng-if="d.image_url" ng-src="{{d.image_url}}" class="rounded-3 border" style="width:100%;max-height:140px;object-fit:cover;" alt="Food photo" />
+            <div ng-if="!d.image_url" class="rounded-3 border bg-light d-flex align-items-center justify-content-center" style="height:100px;">
+              <i class="bi bi-image text-muted fs-2"></i>
+            </div>
+          </div>
+
+          <!-- Info -->
+          <h6 class="fw-bold text-dark mb-1">{{d.food_type}}</h6>
+          <div class="d-flex gap-3 mb-2" style="font-size:12px;color:#666;">
+            <span><i class="bi bi-box-seam me-1"></i>{{d.quantity}} units</span>
+            <span><i class="bi bi-person me-1"></i>{{d.donor_name || 'Donor'}}</span>
+          </div>
+          <div class="small text-muted mb-3"><i class="bi bi-tag me-1"></i>{{d.category || 'General'}}</div>
+
+          <!-- Quality selector -->
+          <label class="form-label fw-semibold small mb-1">Food Quality <span class="text-danger">*</span></label>
+          <select class="form-select form-select-sm rounded-pill mb-2 fw-semibold"
+                  ng-model="d.food_quality"
+                  ng-disabled="d._tested || d._testing"
+                  ng-class="{'border-success': d.food_quality==='fresh', 'border-warning': d.food_quality==='moderate', 'border-danger': d.food_quality==='spoiled'}">
+            <option value="">— Select Quality —</option>
+            <option value="fresh">🌿 Fresh</option>
+            <option value="moderate">⚠️ Moderate</option>
+            <option value="spoiled">🦠 Spoiled</option>
+          </select>
+
+          <!-- AI Suggestion (optional) -->
+          <div class="alert alert-info py-1 px-2 mb-2 rounded-2" style="font-size:11px;" ng-if="d.freshness_status">
+            <i class="bi bi-robot me-1"></i><strong>AI Suggestion:</strong> {{d.freshness_status}}
+          </div>
+
+          <!-- Remarks -->
+          <textarea class="form-control form-control-sm rounded-3 mb-3" rows="2"
+                    ng-model="d.remarks"
+                    ng-disabled="d._tested || d._testing"
+                    placeholder="Add inspection remarks (optional)..."></textarea>
+
+          <!-- Submit button -->
+          <button class="btn btn-sm rounded-pill w-100 fw-bold"
+                  style="background:linear-gradient(135deg,#0d9488,#059669);color:#fff;"
+                  ng-click="testFood(d)"
+                  ng-disabled="!d.food_quality || d._tested || d._testing">
+            <span ng-if="d._testing" class="spinner-border spinner-border-sm me-1"></span>
+            <i class="bi bi-clipboard2-pulse me-1" ng-if="!d._testing && !d._tested"></i>
+            <i class="bi bi-check-circle-fill me-1" ng-if="d._tested"></i>
+            {{d._tested ? 'Test Submitted ✓' : (d._testing ? 'Submitting...' : 'Submit Test')}}
+          </button>
+
+          <!-- Error message -->
+          <div class="alert alert-danger py-1 px-2 mt-2 rounded-2 small" ng-if="d._testError">{{d._testError}}</div>
+
+          <!-- Result badge -->
+          <div class="mt-2 text-center" ng-if="d._tested">
+            <span class="badge rounded-pill px-3 py-2 fs-6" ng-if="d.decision==='distribute'" style="background:#16a34a;">✅ Ready for Distribution</span>
+            <span class="badge rounded-pill px-3 py-2 fs-6 bg-warning text-dark" ng-if="d.decision==='urgent'">⚠️ Urgent Delivery Required</span>
+            <span class="badge rounded-pill px-3 py-2 fs-6 bg-danger" ng-if="d.decision==='rejected'">❌ Marked as Waste</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ DISTRIBUTION MANAGEMENT ════ -->
+    <div ng-show="activeSection==='dist-management'" class="ngo-section fade-in">
+      <div class="ngo-section-header">
+        <h2 class="ngo-section-title"><i class="bi bi-box-arrow-up-right me-2 text-primary"></i>Distribution Management</h2>
+        <div class="d-flex gap-2">
+          <span class="badge rounded-pill bg-warning text-dark px-3" ng-if="(distributionQueue | filter:{decision:'urgent'}).length > 0">
+            {{(distributionQueue | filter:{decision:'urgent'}).length}} Urgent
+          </span>
+          <span class="badge rounded-pill px-3" style="background:#16a34a;">{{(distributionQueue | filter:{decision:'distribute'}).length}} Ready</span>
+        </div>
+      </div>
+
+      <!-- Summary stats -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-4">
+          <div class="ngo-stat-card ngo-stat-card--green" style="min-height:auto;padding:16px 20px;">
+            <div class="ngo-stat-body">
+              <div class="ngo-stat-label">Ready to Distribute</div>
+              <div class="ngo-stat-value text-success" style="font-size:28px;">{{(distributionQueue | filter:{decision:'distribute'}).length}}</div>
+              <div class="ngo-stat-sub">Fresh items cleared</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="ngo-stat-card ngo-stat-card--orange" style="min-height:auto;padding:16px 20px;">
+            <div class="ngo-stat-body">
+              <div class="ngo-stat-label">Urgent Deliveries</div>
+              <div class="ngo-stat-value text-orange" style="font-size:28px;">{{(distributionQueue | filter:{decision:'urgent'}).length}}</div>
+              <div class="ngo-stat-sub">Moderate quality — act fast</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="ngo-stat-card ngo-stat-card--blue" style="min-height:auto;padding:16px 20px;">
+            <div class="ngo-stat-body">
+              <div class="ngo-stat-label">Total in Queue</div>
+              <div class="ngo-stat-value" style="font-size:28px;">{{distributionQueue.length}}</div>
+              <div class="ngo-stat-sub">Items awaiting dispatch</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty state -->
+      <div ng-if="distributionQueue.length === 0" class="ngo-empty-state">
+        <i class="bi bi-box-arrow-up-right fs-1 d-block mb-3 opacity-40 text-primary"></i>
+        <h5 class="fw-semibold text-muted">No items in distribution queue</h5>
+        <p class="text-muted small">Test donations in <a ng-click="setSection('food-testing')" class="text-decoration-underline" style="cursor:pointer;">Food Testing</a> to populate this list.</p>
+      </div>
+
+      <!-- Distribution table -->
+      <div class="ngo-table-wrapper" ng-if="distributionQueue.length > 0">
+        <table class="table ngo-full-table mb-0">
+          <thead>
+            <tr><th>#</th><th>Food Item</th><th>Quantity</th><th>Quality</th><th>Priority</th><th>Select Recipient</th><th>Action</th></tr>
+          </thead>
+          <tbody>
+            <tr class="ngo-table-row" ng-repeat="d in distributionQueue"
+                ng-class="{'table-warning': d.decision==='urgent', 'table-success bg-success-subtle': d.decision==='distribute'}">
+              <td class="small text-muted">{{$index + 1}}</td>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <img ng-if="d.image_url" ng-src="{{d.image_url}}" class="rounded-2 border" style="width:36px;height:36px;object-fit:cover;" alt="" />
+                  <div ng-if="!d.image_url" class="rounded-2 border bg-light d-flex align-items-center justify-content-center" style="width:36px;height:36px;">
+                    <i class="bi bi-box-seam text-muted" style="font-size:14px;"></i>
+                  </div>
+                  <span class="fw-semibold small text-dark">{{d.food_type}}</span>
+                </div>
+              </td>
+              <td class="fw-semibold text-center">{{d.quantity}} units</td>
+              <td>
+                <span class="badge rounded-pill"
+                      ng-class="{'bg-success': d.food_quality==='fresh', 'bg-warning text-dark': d.food_quality==='moderate'}">
+                  {{d.food_quality | uppercase}}
+                </span>
+              </td>
+              <td>
+                <span class="badge rounded-pill" ng-if="d.decision==='urgent'" style="background:#d97706;">⚠️ URGENT</span>
+                <span class="badge rounded-pill" ng-if="d.decision==='distribute'" style="background:#16a34a;">✅ DISTRIBUTE</span>
+              </td>
+              <td style="min-width:180px;">
+                <select class="form-select form-select-sm rounded-pill" ng-model="d.selectedBeneficiaryId"
+                        ng-class="{'is-invalid': d._beneficiaryRequired}">
+                  <option value="">-- Select Beneficiary --</option>
+                  <option ng-repeat="b in beneficiaries" value="{{b.id}}">{{b.name}} ({{b.type}})</option>
+                </select>
+                <div class="invalid-feedback small" ng-if="d._beneficiaryRequired">Required</div>
+              </td>
+              <td>
+                <!-- Only show assignment buttons if NOT yet assigned for distribution -->
+                <div class="d-flex gap-1" ng-if="(!d.distribution_status || d.distribution_status === 'pending') && !d.assigned_partner_id">
+                  <button class="btn btn-sm btn-outline-primary rounded-pill"
+                          ng-click="aiAssignDistributionPartner(d, $event)"
+                          title="AI Assign Partner">
+                    🤖 AI
+                  </button>
+                  <button class="btn btn-sm btn-outline-secondary rounded-pill"
+                          ng-click="manualAssignDistributionPartner(d)"
+                          title="Manual Assign Partner">
+                    👤 Manual
+                  </button>
+                </div>
+                <!-- Show assigned status if it has been assigned for distribution -->
+                <div ng-if="d.distribution_status === 'in_progress' || d.assigned_partner_id">
+                  <span class="badge bg-success">{{d.assignment_type === 'ai' ? '🤖 AI' : '👤 Manual'}}</span>
+                  <div class="small text-muted mt-1">
+                    {{d.assigned_partner_name || d.volunteer_name}}
+                    <span ng-if="d.assignment_reason">- {{d.assignment_reason}}</span>
+                    <button class="btn btn-link btn-sm p-0 ms-2 text-decoration-none" ng-click="d.assigned_partner_id = null; d.distribution_status = 'pending'" title="Change Partner">
+                      <i class="bi bi-pencil-square"></i> Change
+                    </button>
+                  </div>
+                  <div class="mt-1" ng-if="d.distribution_otp">
+                    <span class="badge bg-info text-dark border border-info" style="font-family: monospace; font-size: 11px;" title="Share this OTP with the beneficiary">
+                      <i class="bi bi-key-fill me-1"></i>OTP: {{d.distribution_otp}}
+                    </span>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ════ WASTE MANAGEMENT ════ -->
+    <div ng-show="activeSection==='waste-management'" class="ngo-section fade-in">
+      <div class="ngo-section-header">
+        <h2 class="ngo-section-title"><i class="bi bi-trash3-fill me-2 text-danger"></i>Waste Management</h2>
+        <span class="badge bg-danger rounded-pill px-3">{{wasteList.length}} Rejected</span>
+      </div>
+
+      <!-- Stats -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-4">
+          <div class="ngo-stat-card" style="min-height:auto;padding:16px 20px;border-left:4px solid #dc3545;">
+            <div class="ngo-stat-body">
+              <div class="ngo-stat-label" style="color:#6c1a1a;">Total Rejected</div>
+              <div class="ngo-stat-value" style="font-size:28px;color:#dc3545;">{{wasteList.length}}</div>
+              <div class="ngo-stat-sub" style="color:#924444;">Spoiled / unsafe items</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="ngo-stat-card" style="min-height:auto;padding:16px 20px;border-left:4px solid #6c757d;background:#f8f9fa;">
+            <div class="ngo-stat-body">
+              <div class="ngo-stat-label" style="color:#495057;">Total Units Wasted</div>
+              <div class="ngo-stat-value" style="font-size:28px;color:#6c757d;">
+                {{getTotalWasteQuantity() || 0}}
+              </div>
+              <div class="ngo-stat-sub" style="color:#6c757d;">Units discarded</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="ngo-stat-card" style="min-height:auto;padding:16px 20px;border-left:4px solid #0d9488;background:#f0fdfc;">
+            <div class="ngo-stat-body">
+              <div class="ngo-stat-label" style="color:#0f766e;">Tested Donations</div>
+              <div class="ngo-stat-value" style="font-size:28px;color:#0d9488;">{{wasteList.length + distributionQueue.length}}</div>
+              <div class="ngo-stat-sub" style="color:#0f766e;">Total quality tests run</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty state -->
+      <div ng-if="wasteList.length === 0" class="ngo-empty-state">
+        <i class="bi bi-recycle fs-1 d-block mb-3 opacity-40 text-success"></i>
+        <h5 class="fw-semibold text-muted">No rejected items! 🎉</h5>
+        <p class="text-muted small">All tested donations have been cleared for distribution. Great job!</p>
+      </div>
+
+      <!-- Waste list grid -->
+      <div class="ngo-donation-grid" ng-if="wasteList.length > 0">
+        <div class="ngo-donation-card border-danger border-2" ng-repeat="d in wasteList" style="background:#ffffff;">
+          <!-- Header -->
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="badge bg-danger rounded-pill px-2">❌ REJECTED</span>
+            <small class="text-secondary" style="font-size:10px;">{{d.tested_at | date:'MMM d, HH:mm'}}</small>
+          </div>
+
+          <!-- Image -->
+          <div class="mb-2">
+            <img ng-if="d.image_url" ng-src="{{d.image_url}}" class="rounded-3 border border-danger" style="width:100%;max-height:120px;object-fit:cover;filter:grayscale(30%);" alt="Rejected food" />
+            <div ng-if="!d.image_url" class="rounded-3 border border-danger bg-light d-flex align-items-center justify-content-center" style="height:80px;">
+              <i class="bi bi-exclamation-triangle text-danger fs-3"></i>
+            </div>
+          </div>
+
+          <!-- Info -->
+          <h6 class="fw-bold mb-1" style="color:#1a2e44;">{{d.food_type}}</h6>
+          <div class="d-flex gap-3 mb-2" style="font-size:12px;color:#495057;">
+            <span><i class="bi bi-box-seam me-1"></i>{{d.quantity}} units</span>
+            <span class="badge bg-danger-subtle text-danger border border-danger" style="font-size:9px;">{{d.food_quality | uppercase}}</span>
+          </div>
+
+          <!-- Remarks -->
+          <div class="rounded-3 p-2 bg-light border border-danger" style="font-size:12px;color:#495057;" ng-if="d.remarks">
+            <i class="bi bi-chat-left-text me-1 text-danger"></i>
+            <em>{{d.remarks}}</em>
+          </div>
+          <div class="small" style="font-size:11px;color:#6c757d;" ng-if="!d.remarks">
+            <i class="bi bi-dash-circle me-1"></i>No inspection remarks
+          </div>
+        </div>
+      </div>
+
+      <!-- Analytics summary -->
+      <div class="ngo-panel mt-4" ng-if="wasteList.length > 0">
+        <div class="ngo-panel-header">
+          <span><i class="bi bi-bar-chart-fill me-2 text-danger"></i>Waste Analytics</span>
+        </div>
+        <div class="row g-3 p-3">
+          <div class="col-md-6">
+            <div class="small text-muted mb-1">Quality Distribution</div>
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <div class="progress flex-grow-1" style="height:10px;">
+                <div class="progress-bar bg-success" style="width:{{distributionQueue.length / (distributionQueue.length + wasteList.length) * 100 || 0}}%"></div>
+              </div>
+              <span class="small fw-semibold text-success">{{distributionQueue.length}} passed</span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <div class="progress flex-grow-1" style="height:10px;">
+                <div class="progress-bar bg-danger" style="width:{{wasteList.length / (distributionQueue.length + wasteList.length) * 100 || 0}}%"></div>
+              </div>
+              <span class="small fw-semibold text-danger">{{wasteList.length}} rejected</span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="small text-muted mb-1">Food Safety Rate</div>
+            <div class="fw-bold" style="font-size:32px;color:#0d9488;">
+              {{((distributionQueue.length / (distributionQueue.length + wasteList.length)) * 100) | number:0}}%
+            </div>
+            <div class="small text-muted">of tested donations are safe to consume</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+<!-- Chat Panel Overlay -->
+<div class="chat-panel-overlay" ng-if="chatPanelOpen" ng-click="closeChat()"></div>
+<div class="chat-panel" ng-class="{'open': chatPanelOpen}">
+<div class="chat-header">
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-chat-dots-fill"></i>
+                <span>Chat<span ng-if="selectedReceiverName"> with {{selectedReceiverName}}</span></span>
+            </div>
+            <button class="btn btn-sm btn-close" ng-click="closeChat()"></button>
+        </div>
+    <div class="chat-messages" id="chatMessagesContainer">
+        <div ng-if="chatLoading" class="text-center py-4">
+            <div class="spinner-border text-success"></div>
+        </div>
+        <div ng-if="!chatLoading && chatMessages.length === 0" class="text-center py-4 text-muted">
+            <i class="bi bi-chat-square-text fs-2 d-block mb-2"></i>
+            <small>No messages yet. Start the conversation!</small>
+        </div>
+        <div ng-repeat="msg in chatMessages" class="chat-message" ng-class="{'sent': msg.sender_id === currentUserId, 'received': msg.sender_id !== currentUserId}">
+            <div class="message-content">
+                <div class="message-text">{{msg.message}}</div>
+                <div class="message-meta">
+                    <span class="message-sender">{{msg.sender_name || 'User'}}</span>
+                    <span class="message-time">{{msg.timestamp | localTime}}</span>
+                    <span ng-if="msg.sender_id === currentUserId" class="message-status">
+                        <span ng-if="msg.status === 'sent'">&#10004;</span>
+                        <span ng-if="msg.status === 'delivered'">&#10004;&#10004;</span>
+                        <span ng-if="msg.status === 'seen'" class="text-primary">&#10004;&#10004;</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div ng-if="showTypingIndicator" class="typing-indicator">
+            <span>{{typingUserName}} is typing...</span>
+            <span class="typing-dots">
+                <span></span><span></span><span></span>
+            </span>
+        </div>
+    </div>
+    <div class="chat-input-area">
+        <div class="chat-participants" ng-if="chatParticipants.length > 0">
+            <small class="text-muted">Send to:</small>
+            <select ng-model="chatSelectedReceiver" class="form-select form-select-sm">
+                <option ng-repeat="p in chatParticipants" value="{{p.user_id}}">{{p.name}} ({{p.role}})</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <input type="text" ng-model="chatMessageText" class="form-control form-control-sm" placeholder="Type a message..." ng-keypress="chatSendOnEnter($event)" ng-change="onChatInputChange()" />
+            <button class="btn btn-success btn-sm" ng-click="sendChatMessage()" ng-disabled="!chatMessageText || chatSending">
+                <span ng-if="chatSending" class="spinner-border spinner-border-sm"></span>
+                <i class="bi bi-send" ng-if="!chatSending"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+/* ── Chat Panel ───────────────────────────────────────────── */
+.chat-panel-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1040;
+}
+.chat-panel {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 360px;
+    max-width: 100%;
+    height: 100vh;
+    background: #fff;
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+    z-index: 1050;
+    display: flex;
+    flex-direction: column;
+    transition: right 0.3s ease;
+}
+.chat-panel.open {
+    right: 0;
+}
+.chat-header {
+    padding: 12px 16px;
+    background: #198754;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+}
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.chat-message {
+    display: flex;
+}
+.chat-message.sent {
+    justify-content: flex-end;
+}
+.chat-message.received {
+    justify-content: flex-start;
+}
+.message-content {
+    max-width: 75%;
+    padding: 10px 14px;
+    border-radius: 16px;
+    background: #f1f1f1;
+}
+.chat-message.sent .message-content {
+    background: #198754;
+    color: #fff;
+}
+.message-text {
+    font-size: 14px;
+    word-wrap: break-word;
+}
+.message-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 4px;
+    font-size: 10px;
+    opacity: 0.7;
+}
+.chat-input-area {
+    padding: 12px;
+    border-top: 1px solid #eee;
+}
+.chat-participants {
+    margin-bottom: 8px;
+}
+.chat-participants select {
+    margin-top: 4px;
+}
+.chat-input-area .input-group {
+    display: flex;
+    gap: 8px;
+}
+.chat-input-area input {
+    flex: 1;
+}
+.message-status {
+    margin-left: 4px;
+}
+.message-status .text-primary {
+    color: #198754 !important;
+}
+.typing-indicator {
+    padding: 8px 12px;
+    font-size: 12px;
+    color: #666;
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.typing-dots {
+    display: inline-flex;
+    gap: 2px;
+}
+.typing-dots span {
+    width: 4px;
+    height: 4px;
+    background: #666;
+    border-radius: 50%;
+    animation: typingBounce 1.4s infinite ease-in-out;
+}
+.typing-dots span:nth-child(1) { animation-delay: 0s; }
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingBounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-4px); }
+}
+@media (max-width: 480px) {
+    .chat-panel {
+        width: 100%;
+        right: -100%;
+    }
+}
+</style>
+
+<!-- Manual Assign Modal -->
+<div id="manualAssignModal" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:99999;display:none;">
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:12px;padding:24px;max-width:450px;width:90%;box-shadow:0 4px 30px rgba(0,0,0,0.3);border:2px solid #198754;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;border-bottom:1px solid #eee;padding-bottom:12px;">
+      <h4 style="margin:0;">Manual Partner Assignment</h4>
+      <button type="button" class="btn-close" ng-click="closeManualAssignModal()"></button>
+    </div>
+    <p class="text-muted">Select a volunteer to assign to this distribution task.</p>
+    
+    <div style="text-align:center;padding:20px;" ng-show="manualAssignLoading">
+      <span class="spinner-border spinner-border-sm"></span> Loading volunteers...
+    </div>
+    
+    <div ng-show="!manualAssignLoading">
+      <label class="form-label fw-semibold">Select Volunteer</label>
+      <select class="form-select mb-3" ng-model="selectedManualVolunteer" ng-options="v.id as (v.name || v.email) for v in availableVolunteersForManual">
+        <option value="">-- Select a volunteer --</option>
+      </select>
+    </div>
+    
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px;">
+      <button type="button" class="btn btn-secondary" ng-click="closeManualAssignModal()">Cancel</button>
+      <button type="button" class="btn btn-primary" id="confirm-manual-assign-btn" ng-click="confirmManualDistributionAssign()">Assign</button>
+    </div>
+  </div>
+</div>
+
+    <!-- ══════ BENEFICIARIES SECTION ══════ -->
+    <div ng-show="activeSection === 'beneficiaries'" class="ngo-section fade-in">
+      <div class="ngo-section-header">
+        <h2 class="ngo-section-title"><i class="bi bi-people-fill me-2 text-success"></i>Beneficiaries / Recipients</h2>
+        <span class="badge bg-success rounded-pill px-3">{{beneficiaries.length}} Registered</span>
+      </div>
+
+      <!-- Stats -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-4">
+          <div class="ngo-stat-card" style="min-height:auto;padding:16px 20px;border-left:4px solid #198754;">
+            <div class="ngo-stat-body">
+              <div class="ngo-stat-label" style="color:#146c43;">Total Beneficiaries</div>
+              <div class="ngo-stat-value" style="font-size:28px;color:#198754;">{{beneficiaries.length}}</div>
+              <div class="ngo-stat-sub" style="color:#146c43;">Active recipients</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="ngo-stat-card" style="min-height:auto;padding:16px 20px;border-left:4px solid #0d6efd;background:#f0f7ff;">
+            <div class="ngo-stat-body">
+              <div class="ngo-stat-label" style="color:#0d6efd;">NGO Partners</div>
+              <div class="ngo-stat-value" style="font-size:28px;color:#0d6efd;">
+                {{(beneficiaries | filter:{type:'NGO'}).length}}
+              </div>
+              <div class="ngo-stat-sub" style="color:#0d6efd;">Partner organizations</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="ngo-stat-card" style="min-height:auto;padding:16px 20px;border-left:4px solid #6f42c1;background:#fdf5ff;">
+            <div class="ngo-stat-body">
+              <div class="ngo-stat-label" style="color:#6f42c1;">Shelters</div>
+              <div class="ngo-stat-value" style="font-size:28px;color:#6f42c1;">
+                {{(beneficiaries | filter:{type:'Shelter'}).length}}
+              </div>
+              <div class="ngo-stat-sub" style="color:#6f42c1;">Shelter facilities</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Create Beneficiary Form -->
+      <div class="card mb-4">
+        <div class="card-header bg-success bg-opacity-10">
+          <h5 class="mb-0"><i class="bi bi-plus-circle me-2"></i>Add New Beneficiary</h5>
+        </div>
+        <div class="card-body">
+          <form id="beneficiaryForm" ng-submit="createBeneficiary()">
+            <div class="row g-3">
+              <div class="col-md-3">
+                <label class="form-label">Name *</label>
+                <input type="text" class="form-control" ng-model="newBeneficiaryForm.name" placeholder="Organization/Individual name" required />
+              </div>
+              <div class="col-md-2">
+                <label class="form-label">Type *</label>
+                <select class="form-select" ng-model="newBeneficiaryForm.type" required>
+                  <option value="">-- Select --</option>
+                  <option value="NGO">NGO</option>
+                  <option value="Shelter">Shelter</option>
+                  <option value="Individual">Individual</option>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Address</label>
+                <input type="text" class="form-control" ng-model="newBeneficiaryForm.address" placeholder="Full address" />
+              </div>
+              <div class="col-md-2">
+                <label class="form-label">Contact</label>
+                <input type="text" class="form-control" ng-model="newBeneficiaryForm.contact_number" placeholder="+91-9876543210" />
+              </div>
+              <div class="col-md-3 mb-2">
+                <label class="form-label small fw-bold">Max Capacity</label>
+                <input type="number" class="form-control" ng-model="newBeneficiaryForm.capacity" min="0" placeholder="Count" />
+              </div>
+              <div class="col-md-3 mb-2">
+                <label class="form-label small fw-bold text-danger">Latitude</label>
+                <input type="number" step="any" class="form-control border-danger-subtle" ng-model="newBeneficiaryForm.latitude" placeholder="18.5204" required />
+              </div>
+              <div class="col-md-3 mb-2">
+                <label class="form-label small fw-bold text-danger">Longitude</label>
+                <input type="number" step="any" class="form-control border-danger-subtle" ng-model="newBeneficiaryForm.longitude" placeholder="73.8567" required />
+              </div>
+              <div class="col-md-1">
+                <label class="form-label">&nbsp;</label>
+                <button type="submit" class="btn btn-success w-100">
+                  <i class="bi bi-plus-lg"></i> Add
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Empty state -->
+      <div ng-if="beneficiaries.length === 0" class="ngo-empty-state">
+        <i class="bi bi-people fs-1 d-block mb-3 opacity-40 text-success"></i>
+        <h5 class="fw-semibold text-muted">No beneficiaries yet</h5>
+        <p class="text-muted small">Add beneficiaries above to manage delivery recipients.</p>
+      </div>
+
+      <!-- Beneficiary List -->
+      <div ng-if="beneficiaries.length > 0" class="table-responsive">
+        <table class="table table-hover">
+          <thead class="table-light">
+            <tr>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Address</th>
+              <th>Contact</th>
+              <th>Capacity</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="b in beneficiaries">
+              <td class="fw-semibold">{{b.name}}</td>
+              <td>
+                <span class="badge" ng-class="{'bg-success':b.type==='NGO','bg-primary':b.type==='Shelter','bg-info':b.type==='Individual'}">
+                  {{b.type}}
+                </span>
+              </td>
+              <td>{{b.address || '-'}}</td>
+              <td>{{b.contact_number || '-'}}</td>
+              <td>{{b.capacity || '-'}}</td>
+              <td class="text-end">
+                <button class="btn btn-sm btn-outline-primary me-1" ng-click="startEditBeneficiary(b)">
+                    <i class="bi bi-pencil-square"></i> Edit
+                </button>
+                <button class="btn btn-sm btn-outline-danger" ng-click="deleteBeneficiary(b)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Edit Beneficiary Modal (Moved outside to prevent z-index/editability issues) -->
+<div class="modal fade" id="editBeneficiaryModal" tabindex="-1" aria-labelledby="editBeneficiaryModalLabel" aria-hidden="true" style="z-index: 99999;">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg" style="border-radius: 15px; overflow: hidden;">
+      <div class="modal-header bg-success text-white border-0">
+        <h5 class="modal-title fw-bold" id="editBeneficiaryModalLabel">
+          <i class="bi bi-pencil-square me-2"></i>Edit Beneficiary Details
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" ng-click="cancelEditBeneficiary()"></button>
+      </div>
+      <div class="modal-body p-4" style="background-color: #f8f9fa;">
+        <div class="mb-3">
+          <label class="form-label fw-semibold text-muted small">NAME</label>
+          <input type="text" class="form-control border-0 shadow-sm px-3 py-2" ng-model="beneficiaryForm.name" style="background-color: white !important;" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold text-muted small">TYPE</label>
+          <select class="form-select border-0 shadow-sm px-3 py-2" ng-model="beneficiaryForm.type" style="background-color: white !important;">
+            <option value="NGO">NGO</option>
+            <option value="Shelter">Shelter</option>
+            <option value="Individual">Individual</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold text-muted small">ADDRESS</label>
+          <textarea class="form-control border-0 shadow-sm px-3 py-2" rows="2" ng-model="beneficiaryForm.address" style="background-color: white !important;"></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold text-muted small">CONTACT NUMBER</label>
+          <input type="text" class="form-control border-0 shadow-sm px-3 py-2" ng-model="beneficiaryForm.contact_number" style="background-color: white !important;" />
+        </div>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label fw-semibold text-muted small">CAPACITY</label>
+            <input type="number" class="form-control border-0 shadow-sm px-3 py-2" ng-model="beneficiaryForm.capacity" style="background-color: white !important;" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold text-danger small">LATITUDE</label>
+            <input type="number" step="any" class="form-control border-0 shadow-sm px-3 py-2" ng-model="beneficiaryForm.latitude" style="background-color: white !important;" required />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold text-danger small">LONGITUDE</label>
+            <input type="number" step="any" class="form-control border-0 shadow-sm px-3 py-2" ng-model="beneficiaryForm.longitude" style="background-color: white !important;" required />
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer border-0 p-4 pt-0" style="background-color: #f8f9fa;">
+        <button type="button" class="btn btn-light px-4 rounded-pill" data-bs-dismiss="modal" ng-click="cancelEditBeneficiary()">Cancel</button>
+        <button type="button" class="btn btn-success px-4 rounded-pill fw-bold shadow-sm" ng-click="saveBeneficiary()" data-bs-dismiss="modal">
+          <i class="bi bi-check-circle me-1"></i>Save Changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+

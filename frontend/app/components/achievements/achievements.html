@@ -1,0 +1,172 @@
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="section-title">Your Achievements</h2>
+            <p class="text-muted">Track your impact and earn recognition for your contributions</p>
+        </div>
+    </div>
+
+    <div class="row" ng-if="loading">
+        <div class="col-12 text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" ng-if="!loading">
+        <div class="col-lg-6 mb-4" ng-repeat="achievement in achievements">
+            <div class="card achievement-card h-100">
+                <div class="card-header bg-transparent">
+                    <h5 class="mb-0">
+                        <span class="badge" ng-class="{'badge-bronze': achievement.current_level === 'Bronze', 'badge-silver': achievement.current_level === 'Silver', 'badge-gold': achievement.current_level === 'Gold', 'badge-platinum': achievement.current_level === 'Platinum'}">
+                            {{ achievement.current_level || 'None' }}
+                        </span>
+                        <span class="ms-2">{{ achievement.role | titlecase }}</span>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="achievement-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">{{ achievement.total_completed }}</div>
+                            <div class="stat-label">Completed</div>
+                        </div>
+                        <div class="stat-item" ng-if="achievement.next_level">
+                            <div class="stat-value">{{ achievement.remaining }}</div>
+                            <div class="stat-label">To {{ achievement.next_level }}</div>
+                        </div>
+                        <div class="stat-item" ng-if="!achievement.next_level">
+                            <div class="stat-value">Max</div>
+                            <div class="stat-label">Level Reached</div>
+                        </div>
+                    </div>
+                    
+                    <div class="progress mt-3" style="height: 25px;">
+                        <div class="progress-bar" role="progressbar" 
+                             ng-style="{'width': ((achievement.total_completed / (achievement.total_completed + achievement.remaining)) * 100) + '%'}"
+                             ng-class="{'bg-bronze': achievement.current_level === 'Bronze', 'bg-silver': achievement.current_level === 'Silver', 'bg-gold': achievement.current_level === 'Gold', 'bg-platinum': achievement.current_level === 'Platinum'}">
+                        </div>
+                    </div>
+                    
+                    <p class="text-muted mt-2 mb-0" ng-if="achievement.next_level">
+                        {{ achievement.remaining }} more to reach {{ achievement.next_level }}
+                    </p>
+                    <p class="text-muted mt-2 mb-0" ng-if="!achievement.next_level">
+                        You've reached the highest level!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4" ng-if="certificates && certificates.length > 0">
+        <div class="col-12">
+            <h3 class="section-title">Your Certificates</h3>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-4" ng-repeat="cert in certificates">
+            <div class="card certificate-card h-100">
+                <div class="card-body text-center">
+                    <div class="cert-icon mb-3">
+                        <i class="bi bi-award-fill" ng-class="{'text-bronze': cert.level === 'Bronze', 'text-silver': cert.level === 'Silver', 'text-gold': cert.level === 'Gold', 'text-platinum': cert.level === 'Platinum'}"></i>
+                    </div>
+                    <h5 class="card-title">{{ cert.level }} {{ cert.role | titlecase }}</h5>
+                    <p class="card-text text-muted">
+                        <small>ID: {{ cert.certificate_id }}</small>
+                    </p>
+                    <p class="card-text">
+                        <strong>{{ cert.total_count }}</strong> {{ cert.role === 'donor' ? 'donations' : 'deliveries' }} completed
+                    </p>
+                    <p class="card-text">
+                        <small class="text-muted">Issued: {{ formatDate(cert.issued_at) }}</small>
+                    </p>
+                    <div class="mt-3">
+                        <a ng-href="{{ getCertDownloadUrl(cert.certificate_url) }}" 
+                           class="btn btn-outline-primary btn-sm" 
+                           target="_blank"
+                           ng-if="cert.certificate_url">
+                            <i class="bi bi-download me-1"></i> Download
+                        </a>
+                        <span class="badge bg-success ms-2" ng-if="cert.email_sent">
+                            <i class="bi bi-envelope-check me-1"></i> Emailed
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4" ng-if="(!certificates || certificates.length === 0) && !loading">
+        <div class="col-12 text-center py-5">
+            <div class="empty-state">
+                <i class="bi bi-award display-1 text-muted"></i>
+                <h4 class="mt-3">No Certificates Yet</h4>
+                <p class="text-muted">
+                    Complete donations or deliveries to earn your first certificate!
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.achievement-card {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease;
+}
+.achievement-card:hover {
+    transform: translateY(-4px);
+}
+.badge-bronze {
+    background-color: #CD7F32;
+    color: white;
+}
+.badge-silver {
+    background-color: #C0C0C0;
+    color: #333;
+}
+.badge-gold {
+    background-color: #FFD700;
+    color: #333;
+}
+.badge-platinum {
+    background-color: #E5E4E2;
+    color: #333;
+}
+.bg-bronze { background-color: #CD7F32 !important; }
+.bg-silver { background-color: #C0C0C0 !important; }
+.bg-gold { background-color: #FFD700 !important; }
+.bg-platinum { background-color: #E5E4E2 !important; }
+.text-bronze { color: #CD7F32; }
+.text-silver { color: #C0C0C0; }
+.text-gold { color: #FFD700; }
+.text-platinum { color: #E5E4E2; }
+.achievement-stats {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+}
+.stat-item {
+    text-align: center;
+}
+.stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+}
+.stat-label {
+    font-size: 0.85rem;
+    color: #666;
+}
+.certificate-card {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border: 2px solid #f0f0f0;
+}
+.cert-icon i {
+    font-size: 4rem;
+}
+.empty-state {
+    padding: 40px;
+}
+</style>

@@ -1,0 +1,127 @@
+<div class="d-flex align-items-center justify-content-center py-5" style="min-height: calc(100vh - 80px); background-color: #f8f9fa; font-family: 'Inter', sans-serif;">
+  <div class="w-100 px-3" style="max-width: 650px;">
+    
+    <!-- Progress Indicator -->
+    <div class="d-flex justify-content-between position-relative mb-5 mx-auto" style="max-width: 400px;">
+      <div class="position-absolute" style="top: 10px; left: 10%; right: 10%; height: 3px; background: #e9ecef; z-index: 1;"></div>
+      <div class="position-absolute" style="top: 10px; left: 10%; width: 0%; height: 3px; background: #198754; z-index: 2;"></div>
+      
+      <div class="text-center position-relative" style="z-index: 3;">
+        <span class="d-block mb-1 text-uppercase fw-bold" style="font-size: 0.7rem; color: #198754; tracking-wide: 1px;">Account</span>
+        <div class="rounded-circle bg-success mx-auto d-flex align-items-center justify-content-center" style="width: 24px; height: 24px;">
+          <div class="bg-success border border-white border-2 rounded-circle" style="width: 12px; height: 12px;"></div>
+        </div>
+      </div>
+      
+      <div class="text-center position-relative" style="z-index: 3;">
+        <span class="d-block mb-1 text-uppercase fw-bold text-muted" style="font-size: 0.7rem; letter-spacing: 1px;">NGO Profile</span>
+        <div class="rounded-circle bg-light border mx-auto" style="width: 24px; height: 24px;"></div>
+      </div>
+      
+      <div class="text-center position-relative" style="z-index: 3;">
+        <span class="d-block mb-1 text-uppercase fw-bold text-muted" style="font-size: 0.7rem; letter-spacing: 1px;">Publish</span>
+        <div class="rounded-circle bg-light border mx-auto" style="width: 24px; height: 24px;"></div>
+      </div>
+    </div>
+
+    <!-- Main Card -->
+    <div class="card border-0 shadow-sm p-4 p-md-5 rounded-4 position-relative overflow-hidden mb-4">
+      <div class="position-absolute" style="top: -50px; right: -50px; width: 150px; height: 150px; background: #f0f8ff; border-radius: 50%;"></div>
+      
+      <div class="position-relative z-1">
+        <h2 class="fw-bold mb-2">Join the Mission</h2>
+        <p class="text-muted mb-4" style="font-size: 0.95rem;">Let's set up your NGO identity to start bridging the gap between surplus and need.</p>
+        
+        <div class="alert alert-danger py-2 small" ng-if="error">{{error}}</div>
+        <div class="alert alert-success py-2 small" ng-if="success">{{success}}</div>
+
+        <form name="ngoSignupForm" ng-submit="ngoSignup()" novalidate>
+          <div class="mb-3">
+            <label class="form-label text-uppercase fw-bold text-primary" style="font-size: 0.7rem; letter-spacing: 1px; color:#3b5998!important;">NGO Name</label>
+            <input type="text" ng-model="user.name" class="form-control bg-light border-0 py-2 rounded-3" placeholder="Global Outreach Foundation" required>
+          </div>
+
+          <div class="row gx-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label text-uppercase fw-bold text-primary" style="font-size: 0.7rem; letter-spacing: 1px; color:#3b5998!important;">Email Address</label>
+              <input type="email" ng-model="user.email" class="form-control bg-light border-0 py-2 rounded-3" placeholder="contact@ngo.org" required>
+            </div>
+            <div class="col-md-6 mt-3 mt-md-0 position-relative">
+              <label class="form-label text-uppercase fw-bold text-primary" style="font-size: 0.7rem; letter-spacing: 1px; color:#3b5998!important;">Mobile Number</label>
+              <div class="input-group">
+                <input type="text" ng-model="user.phone" class="form-control bg-light border-0 py-2 rounded-start-3" placeholder="+1 (555) 000-0000" required>
+                <button type="button" class="btn border-0 py-1 px-3 m-1 rounded-pill" 
+                        ng-class="otpVerified ? 'btn-success text-white' : 'btn-light text-success bg-white'" 
+                        style="font-size: 0.7rem; font-weight: 700; position: absolute; right: 2px; top: 1px; z-index: 10;"
+                        ng-click="verifyOtp()">
+                  {{otpVerified ? 'VERIFIED' : 'VERIFY OTP'}}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="row gx-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label text-uppercase fw-bold text-primary" style="font-size: 0.7rem; letter-spacing: 1px; color:#3b5998!important;">Password</label>
+              <input type="password" ng-model="user.password" class="form-control bg-light border-0 py-2 rounded-3" placeholder="••••••••" required>
+            </div>
+            <div class="col-md-6 mt-3 mt-md-0">
+              <label class="form-label text-uppercase fw-bold text-primary" style="font-size: 0.7rem; letter-spacing: 1px; color:#3b5998!important;">Confirm Password</label>
+              <input type="password" ng-model="user.confirmPassword" class="form-control bg-light border-0 py-2 rounded-3" placeholder="••••••••" required>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label text-uppercase fw-bold text-primary" style="font-size: 0.7rem; letter-spacing: 1px; color:#3b5998!important;">City</label>
+            <div class="position-relative">
+              <input type="text" ng-model="user.city" class="form-control bg-light border-0 py-2 rounded-3 pe-5" placeholder="Enter your city" required>
+              <i class="bi bi-geo-alt-fill text-muted position-absolute" style="right: 15px; top: 50%; transform: translateY(-50%);"></i>
+            </div>
+          </div>
+
+          <div class="form-check mb-4">
+            <input class="form-check-input" type="checkbox" id="termsCheck" ng-model="user.terms" required>
+            <label class="form-check-label small text-muted" for="termsCheck">
+              I agree to the <a href="#" class="text-dark fw-semibold text-decoration-none">Terms and Conditions</a>
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-success w-100 py-2 rounded-3 fw-bold d-flex justify-content-center align-items-center" ng-disabled="loading || !ngoSignupForm.$valid || !otpVerified">
+            <span ng-if="loading" class="spinner-border spinner-border-sm me-2"></span>
+            Create Account <i class="bi bi-arrow-right ms-2" ng-if="!loading"></i>
+          </button>
+        </form>
+        
+        <div class="text-center mt-4 pt-3 text-muted small">
+          Already have an NGO account? <a href="#!/login" class="text-primary fw-bold text-decoration-none" style="color:#3b5998!important;">Sign In</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature Tags -->
+    <div class="row gx-3 text-center mb-5">
+      <div class="col-4">
+        <div class="bg-white rounded-3 p-3 shadow-sm h-100">
+          <i class="bi bi-shield-check text-success fs-4 mb-2"></i>
+          <h6 class="fw-bold fs-6 mb-1">Secure Portal</h6>
+          <p class="text-muted mb-0" style="font-size: 0.65rem;">Advanced encryption for all NGO data.</p>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="bg-white rounded-3 p-3 shadow-sm h-100">
+          <i class="bi bi-person-check-fill text-primary fs-4 mb-2" style="color:#3b5998!important;"></i>
+          <h6 class="fw-bold fs-6 mb-1">Verified Needs</h6>
+          <p class="text-muted mb-0" style="font-size: 0.65rem;">Direct connection to vetted local producers.</p>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="bg-white rounded-3 p-3 shadow-sm h-100">
+          <i class="bi bi-bar-chart-fill text-dark fs-4 mb-2"></i>
+          <h6 class="fw-bold fs-6 mb-1">Impact Tracking</h6>
+          <p class="text-muted mb-0" style="font-size: 0.65rem;">Real-time data on every meal delivered.</p>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</div>

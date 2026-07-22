@@ -1,0 +1,167 @@
+<!-- Help Center Page -->
+<div class="help-center-page" ng-controller="HelpCenterController">
+  <!-- Page Header -->
+  <section class="help-header py-5 bg-success text-white">
+    <div class="container text-center">
+      <h1 class="display-3 fw-bold mb-3 help-fade-in">
+        <i class="bi bi-life-preserver me-3"></i>Help Center
+      </h1>
+      <p class="lead help-fade-in delay-1">Find answers or contact us for support</p>
+    </div>
+  </section>
+
+  <!-- Search Section -->
+  <section class="search-section py-5 bg-light">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <div class="search-box position-relative">
+            <i class="bi bi-search position-absolute text-muted" style="top: 50%; left: 20px; transform: translateY(-50%); font-size: 1.2rem;"></i>
+            <input type="text" class="form-control form-control-lg ps-5" placeholder="Search for help..." ng-model="searchQuery" ng-change="filterFAQs()" style="border-radius: 50px; border: 2px solid #e9ecef;">
+          </div>
+          <p class="text-center text-muted mt-2" ng-if="searchQuery">
+            Showing {{filteredFaqs.length}} result(s)
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Category Filter -->
+  <section class="category-section py-4 bg-white">
+    <div class="container">
+      <div class="d-flex justify-content-center flex-wrap gap-2">
+        <button class="btn rounded-pill" ng-class="selectedCategory === '' ? 'btn-success' : 'btn-outline-success'" ng-click="setCategory('')">
+          <i class="bi bi-grid me-2"></i>All
+        </button>
+        <button class="btn rounded-pill" ng-class="selectedCategory === 'donor' ? 'btn-success' : 'btn-outline-success'" ng-click="setCategory('donor')">
+          <i class="bi bi-shop me-2"></i>Donor Help
+        </button>
+        <button class="btn rounded-pill" ng-class="selectedCategory === 'ngo' ? 'btn-success' : 'btn-outline-success'" ng-click="setCategory('ngo')">
+          <i class="bi bi-building me-2"></i>NGO Help
+        </button>
+        <button class="btn rounded-pill" ng-class="selectedCategory === 'volunteer' ? 'btn-success' : 'btn-outline-success'" ng-click="setCategory('volunteer')">
+          <i class="bi bi-person-walking me-2"></i>Delivery Partner Help
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="faq-section py-5">
+    <div class="container">
+      <h2 class="text-center fw-bold mb-5">
+        <i class="bi bi-question-circle text-success me-2"></i>Frequently Asked Questions
+      </h2>
+
+      <!-- Empty Search Result -->
+      <div class="text-center py-5" ng-if="filteredFaqs.length === 0 && searchQuery">
+        <div class="empty-search-icon mb-4">
+          <i class="bi bi-search fs-1 text-muted"></i>
+        </div>
+        <h4 class="fw-bold text-muted mb-2">No Results Found</h4>
+        <p class="text-muted">Try different keywords or browse all categories</p>
+        <button class="btn btn-outline-success rounded-pill" ng-click="searchQuery = ''; filterFAQs()">
+          <i class="bi bi-arrow-counterclockwise me-2"></i>Clear Search
+        </button>
+      </div>
+
+      <!-- FAQ Accordion -->
+      <div class="accordion faq-accordion" id="faqAccordion" ng-if="filteredFaqs.length > 0">
+        <div class="accordion-item border-0 rounded-4 mb-3 shadow-sm" ng-repeat="faq in filteredFaqs track by $index">
+          <h2 class="accordion-header">
+            <button class="accordion-button rounded-4" ng-class="{'collapsed': activeFaqIndex !== $index}" type="button" ng-click="toggleFaq($index)">
+              <span class="badge bg-success-subtle text-success me-3">{{faq.category | uppercase}}</span>
+              {{faq.question}}
+            </button>
+          </h2>
+          <div class="accordion-collapse collapse" ng-class="{'show': activeFaqIndex === $index}">
+            <div class="accordion-body text-muted">
+              {{faq.answer}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Support Section -->
+  <section class="contact-section py-5 bg-light">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="card border-0 rounded-4 shadow-lg">
+            <div class="card-header bg-success text-white rounded-top-4 py-4">
+              <h3 class="mb-0 fw-bold">
+                <i class="bi bi-chat-dots me-2"></i>Contact Support
+              </h3>
+              <p class="mb-0 opacity-75">Can't find what you're looking for? Send us a message.</p>
+            </div>
+            <div class="card-body p-4">
+              <!-- Success Message -->
+              <div class="alert alert-success d-flex align-items-center" ng-if="formSubmitted">
+                <i class="bi bi-check-circle-fill fs-4 me-3"></i>
+                <div>
+                  <strong>Request Submitted!</strong>
+                  <p class="mb-0 small">We'll get back to you within 24-48 hours.</p>
+                </div>
+              </div>
+
+              <!-- Contact Form -->
+              <form ng-submit="submitSupportForm()" ng-if="!formSubmitted">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label fw-medium">Your Name</label>
+                    <div class="input-group">
+                      <span class="input-group-text bg-white"><i class="bi bi-person"></i></span>
+                      <input type="text" class="form-control" ng-model="supportForm.name" placeholder="Enter your name" required>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label fw-medium">Email Address</label>
+                    <div class="input-group">
+                      <span class="input-group-text bg-white"><i class="bi bi-envelope"></i></span>
+                      <input type="email" class="form-control" ng-model="supportForm.email" placeholder="your@email.com" required>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label fw-medium">Subject</label>
+                    <div class="input-group">
+                      <span class="input-group-text bg-white"><i class="bi bi-tag"></i></span>
+                      <select class="form-select" ng-model="supportForm.subject" required>
+                        <option value="">Select a topic</option>
+                        <option value="donation">Donation Issues</option>
+                        <option value="account">Account & Login</option>
+                        <option value="delivery">Delivery Problems</option>
+                        <option value="technical">Technical Support</option>
+                        <option value="other">Other</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label fw-medium">Message</label>
+                    <textarea class="form-control" rows="5" ng-model="supportForm.message" placeholder="Describe your issue in detail..." required></textarea>
+                  </div>
+                  <div class="col-12">
+                    <button type="submit" class="btn btn-success btn-lg rounded-pill px-5 fw-bold" ng-disabled="submitting">
+                      <span ng-if="submitting" class="spinner-border spinner-border-sm me-2"></span>
+                      <span ng-if="!submitting"><i class="bi bi-send me-2"></i>Send Request</span>
+                      <span ng-if="submitting">Sending...</span>
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Back Link -->
+  <div class="text-center py-4 mb-4">
+    <a href="#!/" class="btn btn-link text-success fw-medium">
+      <i class="bi bi-arrow-left me-2"></i> Back to Home
+    </a>
+  </div>
+</div>
